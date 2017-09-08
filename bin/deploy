@@ -1,0 +1,9 @@
+#!/bin/bash
+cat requirements.txt | xargs brew install
+mkdir -p /etc/nginx
+bin/gen_nginx_config -s nginx -c conf/config.ini -t conf/proxy_params -o /etc/nginx/proxy_params
+bin/gen_nginx_config -s nginx -c conf/config.ini -t conf/nginx.conf -o /etc/nginx/nginx.conf
+echo "NO2@yandex.ru
+A
+Y
+" | certbot  --nginx
