@@ -1,0 +1,5 @@
+# Secret keys and data
+secrets.json
+
+# Log file
+*.log
