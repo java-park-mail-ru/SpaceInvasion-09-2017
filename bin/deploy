@@ -1,0 +1,8 @@
+#!/bin/bash
+sudo cat requirements.txt | xargs brew install
+sudo mkdir -p /etc/nginx
+sudo mkdir -p /etc/ssl/certs
+sudo mkdir -p /var/log/SpaceInvasion
+sudo bin/gen_nginx_config -s nginx -c conf/config.ini -t conf/proxy_params -o /etc/nginx/proxy_params
+sudo bin/gen_nginx_config -s nginx -c conf/config.ini -t conf/nginx.conf -o /etc/nginx/nginx.conf
+sudo certbot -n --nginx --nginx-server-root /etc/nginx/ -d www.space-invasion.ru -d space-invasion.ru
