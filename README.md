@@ -1,12 +1,11 @@
 # Space Invasion the browser multiplayer MMORTS-shooter game
 
-[![GitHub Version](https://badge.fury.io/gh/Nikita-Boyarskikh/SpaceInvasion.svg)](https://badge.fury.io/gh/Nikita-Boyarskikh/SpaceInvasion)
-[![Build Status](http://img.shields.io/travis/Nikita-Boyarskikh/SpaceInvasion.svg?style=flat-square)](https://travis-ci.org/Nikita-Boyarskikh/SpaceInvasion)
-[![Dependency Status](http://img.shields.io/gemnasium/Nikita-Boyarskikh/SpaceInvasion.svg?style=flat-square)](https://gemnasium.com/Nikita-Boyarskikh/SpaceInvasion)
-[![Coverage Status](http://img.shields.io/coveralls/Nikita-Boyarskikh/SpaceInvasion.svg?style=flat-square)](https://coveralls.io/r/Nikita-Boyarskikh/SpaceInvasion)
-[![Code Climate](http://img.shields.io/codeclimate/github/Nikita-Boyarskikh/SpaceInvasion.svg?style=flat-square)](https://codeclimate.com/github/Nikita-Boyarskikh/SpaceInvasion)
-[![Github Issues](http://githubbadges.herokuapp.com/Nikita-Boyarskikh/SpaceInvasion/issues.svg?style=flat-square)](https://github.com/Nikita-Boyarskikh/SpaceInvasion/issues)
-[![Pending Pull-Requests](http://githubbadges.herokuapp.com/Nikita-Boyarskikh/SpaceInvasion/pulls.svg?style=flat-square)](https://github.com/Nikita-Boyarskikh/SpaceInvasion/pulls)
+[![Build Status](http://img.shields.io/travis/Nikita-Boyarskikh/SpaceInvasionBackend.svg?style=flat-square)](https://travis-ci.org/Nikita-Boyarskikh/SpaceInvasionBackend)
+[![Dependency Status](http://img.shields.io/gemnasium/Nikita-Boyarskikh/SpaceInvasionBackend.svg?style=flat-square)](https://gemnasium.com/Nikita-Boyarskikh/SpaceInvasionBackend)
+[![Coverage Status](http://img.shields.io/coveralls/Nikita-Boyarskikh/SpaceInvasionBackend.svg?style=flat-square)](https://coveralls.io/r/Nikita-Boyarskikh/SpaceInvasionBackend)
+[![Code Climate](http://img.shields.io/codeclimate/github/Nikita-Boyarskikh/SpaceInvasionBackend.svg?style=flat-square)](https://codeclimate.com/github/Nikita-Boyarskikh/SpaceInvasionBackend)
+[![Github Issues](http://githubbadges.herokuapp.com/Nikita-Boyarskikh/SpaceInvasionBackend/issues.svg?style=flat-square)](https://github.com/Nikita-Boyarskikh/SpaceInvasionBackend/issues)
+[![Pending Pull-Requests](http://githubbadges.herokuapp.com/Nikita-Boyarskikh/SpaceInvasionBackend/pulls.svg?style=flat-square)](https://github.com/Nikita-Boyarskikh/SpaceInvasionBackend/pulls)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 ## Table of contents
@@ -44,7 +43,7 @@ TODO
 
 ## Bugs and feature requests
 
-Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/Nikita-Boyarskikh/SpaceInvasion/blob/master/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/Nikita-Boyarskikh/SpaceInvasion/issues/new).
+Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/Nikita-Boyarskikh/SpaceInvasionBackend/blob/master/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/Nikita-Boyarskikh/SpaceInvasionBackend/issues/new).
 
 
 ## Documentation
@@ -79,7 +78,7 @@ Please read through our [contributing guidelines](https://github.com/twbs/bootst
 - <https://t.me/Egor_Kurakov>
 - <https://github.com/KurakovEgor>
 
-# Frontend
+### Frontend
 
 **Olga Surikova**
 
