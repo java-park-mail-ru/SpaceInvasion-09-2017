@@ -1,4 +1,4 @@
-package ru.space_invasion;
+package ru.spaceinvasion;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
