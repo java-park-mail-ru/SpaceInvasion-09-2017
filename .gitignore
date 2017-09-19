@@ -95,3 +95,6 @@ hs_err_pid*
 
 .gitignore
 target/
+
+# Secret private keys, passwords and other secret data
+secrets.json
