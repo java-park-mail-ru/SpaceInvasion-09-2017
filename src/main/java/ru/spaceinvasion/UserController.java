@@ -6,13 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Objects;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(
-        path = Constants.APIConstants.USER_API_PATH,
+        path = Constants.ApiConstants.USER_API_PATH,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 )

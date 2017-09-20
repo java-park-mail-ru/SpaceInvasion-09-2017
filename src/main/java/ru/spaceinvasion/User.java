@@ -18,11 +18,15 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof User)) {
+            return false;
+        }
 
-        final User user = (User) o;
+        final User user = (User) obj;
 
         return password.equals(user.password) && password.equals(user.password) && email.equals(user.email);
     }
@@ -30,8 +34,9 @@ public class User {
     @Override
     public int hashCode() {
         int result = password.hashCode();
-        result = 31 * result + username.hashCode();
-        result = 31 * result + email.hashCode();
+        final int hashBase = 31;
+        result = hashBase * result + username.hashCode();
+        result = hashBase * result + email.hashCode();
         return result;
     }
 
