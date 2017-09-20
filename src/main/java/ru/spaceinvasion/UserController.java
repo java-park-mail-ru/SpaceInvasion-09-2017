@@ -20,11 +20,11 @@ public class UserController {
 
     private final HashMap<String, User> registeredUsers = new HashMap<>();
 
-    @RequestMapping(method = RequestMethod.POST, path = "singin")
+    @RequestMapping(method = RequestMethod.POST, path = "signin")
     public ResponseEntity<?> signIn(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username or password"));
+                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -35,9 +35,9 @@ public class UserController {
         // TODO: Check if user exists in database
         if (!Objects.equals(registeredUsers.get(user.getUsername()), user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Wrong login, password or email", ""));
+                    .body(new RestJsonAnswer("Singning in failed", "Wrong login, password or email"));
         }
-        httpSession.setAttribute("curUser", user);
+        httpSession.setAttribute("user", user);
 
         return ResponseEntity.ok(user);
     }
@@ -46,7 +46,7 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username or password"));
+                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -67,14 +67,14 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, path = "logout", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null || httpSession.isNew()) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new RestJsonAnswer("Is not sign in yet", "You can not logout if you are not singed in"));
         }
         httpSession.invalidate();
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{username}")
+    @RequestMapping(method = RequestMethod.GET, path = "/{username}", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getUser(@PathVariable String username) {
 
         final User user = registeredUsers.get(username);
@@ -89,29 +89,39 @@ public class UserController {
     public ResponseEntity<?> editAccount(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username or password"));
+                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
         }
 
-        registeredUsers.replace(((User) httpSession.getAttribute("curUser")).getUsername(), user);
-        return ResponseEntity.ok().build();
+        final User curUser = (User) httpSession.getAttribute("user");
+        if (curUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
+        }
+
+        user.setPassword(curUser.getPassword());
+        httpSession.removeAttribute("user");
+        httpSession.setAttribute("user", user);
+        registeredUsers.remove(curUser.getUsername());
+        registeredUsers.put(user.getUsername(), user);
+        return ResponseEntity.ok().body(user);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteAccount(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username or password"));
-        }
-
-        if (!Objects.equals(registeredUsers.get(user.getUsername()), user)) {
-            return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
+                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
-        if (!Objects.equals(curUser, user)) {
+        if (curUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
+        }
+
+        if (!Objects.equals(registeredUsers.get(user.getUsername()), user) || !Objects.equals(curUser, user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Permission denied", "You are can not delete other user profile"));
+                    .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
         }
 
         registeredUsers.remove(user.getUsername());
@@ -142,6 +152,8 @@ public class UserController {
         final String password = user.getPassword();
         final String email = user.getEmail();
 
-        return username != null && password != null && email != null;
+        final boolean notNull = username != null && password != null && email != null;
+        final boolean notEmpty = !Objects.equals(username, "") && !Objects.equals(password, "") && !Objects.equals(email, "");
+        return notEmpty && notNull;
     }
 }
