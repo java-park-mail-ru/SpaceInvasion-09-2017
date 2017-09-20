@@ -32,7 +32,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
-        // TODO: Check if user exists in database
         if (!Objects.equals(registeredUsers.get(user.getUsername()), user)) {
             return ResponseEntity.badRequest()
                     .body(new RestJsonAnswer("Singning in failed", "Wrong login, password or email"));
@@ -59,7 +58,7 @@ public class UserController {
                     .body(new RestJsonAnswer("Username already used", "Come up with a different username"));
         }
         httpSession.setAttribute("user", user);
-        registeredUsers.put(user.getUsername(), user); // TODO: Write new user into database
+        registeredUsers.put(user.getUsername(), user);
 
         return ResponseEntity.ok(user);
     }
