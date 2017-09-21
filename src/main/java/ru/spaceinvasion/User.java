@@ -3,12 +3,18 @@ package ru.spaceinvasion;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 public class User {
 
     @JsonIgnore
+    @NotEmpty
     private String password;
+    @NotEmpty
     private final String username;
+    @NotNull
     private final String email;
 
     @Override
@@ -36,7 +42,9 @@ public class User {
 
     @SuppressWarnings("unused")
     @JsonCreator
-    public User(String username, String password, String email) {
+    public User(@JsonProperty(value = "username", required = true) String username,
+                @JsonProperty(value = "password", required = true) String password,
+                @JsonProperty("email") String email) {
         this.username = username;
         this.password = password;
         this.email = email;
