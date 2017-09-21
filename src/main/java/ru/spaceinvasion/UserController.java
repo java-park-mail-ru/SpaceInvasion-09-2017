@@ -1,5 +1,7 @@
 package ru.spaceinvasion;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 import org.jetbrains.annotations.Contract;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,11 +22,11 @@ public class UserController {
 
     private final HashMap<String, User> registeredUsers = new HashMap<>();
 
-    @RequestMapping(method = RequestMethod.POST, path = "signin")
+    @PostMapping("signin")
     public ResponseEntity<?> signIn(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
+                    .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -41,11 +43,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "signup")
+    @PostMapping("signup")
     public ResponseEntity<?> signUp(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
+                    .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -63,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "logout", consumes = MediaType.ALL_VALUE)
+    @PostMapping(path = "logout", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null || httpSession.isNew()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -73,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{username}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(path = "/{username}", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getUser(@PathVariable String username) {
 
         final User user = registeredUsers.get(username);
@@ -84,11 +86,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH)
+    @PatchMapping
     public ResponseEntity<?> editAccount(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
+                    .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -105,11 +107,11 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @DeleteMapping
     public ResponseEntity<?> deleteAccount(@RequestBody User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return ResponseEntity.badRequest()
-                    .body(new RestJsonAnswer("Bad request", "Incorrect username, email or password"));
+                    .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -129,7 +131,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.ALL_VALUE)
+    @GetMapping(consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> curUser(HttpSession httpSession) {
         final User curUser = (User) httpSession.getAttribute("user");
 
@@ -142,17 +144,11 @@ public class UserController {
     }
 
     @Contract(value = "null -> false", pure = true)
-    private boolean checkUser(User user) {
-        if (user == null) {
-            return false;
-        }
-
-        final String username = user.getUsername();
-        final String password = user.getPassword();
-        final String email = user.getEmail();
-
-        final boolean notNull = username != null && password != null && email != null;
-        final boolean notEmpty = !Objects.equals(username, "") && !Objects.equals(password, "") && !Objects.equals(email, "");
-        return notEmpty && notNull;
+    @SuppressWarnings("OverlyComplexBooleanExpression")
+    private static boolean checkUser(User user) {
+        return user != null
+                && !isEmpty(user.getUsername())
+                && !isEmpty(user.getPassword())
+                && !isEmpty(user.getEmail());
     }
 }

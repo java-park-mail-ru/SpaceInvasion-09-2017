@@ -1,5 +1,6 @@
 package ru.spaceinvasion;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,13 +10,6 @@ public class User {
     private String password;
     private final String username;
     private final String email;
-
-    @SuppressWarnings("unused")
-    public User() {
-        this.username = "";
-        this.password = "";
-        this.email = "";
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -28,7 +22,7 @@ public class User {
 
         final User user = (User) obj;
 
-        return password.equals(user.password) && password.equals(user.password) && email.equals(user.email);
+        return username.equals(user.username) && password.equals(user.password) && email.equals(user.email);
     }
 
     @Override
@@ -41,6 +35,7 @@ public class User {
     }
 
     @SuppressWarnings("unused")
+    @JsonCreator
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
