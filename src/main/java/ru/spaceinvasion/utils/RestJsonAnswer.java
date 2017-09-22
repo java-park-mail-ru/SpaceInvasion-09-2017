@@ -1,4 +1,4 @@
-package ru.spaceinvasion;
+package ru.spaceinvasion.utils;
 
 public class RestJsonAnswer {
     private final String result;

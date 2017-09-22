@@ -16,11 +16,15 @@ public class Config {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/v1/**")
                     .allowCredentials(true).allowedOrigins(
-                        "space-invasion.ru",
-                        "space-invasion.herokuapp.com",
-                        "www.space-invasion.ru",
-                        "www.space-invasion.herokuapp.com"
-                ).allowedMethods("GET", "POST", "PATCH", "DELETE");
+                        "http://space-invasion.ru",
+                        "http://space-invasion.herokuapp.com",
+                        "http://www.space-invasion.ru",
+                        "http://www.space-invasion.herokuapp.com",
+                        "https://space-invasion.ru",
+                        "https://space-invasion.herokuapp.com",
+                        "https://www.space-invasion.ru",
+                        "https://www.space-invasion.herokuapp.com"
+                ).allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
             }
         };
     }

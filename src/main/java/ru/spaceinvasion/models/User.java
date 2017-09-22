@@ -1,4 +1,4 @@
-package ru.spaceinvasion;
+package ru.spaceinvasion.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;

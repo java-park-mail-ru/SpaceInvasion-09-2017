@@ -1,4 +1,4 @@
-package ru.spaceinvasion;
+package ru.spaceinvasion.controllers;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.spaceinvasion.Constants;
+import ru.spaceinvasion.models.User;
+import ru.spaceinvasion.utils.RestJsonAnswer;
 
 import java.util.HashMap;
 import java.util.Objects;
