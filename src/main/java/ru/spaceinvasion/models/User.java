@@ -3,66 +3,59 @@ package ru.spaceinvasion.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
 public class User {
 
     @JsonIgnore
-    @NotEmpty
+    @NotBlank
     private String password;
-    @NotEmpty
+    @NotBlank
     private final String username;
     @NotNull
     private final String email;
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof User)) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
 
-        final User user = (User) obj;
+        final User user = (User) o;
 
-        return username.equals(user.username) && password.equals(user.password) && email.equals(user.email);
+        return (password != null ? password.equals(user.password) : user.password == null)
+                && (username != null ? username.equals(user.username) : user.username == null)
+                && email.equals(user.email);
     }
 
     @Override
     public int hashCode() {
-        int result = password.hashCode();
-        final int hashBase = 31;
-        result = hashBase * result + username.hashCode();
-        result = hashBase * result + email.hashCode();
+        int result = password != null ? password.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + email.hashCode();
         return result;
     }
 
-    @SuppressWarnings("unused")
     @JsonCreator
     public User(@JsonProperty(value = "username", required = true) String username,
                 @JsonProperty(value = "password", required = true) String password,
                 @JsonProperty("email") String email) {
         this.username = username;
         this.password = password;
-        this.email = email;
+        this.email = (email != null ? email : "");
     }
 
-    @SuppressWarnings("unused")
     public String getUsername() {
         return username;
     }
 
     @JsonIgnore
-    @SuppressWarnings("unused")
     public String getPassword() {
         return password;
     }
 
     @JsonProperty
-    @SuppressWarnings("unused")
     public void setPassword(String password) {
         this.password = password;
     }

@@ -14,9 +14,9 @@ import ru.spaceinvasion.utils.RestJsonAnswer;
 import java.util.HashMap;
 import java.util.Objects;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = {"https://space-invasion.herokuapp.com", "https://www.space-invasion.herokuapp.com"})
 @RequestMapping(
         path = Constants.ApiConstants.USER_API_PATH,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -25,23 +25,23 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     // Typical requests
-    public static final ResponseEntity BAD_REQUEST = ResponseEntity.badRequest()
+    public static final ResponseEntity<RestJsonAnswer> BAD_REQUEST = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
-    public static final ResponseEntity WRONG_AUTH_DATA_RESPONSE = ResponseEntity.badRequest()
+    public static final ResponseEntity<RestJsonAnswer> WRONG_AUTH_DATA_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Singning in failed", "Wrong login, password or email"));
-    public static final ResponseEntity USERNAME_ALREADY_USED_RESPONSE = ResponseEntity.badRequest()
+    public static final ResponseEntity<RestJsonAnswer> USERNAME_ALREADY_USED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Username already used", "Come up with a different username"));
-    public static final ResponseEntity UNAUTHORIZED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    public static final ResponseEntity<RestJsonAnswer> UNAUTHORIZED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
-    public static final ResponseEntity CANT_LOGOUT_IF_LOGINED_RESPONE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    public static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_LOGINED_RESPONE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(new RestJsonAnswer("Is not sign in yet", "You can not logout if you are not singed in"));
-    public static final ResponseEntity CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
+    public static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
 
     private final HashMap<String, User> registeredUsers = new HashMap<>();
 
     @PostMapping("signin")
-    public ResponseEntity<?> signIn(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
         }
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public ResponseEntity<?> signUp(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
         }
@@ -100,7 +100,7 @@ public class UserController {
     }
 
     @PatchMapping
-    public ResponseEntity<?> editAccount(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<?> editAccount(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
         }
@@ -122,7 +122,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteAccount(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<?> deleteAccount(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
         }
