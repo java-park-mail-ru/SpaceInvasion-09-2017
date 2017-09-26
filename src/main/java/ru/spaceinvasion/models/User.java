@@ -17,6 +17,7 @@ public class User {
     @NotNull
     private final String email;
 
+    //CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,6 +37,7 @@ public class User {
         result = 31 * result + email.hashCode();
         return result;
     }
+    //CHECKSTYLE:ON
 
     @JsonCreator
     public User(@JsonProperty(value = "username", required = true) String username,
