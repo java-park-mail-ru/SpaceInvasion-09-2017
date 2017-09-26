@@ -1,0 +1,11 @@
+language: java
+jdk:
+  - oraclejdk8
+deploy:
+  provider: heroku
+  api_key:
+    secure: tqs2QVhnwlXrZe9suQ+ZPQt/sLtD6ig2CMqZTZFYuFqkPuA4F79u7DGmVa5nAaZpyIR5awVgN11Ql9MSCSNBmHaZ2ifyDiXEeZwY0xWxJflpC61A2iWEisN4vvl+hEhywgebxooMjxu6UIOHtjMOkeuQBL4DjP+1mUBdUr0X61PTGNYrcORRSuaM+cFajrIQLacIBxfyQH5TUwrmZcxo+AvlmZCs6EQ/Qe3nZ8coSsfp9+X6DOv1hPsB7tCFCuP5DhpZ2uvXwegB1Fhw0iunPEMTCTvzMT0dbUxKE+2AfN0eGc0kFfEksw3KdXlOckcjZw+BlDc2IEd3xf6wrrx1AH+0VYMaVV2oZTSEV4nl2wvJ3was5rGHq3a5kUZQHYKuOmMU/QDAcF42nYT1xB1fT7nxYtVaQKTdn6azvKBJ87VKFUr6jJtbBJMToUjU6Az/IQ5o20OnTPYCpJftVTxmwVVOPvnBeYnCC0OICB8unB+zpva0qDq7KQabNgSL84OnWs7c/+W6ot7NN0dq4YQPUpYvr33cYKyTOVpHaJ6xniswjwTJoW0/0Dgy6g8tF31vdMcDhe1rZ08OUoyin/6X152F0RBe6F0k5zJNk1dSG2Af2a81XedIME7sCTEJLkvTfEKcbx+4/pPuv5GFSraPUNOBWgQ9AGCbS0k0L8Dhxok=
+  app: space-invasion-backend
+  on:
+    repo: java-park-mail-ru/SpaceInvasion-09-2017
+    branch: release
