@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
-import java.util.Comparator;
 
 public class User {
 
@@ -63,11 +62,13 @@ public class User {
     }
 
     @JsonProperty
+    @SuppressWarnings("unused")
     public int getScore() {
         return score;
     }
 
     @JsonIgnore
+    @SuppressWarnings("unused")
     public void setScore(int score) {
         this.score = score;
     }
@@ -77,8 +78,8 @@ public class User {
         this.password = password;
     }
 
-    public int compareTo(User u) {
-        return this.score - u.score;
+    public int compareTo(User user) {
+        return this.score - user.score;
     }
 
     @SuppressWarnings("unused")
