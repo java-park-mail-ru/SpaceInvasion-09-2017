@@ -26,13 +26,13 @@ public class UserController {
 
     // Typical requests
     public static final ResponseEntity<RestJsonAnswer> BAD_REQUEST = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Bad request", "Invalid username, email or password"));
+            .body(new RestJsonAnswer("Bad request", "Invalid username or password"));
     public static final ResponseEntity<RestJsonAnswer> WRONG_AUTH_DATA_RESPONSE = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Singning in failed", "Wrong login, password or email"));
+            .body(new RestJsonAnswer("Singning in failed", "Wrong login or password"));
     public static final ResponseEntity<RestJsonAnswer> USERNAME_ALREADY_USED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Username already used", "Come up with a different username"));
     public static final ResponseEntity<RestJsonAnswer> UNAUTHORIZED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
+            .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
     public static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_LOGINED_RESPONE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(new RestJsonAnswer("Is not sign in yet", "You can not logout if you are not singed in"));
     public static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
