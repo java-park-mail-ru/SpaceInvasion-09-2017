@@ -23,6 +23,8 @@ public class SpaceInvasion {
                         .allowCredentials(true).allowedOrigins(
                         "http://space-invasion.ru",
                         "http://space-invasion.herokuapp.com",
+                        "http://space-invasion-frontend.herokuapp.com",
+                        "https://space-invasion-frontend.herokuapp.com",
                         "http://www.space-invasion.ru",
                         "http://www.space-invasion.herokuapp.com",
                         "https://space-invasion.ru",
