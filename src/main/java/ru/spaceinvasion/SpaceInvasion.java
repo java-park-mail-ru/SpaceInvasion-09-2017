@@ -21,14 +21,16 @@ public class SpaceInvasion {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/v1/**")
                         .allowCredentials(true).allowedOrigins(
+                        /* Продакш машина */
                         "http://space-invasion.ru",
-                        "http://space-invasion.herokuapp.com",
-                        "http://www.space-invasion.ru",
-                        "http://www.space-invasion.herokuapp.com",
                         "https://space-invasion.ru",
-                        "https://space-invasion.herokuapp.com",
+                        "http://www.space-invasion.ru",
                         "https://www.space-invasion.ru",
-                        "https://www.space-invasion.herokuapp.com"
+                        /* Дев машина */
+                        "http://space-invasion-frontend.herokuapp.com",
+                        "https://space-invasion-frontend.herokuapp.com",
+                        "http://www.space-invasion-frontend.herokuapp.com",
+                        "https://www.space-invasion-frontend.herokuapp.com"
                 ).allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
             }
         };
