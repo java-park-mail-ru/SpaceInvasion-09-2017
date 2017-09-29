@@ -21,6 +21,7 @@ public class SpaceInvasion {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/v1/**")
                         .allowCredentials(true).allowedOrigins(
+                        "*", // Для тестирования
                         /* Продакш машина */
                         "http://space-invasion.ru",
                         "https://space-invasion.ru",
