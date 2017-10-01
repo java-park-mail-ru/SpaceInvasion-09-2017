@@ -51,7 +51,9 @@ public class UserController {
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
-        if (!Objects.equals(registeredUsers.get(user.getUsername()), user)) {
+        final User registeredUser = registeredUsers.get(user.getUsername());
+        if (registeredUser == null || !(Objects.equals(registeredUser.getUsername(), user.getUsername())
+                && Objects.equals(registeredUser.getPassword(), user.getPassword()))) {
             return WRONG_AUTH_DATA_RESPONSE;
         }
         httpSession.setAttribute("user", user);
