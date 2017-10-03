@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -z "$(git diff --cached --name-only | grep -E '\.(xml|java)$')" ]
+then
+  eval mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  if [ $? -ne 0  ]; then
+    echo "park_checks.xml failed on staged files. Please check your code and try again.\nYou can run checks manually via \`eval mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V\`."
+    exit 1 # exit with failure status
+  fi
+fi
