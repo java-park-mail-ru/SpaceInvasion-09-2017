@@ -13,9 +13,9 @@ public class User {
     @NotBlank
     private String password;
     @NotBlank
-    private final String username;
+    private String username;
     @NotNull
-    private final String email;
+    private String email;
     @NotNull
     @JsonIgnore
     private int score;
@@ -72,6 +72,14 @@ public class User {
     public void setScore(int score) {
         this.score = score;
     }
+
+    @JsonIgnore
+    @SuppressWarnings("unused")
+    public void setUsername(String username) { this.username = username; }
+
+    @JsonIgnore
+    @SuppressWarnings("unused")
+    public void setEmail(String email) { this.email = email; }
 
     @JsonProperty
     public void setPassword(String password) {
