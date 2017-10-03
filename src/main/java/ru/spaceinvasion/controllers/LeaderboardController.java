@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(Constants.ApiConstants.SCOREBOARD_API_PATH)
-public class ScoreboardController {
+public class LeaderboardController {
     // Mocked database
     private final HashMap<String, User> registeredUsers = new HashMap<>();
 
     // Fill with fake data (for frontend testing)
-    public ScoreboardController() {
+    public LeaderboardController() {
         final ArrayList<User> users = new ArrayList<>();
         users.add(new User("egor", "egor12345", "https://Egor_Kurakov"));
         users.add(new User("vasidmi", "vasidmi12345", "https://t.me/vasidmi"));
