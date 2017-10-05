@@ -10,16 +10,17 @@ import ru.spaceinvasion.models.UserComparator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(Constants.ApiConstants.SCOREBOARD_API_PATH)
 public class ScoreboardController {
     // Mocked database
-    private final HashMap<String, User> registeredUsers = new HashMap<>();
+    private final Map<String, User> registeredUsers = new HashMap<>();
 
     // Fill with fake data (for frontend testing)
     public ScoreboardController() {
-        final ArrayList<User> users = new ArrayList<>();
+        final List<User> users = new ArrayList<>();
         users.add(new User("egor", "egor12345", "https://Egor_Kurakov"));
         users.add(new User("vasidmi", "vasidmi12345", "https://t.me/vasidmi"));
         users.add(new User("ChocolateSwan", "ChocolateSwan12345", "https://t.me/ChocolateSwan"));
@@ -31,7 +32,7 @@ public class ScoreboardController {
 
     @GetMapping
     public List<User> getScoreBoardAll() {
-        final ArrayList<User> users = new ArrayList<>(registeredUsers.values());
+        final List<User> users = new ArrayList<>(registeredUsers.values());
         users.sort(new UserComparator());
 
         int toIndex = users.size();

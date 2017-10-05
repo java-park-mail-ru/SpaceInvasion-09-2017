@@ -12,6 +12,7 @@ import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.utils.RestJsonAnswer;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -38,7 +39,7 @@ public class UserController {
     public static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
 
-    private final HashMap<String, User> registeredUsers = new HashMap<>();
+    private final Map<String, User> registeredUsers = new HashMap<>();
 
     @PostMapping("signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
