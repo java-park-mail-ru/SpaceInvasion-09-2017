@@ -1,4 +1,4 @@
-package ru.spaceinvasion.tests.unit;
+package unit;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;

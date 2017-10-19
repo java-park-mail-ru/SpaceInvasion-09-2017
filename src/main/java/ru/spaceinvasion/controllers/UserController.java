@@ -3,16 +3,20 @@ package ru.spaceinvasion.controllers;
 import static org.springframework.util.StringUtils.isEmpty;
 
 import org.jetbrains.annotations.Contract;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.spaceinvasion.Constants;
+import ru.spaceinvasion.Exceptions;
 import ru.spaceinvasion.models.User;
+import ru.spaceinvasion.services.UserService;
 import ru.spaceinvasion.utils.RestJsonAnswer;
 
 import java.util.HashMap;
 import java.util.Objects;
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -23,6 +27,12 @@ import javax.validation.Valid;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
 public class UserController {
+
+    static UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     // Typical requests
     public static final ResponseEntity<RestJsonAnswer> BAD_REQUEST = ResponseEntity.badRequest()
@@ -38,6 +48,7 @@ public class UserController {
     public static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
 
+    // For Mocking
     private final HashMap<String, User> registeredUsers = new HashMap<>();
 
     @PostMapping("signin")
@@ -51,13 +62,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
-        final User registeredUser = registeredUsers.get(user.getUsername());
-        if (registeredUser == null || !(Objects.equals(registeredUser.getUsername(), user.getUsername())
-                && Objects.equals(registeredUser.getPassword(), user.getPassword()))) {
+        if (!userService.validate(user)) {
             return WRONG_AUTH_DATA_RESPONSE;
         }
         httpSession.setAttribute("user", user);
-
         return ResponseEntity.ok(user);
     }
 
@@ -71,12 +79,14 @@ public class UserController {
         if (curUser != null) {
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
-
-        if (registeredUsers.containsKey(user.getUsername())) {
+        try {
+            user = userService.create(user);
+        } catch (DuplicateKeyException e) {
             return USERNAME_ALREADY_USED_RESPONSE;
         }
         httpSession.setAttribute("user", user);
-        registeredUsers.put(user.getUsername(), user);
+//        registeredUsers.put(user.getUsername(), user);
+//        registeredUsers.putIfAbsent(user.getUsername(), user);
 
         return ResponseEntity.ok(user);
     }
@@ -93,8 +103,11 @@ public class UserController {
     @GetMapping(path = "{username}", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getUser(@PathVariable String username) {
 
-        final User user = registeredUsers.get(username);
-        if (user == null) {
+        User user = new User();
+        user.setUsername(username);
+        try {
+            user = userService.getUser(user);
+        } catch (Exceptions.NotFoundUser e) {
             return ResponseEntity.notFound().build();
         }
 
@@ -112,15 +125,17 @@ public class UserController {
             return UNAUTHORIZED_RESPONSE;
         }
 
-        user.setPassword(curUser.getPassword());
+        try {
+            user = userService.update(curUser, user.getUsername(),
+                    user.getEmail(),user.getPassword());
+        } catch (DuplicateKeyException e) {
+            return USERNAME_ALREADY_USED_RESPONSE;
+            //TODO: Maybe email?
+        }
 
         httpSession.removeAttribute("user");
         httpSession.setAttribute("user", user);
-
-        registeredUsers.remove(curUser.getUsername());
-        registeredUsers.put(user.getUsername(), user);
-
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping
@@ -137,11 +152,14 @@ public class UserController {
         if (!Objects.equals(registeredUsers.get(user.getUsername()), user) || !Objects.equals(curUser, user)) {
             return CONFIRMATION_FAILED_RESPONSE;
         }
-
-        registeredUsers.remove(user.getUsername());
+        try {
+            userService.delete(user);
+        } catch (Exceptions.NotFoundUser e) {
+            return BAD_REQUEST;
+        }
         httpSession.invalidate();
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping(consumes = MediaType.ALL_VALUE)

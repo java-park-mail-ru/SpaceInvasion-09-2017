@@ -24,6 +24,7 @@ public class ScoreboardController {
         users.add(new User("vasidmi", "vasidmi12345", "https://t.me/vasidmi"));
         users.add(new User("ChocolateSwan", "ChocolateSwan12345", "https://t.me/ChocolateSwan"));
         users.add(new User("boyanik", "boyanik12345", "https://t.me/Nikita_Boyarskikh"));
+
         for (User u : users) {
             registeredUsers.put(u.getUsername(), u);
         }
