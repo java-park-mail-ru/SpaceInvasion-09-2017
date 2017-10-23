@@ -1,4 +1,4 @@
-package ru.spaceinvasion;
+package ru.spaceinvasion.utils;
 
 /**
  * Created by egor on 19.10.17.

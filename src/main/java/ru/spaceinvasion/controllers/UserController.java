@@ -8,15 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.spaceinvasion.Constants;
-import ru.spaceinvasion.Exceptions;
+import ru.spaceinvasion.utils.Constants;
+import ru.spaceinvasion.utils.Exceptions;
 import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
 import ru.spaceinvasion.utils.RestJsonAnswer;
 
-import java.util.HashMap;
-import java.util.Objects;
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -24,8 +21,7 @@ import javax.validation.Valid;
 @RequestMapping(
         path = Constants.ApiConstants.USER_API_PATH,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserController {
 
     static UserService userService;
@@ -48,10 +44,7 @@ public class UserController {
     public static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
 
-    // For Mocking
-    private final HashMap<String, User> registeredUsers = new HashMap<>();
-
-    @PostMapping("signin")
+    @PostMapping(path = "signin", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
@@ -69,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("signup")
+    @PostMapping(path = "signup", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
@@ -93,11 +86,22 @@ public class UserController {
 
     @PostMapping(path = "logout", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> logout(HttpSession httpSession) {
-        if (httpSession == null || httpSession.isNew()) {
+        if (httpSession == null ||
+                httpSession.getAttribute("user") == null) {
             return CANT_LOGOUT_IF_LOGINED_RESPONE;
         }
         httpSession.invalidate();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "me", consumes = MediaType.ALL_VALUE)
+    public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
+        User curUser = (User) httpSession.getAttribute("user");
+        if (curUser == null) {
+            return UNAUTHORIZED_RESPONSE;
+        }
+        curUser = userService.getUser(curUser);
+        return ResponseEntity.ok(curUser);
     }
 
     @GetMapping(path = "{username}", consumes = MediaType.ALL_VALUE)
@@ -148,10 +152,6 @@ public class UserController {
         if (curUser == null) {
             return UNAUTHORIZED_RESPONSE;
         }
-
-        if (!Objects.equals(registeredUsers.get(user.getUsername()), user) || !Objects.equals(curUser, user)) {
-            return CONFIRMATION_FAILED_RESPONSE;
-        }
         try {
             userService.delete(user);
         } catch (Exceptions.NotFoundUser e) {
@@ -160,17 +160,6 @@ public class UserController {
         httpSession.invalidate();
 
         return ResponseEntity.ok(null);
-    }
-
-    @GetMapping(consumes = MediaType.ALL_VALUE)
-    public ResponseEntity<?> curUser(HttpSession httpSession) {
-        final User curUser = (User) httpSession.getAttribute("user");
-
-        if (curUser == null) {
-            return UNAUTHORIZED_RESPONSE;
-        }
-
-        return ResponseEntity.ok(curUser);
     }
 
     @Contract(value = "null -> false", pure = true)
