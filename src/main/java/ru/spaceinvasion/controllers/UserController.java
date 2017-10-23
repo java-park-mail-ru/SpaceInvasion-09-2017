@@ -78,8 +78,6 @@ public class UserController {
             return USERNAME_ALREADY_USED_RESPONSE;
         }
         httpSession.setAttribute("user", user);
-//        registeredUsers.put(user.getUsername(), user);
-//        registeredUsers.putIfAbsent(user.getUsername(), user);
 
         return ResponseEntity.ok(user);
     }
