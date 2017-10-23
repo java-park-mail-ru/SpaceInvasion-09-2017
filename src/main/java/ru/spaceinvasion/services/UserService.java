@@ -1,10 +1,7 @@
 package ru.spaceinvasion.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.spaceinvasion.models.User;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public interface UserService {
@@ -42,5 +39,7 @@ public interface UserService {
      * a record into the Student table.
      */
     User update(User user, String newUsername, String newEmail, String newPassword);
+
+    void dropAll();
 
 }

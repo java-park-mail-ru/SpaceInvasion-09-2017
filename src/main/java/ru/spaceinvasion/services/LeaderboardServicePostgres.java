@@ -1,11 +1,15 @@
 package ru.spaceinvasion.services;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.spaceinvasion.models.User;
 
 import java.util.List;
 
-public class LeaderboardServicePostgres implements LiderboardService {
+@Service
+@Transactional
+public class LeaderboardServicePostgres implements LeaderboardService {
 
     private JdbcTemplate jdbcTemplateObject;
 
