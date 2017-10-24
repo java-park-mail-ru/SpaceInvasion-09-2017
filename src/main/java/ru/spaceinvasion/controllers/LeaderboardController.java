@@ -23,9 +23,8 @@ public class LeaderboardController {
         this.leaderboardService = leaderboardService;
     }
 
-    @GetMapping(path = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping
     public List<User> getScoreBoardAll() {
-
         return leaderboardService.getTop(
                 Constants.ApiConstants.LEADERBOARD_SIZE);
 

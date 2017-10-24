@@ -46,7 +46,7 @@ public class UserController {
     private static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
             .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
 
-    @PostMapping(path = "signin", consumes = MediaType.ALL_VALUE)
+    @PostMapping(path = "signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
@@ -64,7 +64,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(path = "signup", consumes = MediaType.ALL_VALUE)
+    @PostMapping(path = "signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
             return BAD_REQUEST;
@@ -84,7 +84,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(path = "logout", consumes = MediaType.ALL_VALUE)
+    @PostMapping(path = "logout")
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null ||
                 httpSession.getAttribute("user") == null) {
@@ -94,7 +94,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "me", consumes = MediaType.ALL_VALUE)
+    @GetMapping
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
         User curUser = (User) httpSession.getAttribute("user");
         if (curUser == null) {
@@ -104,7 +104,7 @@ public class UserController {
         return ResponseEntity.ok(curUser);
     }
 
-    @GetMapping(path = "{username}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(path = "{username}")
     public ResponseEntity<?> getUser(@PathVariable String username) {
 
         User user = new User();
