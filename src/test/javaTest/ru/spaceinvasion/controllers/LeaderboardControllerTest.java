@@ -15,8 +15,6 @@ import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
-public class UserControllerTest {
+public class LeaderboardControllerTest {
 
     @Autowired
     private UserService userService;
@@ -51,31 +49,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testMe() throws Exception {
-        mockMvc
-                .perform(get("/v1/user")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void testSignIn() throws Exception {
-        testSignUp();
-        final MockHttpSession mockHttpSession = new MockHttpSession();
-        mockMvc
-                .perform(post("/v1/user/signin")
-                        .session(mockHttpSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"username\":\"n02\"," +
-                                "\"password\":\"soHardPassword\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("username").value("n02"));
-        assertEquals(((User)mockHttpSession.getAttribute("user"))
-                        .getUsername(), "n02");
-    }
-
-    @Test
-    public void testLogout() throws Exception {
+    public void testChangeScore() throws Exception {
         final MockHttpSession mockHttpSession = new MockHttpSession();
         testSignUp();
         mockMvc
@@ -84,11 +58,30 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"n02\"," +
                                 "\"password\":\"soHardPassword\"}"));
+        userService.changeScore(((User)mockHttpSession.getAttribute("user")),5);
         mockMvc
-                .perform(post("/v1/user/logout")
+                .perform(get("/v1/user")
                         .session(mockHttpSession)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("score").value(5));
+        User user = new User("egorkurakov","123456","egor@live.ru");
+        userService.create(user);
+        userService.changeScore(user,25);
+        user = new User("vasidmi","123456","vasi@dmi.ru");
+        userService.create(user);
+        userService.changeScore(user,20);
+        user = new User("chocolateSwan","123456","chocolate@swan.ru");
+        userService.create(user);
+        userService.changeScore(user,24);
+        mockMvc
+                .perform(get("/v1/leaderboard")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].username").value("egorkurakov"))
+                .andExpect(jsonPath("$[0].score").value(25))
+                .andExpect(jsonPath("$[3].username").value("n02"))
+                .andExpect(jsonPath("$[3].score").value(5));
     }
 }
 
