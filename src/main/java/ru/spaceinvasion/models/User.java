@@ -61,23 +61,19 @@ public class User {
     }
 
     @JsonProperty
-    @SuppressWarnings("unused")
     public int getScore() {
         return score;
     }
 
     @JsonIgnore
-    @SuppressWarnings("unused")
     public void setScore(int score) {
         this.score = score;
     }
 
     @JsonIgnore
-    @SuppressWarnings("unused")
     public void setUsername(String username) { this.username = username; }
 
     @JsonIgnore
-    @SuppressWarnings("unused")
     public void setEmail(String email) { this.email = email; }
 
     @JsonProperty
@@ -85,11 +81,10 @@ public class User {
         this.password = password;
     }
 
-    public int compareTo(User user) {
+    int compareTo(User user) {
         return this.score - user.score;
     }
 
-    @SuppressWarnings("unused")
     public String getEmail() {
         return email;
     }
@@ -99,6 +94,7 @@ public class User {
     }
 
     @JsonIgnore
+    @SuppressWarnings("unused")
     public void setId(int id) {
         this.id = id;
     }

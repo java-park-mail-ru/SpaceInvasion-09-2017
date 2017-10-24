@@ -10,6 +10,6 @@ public class Soldier extends Unit {
 
     @Override
     public void update() {
-        //TODO: Implement movement
+
     }
 }

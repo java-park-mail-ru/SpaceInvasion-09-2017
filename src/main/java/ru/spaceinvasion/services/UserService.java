@@ -25,6 +25,7 @@ public interface UserService {
      * This is the method to be used to list down
      * all the records from the Student table.
      */
+    @SuppressWarnings("unused")
     List<User> getUsers();
 
     /**

@@ -25,6 +25,7 @@ public class UserServicePostgres implements UserService {
     @Override
     public User create(User user) throws DuplicateKeyException{
         final String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?) RETURNING  *";
+
         try {
             user = jdbcTemplateObject.queryForObject(sql,
                     USER_ROW_MAPPER, user.getUsername(),

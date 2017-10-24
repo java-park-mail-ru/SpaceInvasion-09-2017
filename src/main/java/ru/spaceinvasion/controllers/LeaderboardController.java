@@ -1,6 +1,5 @@
 package ru.spaceinvasion.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +17,13 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class LeaderboardController {
 
-    @Autowired
-    LeaderboardService leaderboardService;
+    private LeaderboardService leaderboardService;
 
-    public LeaderboardController() {}
+    public LeaderboardController(LeaderboardService leaderboardService) {
+        this.leaderboardService = leaderboardService;
+    }
 
-    @GetMapping("/")
+    @GetMapping(path = "", consumes = MediaType.ALL_VALUE)
     public List<User> getScoreBoardAll() {
 
         return leaderboardService.getTop(

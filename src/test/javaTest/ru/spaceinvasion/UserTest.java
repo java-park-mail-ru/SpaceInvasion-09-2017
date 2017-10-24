@@ -6,15 +6,10 @@ import ru.spaceinvasion.models.User;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by egor on 28.09.17.
- */
-
-
 @SpringBootTest
 public class UserTest {
 
-    public User getDefaultUser() {
+    private User getDefaultUser() {
         return new User("UsualUser", "123", "my@email.com");
     }
 

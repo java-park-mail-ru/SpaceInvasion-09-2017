@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 public class SpaceInvasion {
+
+    @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(SpaceInvasion.class);
 
     public static void main(String[] args) {
