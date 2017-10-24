@@ -1,45 +1,33 @@
 package ru.spaceinvasion.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.spaceinvasion.Constants;
+import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.models.User;
-import ru.spaceinvasion.models.UserComparator;
+import ru.spaceinvasion.services.LeaderboardService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(Constants.ApiConstants.SCOREBOARD_API_PATH)
+@RequestMapping(
+        path = Constants.ApiConstants.LEADERBOARD_API_PATH,
+        consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class LeaderboardController {
-    // Mocked database
-    private final Map<String, User> registeredUsers = new HashMap<>();
 
-    // Fill with fake data (for frontend testing)
-    public LeaderboardController() {
-        final List<User> users = new ArrayList<>();
-        users.add(new User("egor", "egor12345", "https://Egor_Kurakov"));
-        users.add(new User("vasidmi", "vasidmi12345", "https://t.me/vasidmi"));
-        users.add(new User("ChocolateSwan", "ChocolateSwan12345", "https://t.me/ChocolateSwan"));
-        users.add(new User("boyanik", "boyanik12345", "https://t.me/Nikita_Boyarskikh"));
-        for (User u : users) {
-            registeredUsers.put(u.getUsername(), u);
-        }
+    private LeaderboardService leaderboardService;
+
+    public LeaderboardController(LeaderboardService leaderboardService) {
+        this.leaderboardService = leaderboardService;
     }
 
-    @GetMapping
+    @GetMapping(path = "", consumes = MediaType.ALL_VALUE)
     public List<User> getScoreBoardAll() {
-        final List<User> users = new ArrayList<>(registeredUsers.values());
-        users.sort(new UserComparator());
 
-        int toIndex = users.size();
-        if (Constants.ApiConstants.SCOREBOARD_SIZE < toIndex) {
-            toIndex = Constants.ApiConstants.SCOREBOARD_SIZE;
-        }
+        return leaderboardService.getTop(
+                Constants.ApiConstants.LEADERBOARD_SIZE);
 
-        return users.subList(0, toIndex);
     }
 }

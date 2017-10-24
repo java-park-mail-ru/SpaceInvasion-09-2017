@@ -10,15 +10,12 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     @JsonIgnore
-    @NotBlank
     private String password;
-    @NotBlank
-    private final String username;
-    @NotNull
-    private final String email;
-    @NotNull
+    private String username;
+    private String email;
     @JsonIgnore
     private int score;
+    private int id;
 
     //CHECKSTYLE:OFF
     @Override
@@ -42,6 +39,8 @@ public class User {
     }
     //CHECKSTYLE:ON
 
+    public User() { }
+
     @JsonCreator
     public User(@JsonProperty(value = "username", required = true) String username,
                 @JsonProperty(value = "password", required = true) String password,
@@ -62,28 +61,41 @@ public class User {
     }
 
     @JsonProperty
-    @SuppressWarnings("unused")
     public int getScore() {
         return score;
     }
 
     @JsonIgnore
-    @SuppressWarnings("unused")
     public void setScore(int score) {
         this.score = score;
     }
+
+    @JsonIgnore
+    public void setUsername(String username) { this.username = username; }
+
+    @JsonIgnore
+    public void setEmail(String email) { this.email = email; }
 
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public int compareTo(User user) {
+    int compareTo(User user) {
         return this.score - user.score;
     }
 
-    @SuppressWarnings("unused")
     public String getEmail() {
         return email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @JsonIgnore
+    @SuppressWarnings("unused")
+    public void setId(int id) {
+        this.id = id;
     }
 }

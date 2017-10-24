@@ -9,3 +9,4 @@ deploy:
   on:
     repo: java-park-mail-ru/SpaceInvasion-09-2017
     all_branches: true
+    tags: true
