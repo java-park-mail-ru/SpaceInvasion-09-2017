@@ -94,5 +94,15 @@ public class UserServicePostgres implements UserService {
                        String newEmail, String newPassword) {
         throw new NotImplementedException();
     }
+
+    @Override
+    public User changeScore(User user, Integer dScore) {
+        String sql = "UPDATE users SET score = (score + ?) WHERE username = ? RETURNING *";
+        try {
+            return jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, dScore, user.getUsername());
+        } catch (EmptyResultDataAccessException e) {
+            throw e;
+        }
+    }
 }
 

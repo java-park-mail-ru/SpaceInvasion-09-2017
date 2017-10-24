@@ -43,4 +43,6 @@ public interface UserService {
 
     void dropAll();
 
+    User changeScore(User user, Integer dScore);
+
 }

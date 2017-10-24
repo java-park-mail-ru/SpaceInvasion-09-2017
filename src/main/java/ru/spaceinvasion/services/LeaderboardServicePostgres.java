@@ -19,7 +19,7 @@ public class LeaderboardServicePostgres implements LeaderboardService {
     }
 
     public List<User> getTop(int limit) {
-        String sql = "SELECT * FROM users ORDER BY score LIMIT ?";
+        String sql = "SELECT * FROM users ORDER BY score DESC LIMIT ?";
         return jdbcTemplateObject.query(sql, Mappers.USER_ROW_MAPPER, limit);
     }
 }
