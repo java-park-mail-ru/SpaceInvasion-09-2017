@@ -3,7 +3,6 @@ MAINTAINER SpaceInvasionLab <spaceinvasion@yandex.ru>
 
 RUN apt update &&\
     apt-get install -y postgresql git
-RUN apt-get install -y postgresql-client-common
 
 USER postgres
 
@@ -11,7 +10,7 @@ RUN service postgresql start &&\
     psql -c "CREATE ROLE space_invasion WITH SUPERUSER LOGIN ENCRYPTED PASSWORD 'space_invasion_admin_pass';" &&\
     psql -c "CREATE DATABASE space_invasion_db;" &&\
     psql -c "GRANT ALL ON DATABASE space_invasion_db TO space_invasion;" &&\
-    service postgres stop
+    service postgresql stop
 
 USER root
 
