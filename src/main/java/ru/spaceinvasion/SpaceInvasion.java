@@ -37,7 +37,10 @@ public class SpaceInvasion {
                         "http://space-invasion-frontend.herokuapp.com",
                         "https://space-invasion-frontend.herokuapp.com",
                         "http://www.space-invasion-frontend.herokuapp.com",
-                        "https://www.space-invasion-frontend.herokuapp.com"
+                        "https://www.space-invasion-frontend.herokuapp.com",
+                        /* Localhost */
+                        "http://localhost:8080",
+                        "http://localhost"
                 ).allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
             }
         };
