@@ -17,7 +17,9 @@ USER root
 RUN apt-get install -y openjdk-8-jdk-headless
 RUN apt-get install -y maven
 
-ENV PORT=80 PGUSER=space_invasion PGPASSWORD=space_invasion_admin_pass PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE=space_invasion_db
+ENV PORT=80
+ENV JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/space_invasion_db
+ENV PGUSER=space_invasion PGPASSWORD=space_invasion_admin_pass PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE=space_invasion_db
 ENV SPACE_INVASION_ROOT=/var/www/SpaceInvasion
 
 EXPOSE 5432
