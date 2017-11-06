@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
+import ru.spaceinvasion.utils.Constants;
+import ru.spaceinvasion.websocket.GameSocketHandler;
 
 @SpringBootApplication
 public class SpaceInvasion {
@@ -20,28 +24,20 @@ public class SpaceInvasion {
     }
 
     @Bean
+    public WebSocketHandler gameWebSocketHandler() {
+        return new PerConnectionWebSocketHandler(GameSocketHandler.class);
+    }
+
+    @Bean
     @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/v1/**")
-                        .allowCredentials(true).allowedOrigins(
-                        "*", // Для тестирования
-                        /* Продакш машина */
-                        "http://space-invasion.ru",
-                        "https://space-invasion.ru",
-                        "http://www.space-invasion.ru",
-                        "https://www.space-invasion.ru",
-                        /* Дев машина */
-                        "http://space-invasion-frontend.herokuapp.com",
-                        "https://space-invasion-frontend.herokuapp.com",
-                        "http://www.space-invasion-frontend.herokuapp.com",
-                        "https://www.space-invasion-frontend.herokuapp.com",
-                        /* Localhost */
-                        "http://localhost:8080",
-                        "http://localhost"
-                ).allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
+                        .allowCredentials(true)
+                        .allowedOrigins(Constants.UrlConstants.ALLOWED_ORIGINS)
+                        .allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
             }
         };
     }

@@ -61,6 +61,15 @@ public class UserServicePostgres implements UserService {
             } catch (EmptyResultDataAccessException e) {
                 throw new Exceptions.NotFoundUser();
             }
+        } else if (user.getId() != null) {
+            sql = "SELECT * FROM users WHERE id = ?";
+            try {
+                user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, user.getId());
+            } catch (EmptyResultDataAccessException e) {
+                throw new Exceptions.NotFoundUser();
+            }
+        } else {
+            throw new Exceptions.NotFoundUser();
         }
 
         return user;
