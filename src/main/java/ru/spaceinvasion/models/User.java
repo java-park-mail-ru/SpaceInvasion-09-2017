@@ -15,9 +15,13 @@ public class User {
     @Nullable
     private String email;
     private int score;
-    private int id;
+    private Integer id;
 
     public User() { }
+
+    public User(Integer id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -77,13 +81,13 @@ public class User {
         return email;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     @JsonIgnore
     @SuppressWarnings("unused")
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
