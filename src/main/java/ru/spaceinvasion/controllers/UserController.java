@@ -4,7 +4,6 @@ import static org.springframework.util.StringUtils.isEmpty;
 
 import org.jetbrains.annotations.Contract;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,7 @@ import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.utils.Exceptions;
 import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
-import ru.spaceinvasion.utils.RestJsonAnswer;
+import ru.spaceinvasion.utils.TypicalResponses;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,33 +22,16 @@ import javax.validation.Valid;
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserController {
-
     private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // Typical requests
-    private static final ResponseEntity<RestJsonAnswer> BAD_REQUEST = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Bad request", "Invalid username or password"));
-    private static final ResponseEntity<RestJsonAnswer> WRONG_AUTH_DATA_RESPONSE = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Singning in failed", "Wrong login or password"));
-    private static final ResponseEntity<RestJsonAnswer> USERNAME_ALREADY_USED_RESPONSE = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Username already used", "Come up with a different username"));
-    private static final ResponseEntity<RestJsonAnswer> UNAUTHORIZED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
-    private static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_LOGINED_RESPONE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body(new RestJsonAnswer("Is not sign in yet", "You can not logout if you are not singed in"));
-
-    @SuppressWarnings("unused")
-    private static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
-            .body(new RestJsonAnswer("Bad request", "Your confirmed user data is not match with origin data"));
-
     @PostMapping(path = "signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return BAD_REQUEST;
+            return TypicalResponses.BAD_REQUEST;
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -58,7 +40,7 @@ public class UserController {
         }
 
         if (!userService.validate(user)) {
-            return WRONG_AUTH_DATA_RESPONSE;
+            return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
         }
         httpSession.setAttribute("user", user);
         return ResponseEntity.ok(user);
@@ -67,7 +49,7 @@ public class UserController {
     @PostMapping(path = "signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return BAD_REQUEST;
+            return TypicalResponses.BAD_REQUEST;
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
@@ -77,7 +59,7 @@ public class UserController {
         try {
             user = userService.create(user);
         } catch (DuplicateKeyException e) {
-            return USERNAME_ALREADY_USED_RESPONSE;
+            return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
         }
         httpSession.setAttribute("user", user);
 
@@ -88,7 +70,7 @@ public class UserController {
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null ||
                 httpSession.getAttribute("user") == null) {
-            return CANT_LOGOUT_IF_LOGINED_RESPONE;
+            return TypicalResponses.CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE;
         }
         httpSession.invalidate();
         return ResponseEntity.ok().build();
@@ -98,19 +80,21 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
         User curUser = (User) httpSession.getAttribute("user");
         if (curUser == null) {
-            return UNAUTHORIZED_RESPONSE;
+            return TypicalResponses.FORBIDDEN_RESPONSE;
         }
-        curUser = userService.getUser(curUser);
+        try {
+            curUser = userService.getUser(curUser.getId());
+        } catch (Exceptions.NotFoundUser e) {
+            return TypicalResponses.FORBIDDEN_RESPONSE;
+        }
         return ResponseEntity.ok(curUser);
     }
 
     @GetMapping(path = "{username}")
     public ResponseEntity<?> getUser(@PathVariable String username) {
-
-        User user = new User();
-        user.setUsername(username);
+        User user;
         try {
-            user = userService.getUser(user);
+            user = userService.getUser(username);
         } catch (Exceptions.NotFoundUser e) {
             return ResponseEntity.notFound().build();
         }
@@ -121,19 +105,19 @@ public class UserController {
     @PatchMapping
     public ResponseEntity<?> editAccount(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return BAD_REQUEST;
+            return TypicalResponses.BAD_REQUEST;
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
         if (curUser == null) {
-            return UNAUTHORIZED_RESPONSE;
+            return TypicalResponses.UNAUTHORIZED_RESPONSE;
         }
 
         try {
             user = userService.update(curUser, user.getUsername(),
                     user.getEmail(),user.getPassword());
         } catch (DuplicateKeyException e) {
-            return USERNAME_ALREADY_USED_RESPONSE;
+            return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
             //TODO: Maybe email?
         }
 
@@ -145,17 +129,17 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> deleteAccount(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return BAD_REQUEST;
+            return TypicalResponses.BAD_REQUEST;
         }
 
         final User curUser = (User) httpSession.getAttribute("user");
         if (curUser == null) {
-            return UNAUTHORIZED_RESPONSE;
+            return TypicalResponses.FORBIDDEN_RESPONSE;
         }
         try {
             userService.delete(user);
         } catch (Exceptions.NotFoundUser e) {
-            return BAD_REQUEST;
+            return TypicalResponses.BAD_REQUEST;
         }
         httpSession.invalidate();
 

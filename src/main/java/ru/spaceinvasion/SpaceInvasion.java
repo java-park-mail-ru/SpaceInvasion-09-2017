@@ -13,9 +13,6 @@ import ru.spaceinvasion.utils.Constants;
 @SpringBootApplication
 public class SpaceInvasion {
 
-    @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(SpaceInvasion.class);
-
     public static void main(String[] args) {
         SpringApplication.run(SpaceInvasion.class, args);
     }

@@ -48,7 +48,7 @@ public class UserServicePostgres implements UserService {
         return true;
     }
 
-    @Override
+    @Deprecated
     public User getUser(User user) {
         String sql;
         if (user == null) {
@@ -65,6 +65,40 @@ public class UserServicePostgres implements UserService {
 
         return user;
     }
+
+    @Override
+    public User getUser(Integer userId) {
+        String sql;
+        User user;
+        if (userId == null) {
+            throw new Exceptions.NotFoundUser();
+        }
+        sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exceptions.NotFoundUser();
+        }
+        return user;
+    }
+
+    @Override
+    public User getUser(String username) {
+        String sql;
+        User user;
+        if (username == null) {
+            throw new Exceptions.NotFoundUser();
+        }
+        sql = "SELECT * FROM users WHERE username = ?";
+        try {
+            user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, username);
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exceptions.NotFoundUser();
+        }
+        return user;
+    }
+
+
 
     @Override
     public List<User> getUsers() {
