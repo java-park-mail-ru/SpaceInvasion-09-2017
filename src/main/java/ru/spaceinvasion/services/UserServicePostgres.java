@@ -37,7 +37,7 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public Boolean validate(User user) {
+    public Boolean authenticate(User user) {
         final String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try {
             jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER,
@@ -98,8 +98,6 @@ public class UserServicePostgres implements UserService {
         return user;
     }
 
-
-
     @Override
     public List<User> getUsers() {
         String sql = "SELECT * FROM users";
@@ -108,25 +106,9 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public void delete(User user) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        try {
-            jdbcTemplateObject.update(sql, user.getId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new Exceptions.NotFoundUser();
-        }
-    }
-
-    @Override
     public void dropAll() {
         String sql = "DELETE FROM users *";
         jdbcTemplateObject.update(sql);
-    }
-
-    @Override
-    public User update(User user, String newUsername,
-                       String newEmail, String newPassword) {
-        throw new NotImplementedException();
     }
 
     @Override

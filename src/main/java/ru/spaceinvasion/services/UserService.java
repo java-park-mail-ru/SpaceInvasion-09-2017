@@ -9,7 +9,7 @@ public interface UserService {
 
     User create(User user);
 
-    Boolean validate(User user);
+    Boolean authenticate(User user);
 
     User getUser(Integer userId);
 
@@ -17,10 +17,6 @@ public interface UserService {
 
     @SuppressWarnings("unused")
     List<User> getUsers();
-
-    void delete(User user);
-
-    User update(User user, String newUsername, String newEmail, String newPassword);
 
     void dropAll();
 

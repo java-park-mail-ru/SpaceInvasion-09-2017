@@ -39,7 +39,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
-        if (!userService.validate(user)) {
+        if (!userService.authenticate(user)) {
             return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
         }
         httpSession.setAttribute("user", user);
@@ -100,50 +100,6 @@ public class UserController {
         }
 
         return ResponseEntity.ok(user);
-    }
-
-    @PatchMapping
-    public ResponseEntity<?> editAccount(@RequestBody @Valid User user, HttpSession httpSession) {
-        if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
-        }
-
-        final User curUser = (User) httpSession.getAttribute("user");
-        if (curUser == null) {
-            return TypicalResponses.UNAUTHORIZED_RESPONSE;
-        }
-
-        try {
-            user = userService.update(curUser, user.getUsername(),
-                    user.getEmail(),user.getPassword());
-        } catch (DuplicateKeyException e) {
-            return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
-            //TODO: Maybe email?
-        }
-
-        httpSession.removeAttribute("user");
-        httpSession.setAttribute("user", user);
-        return ResponseEntity.ok(user);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<?> deleteAccount(@RequestBody @Valid User user, HttpSession httpSession) {
-        if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
-        }
-
-        final User curUser = (User) httpSession.getAttribute("user");
-        if (curUser == null) {
-            return TypicalResponses.FORBIDDEN_RESPONSE;
-        }
-        try {
-            userService.delete(user);
-        } catch (Exceptions.NotFoundUser e) {
-            return TypicalResponses.BAD_REQUEST;
-        }
-        httpSession.invalidate();
-
-        return ResponseEntity.ok(null);
     }
 
     @Contract(value = "null -> false", pure = true)
