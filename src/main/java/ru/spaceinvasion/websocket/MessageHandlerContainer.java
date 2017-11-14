@@ -1,6 +1,6 @@
 package ru.spaceinvasion.websocket;
 
-import org.jetbrains.annotations.NotNull;
+import ru.spaceinvasion.mechanic.handlers.MessageHandler;
 import ru.spaceinvasion.models.Message;
 
 /**

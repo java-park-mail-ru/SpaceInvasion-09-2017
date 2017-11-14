@@ -8,4 +8,8 @@ public class Exceptions {
             super(description);
         }
     }
+
+    public static class NotFoundSessionForUser extends RuntimeException { };
+
+    public static class NotValidData extends RuntimeException { };
 }

@@ -1,4 +1,4 @@
-package ru.spaceinvasion.websocket;
+package ru.spaceinvasion.mechanic.handlers;
 
 import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.utils.Exceptions;
@@ -18,5 +18,5 @@ public abstract class MessageHandler<T extends Message> {
         }
     }
 
-    public abstract void handle( T message, Integer userId);
+    public abstract void handle(T message, Integer userId);
 }

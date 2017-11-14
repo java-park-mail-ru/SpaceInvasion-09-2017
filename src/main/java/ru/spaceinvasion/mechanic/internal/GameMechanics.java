@@ -1,7 +1,6 @@
-package ru.spaceinvasion.mechanic;
+package ru.spaceinvasion.mechanic.internal;
 
-import org.jetbrains.annotations.NotNull;
-import ru.spaceinvasion.mechanic.base.ClientSnap;
+import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 
 /**
  * Created by egor on 07.11.17.
