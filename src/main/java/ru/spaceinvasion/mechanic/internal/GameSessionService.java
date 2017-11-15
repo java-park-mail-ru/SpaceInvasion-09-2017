@@ -53,4 +53,7 @@ public class GameSessionService {
     }
 
 
+    public Set<GameSession> getSessions() {
+        return gameSessions;
+    }
 }

@@ -23,4 +23,7 @@ public class Constants {
                 "https://www.space-invasion-frontend.herokuapp.com"
         };
     }
+    public static class GameMechanicConstants {
+        public static final Integer NUM_OF_PROCESSED_SNAPS_PER_SERVER_TICK = 3;
+    }
 }

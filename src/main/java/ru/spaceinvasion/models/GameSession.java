@@ -2,6 +2,7 @@ package ru.spaceinvasion.models;
 
 import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.mechanic.internal.GameSessionService;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -43,5 +44,9 @@ public class GameSession {
 
     public void setPlayer2(Integer player2) {
         this.player2 = player2;
+    }
+
+    public void terminateSession() {
+        throw new NotImplementedException();
     }
 }
