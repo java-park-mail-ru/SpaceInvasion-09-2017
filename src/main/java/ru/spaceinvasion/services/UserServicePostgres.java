@@ -48,24 +48,6 @@ public class UserServicePostgres implements UserService {
         return true;
     }
 
-    @Deprecated
-    public User getUser(User user) {
-        String sql;
-        if (user == null) {
-            throw new Exceptions.NotFoundUser();
-        }
-        if (user.getUsername() != null) {
-            sql = "SELECT * FROM users WHERE username = ?";
-            try {
-                user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, user.getUsername());
-            } catch (EmptyResultDataAccessException e) {
-                throw new Exceptions.NotFoundUser();
-            }
-        }
-
-        return user;
-    }
-
     @Override
     public User getUser(Integer userId) {
         String sql;
