@@ -11,7 +11,7 @@ import ru.spaceinvasion.resources.Constants.HEALTH_OF_BASE
  * Created by egor on 17.11.17.
  */
 class Base(mediator: GamePartMediator,
-           gamePartId: Int) : GamePart(mediator, gamePartId), Damaging {
+           gamePartId: Long) : GamePart(mediator, gamePartId), Damaging {
     override var health: Int = HEALTH_OF_BASE
     override fun notify(message: GameMessage) {
 

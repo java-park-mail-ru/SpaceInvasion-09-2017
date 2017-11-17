@@ -1,18 +1,17 @@
 package ru.spaceinvasion.mechanic.game
 
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
-import ru.spaceinvasion.mechanic.game.models.Field
+import ru.spaceinvasion.mechanic.game.models.Mechanics
 import ru.spaceinvasion.mechanic.game.models.Player
 
 import java.util.ArrayList
 import java.util.HashMap
+import java.util.concurrent.atomic.AtomicLong
 
 class GamePartMediator( player1 : Player, player2: Player ) : Mediator<GamePart> {
 
     init {
-        registerColleague(Player::class.java, player1)
-        registerColleague(Player::class.java, player2)
-        registerColleague(Field::class.java, Field(this,-3))
+        registerColleague(Mechanics::class.java, Mechanics(this, ID_GENERATOR.decrementAndGet(), ID_GENERATOR))
     }
 
     private val colleagues = HashMap<Class<*>, MutableList<GamePart>>()
@@ -29,13 +28,16 @@ class GamePartMediator( player1 : Player, player2: Player ) : Mediator<GamePart>
         }
     }
 
-    override fun send(message: GameMessage, gamePart: GamePart, gamePartId: Int?) {
-        val gameParts = colleagues[gamePart.javaClass]
-        for (_gamePart in gameParts!!) {
-            //or equals?
-            if (gamePartId == null || _gamePart.gamePartId == gamePartId) {
-                _gamePart.notify(message)
-            }
-        }
+    override fun <T : GamePart> send(message: GameMessage, sendToGamePart: Class<T>, sendToGamePartId: Long?) {
+        val gameParts = colleagues[sendToGamePart]
+        gameParts!!
+                .filter { //or equals?
+                    sendToGamePartId == null || it.gamePartId == sendToGamePartId
+                }
+                .forEach { it.notify(message) }
+    }
+
+    companion object {
+        private val ID_GENERATOR = AtomicLong(-1)
     }
 }

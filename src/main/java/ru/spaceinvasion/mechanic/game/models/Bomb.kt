@@ -8,9 +8,11 @@ import ru.spaceinvasion.mechanic.game.messages.GameMessage
 /**
  * Created by egor on 17.11.17.
  */
-class Bomb(mediator: GamePartMediator, gamePartId: Int) : GamePart(mediator, gamePartId) {
+class Bomb(mediator: GamePartMediator, gamePartId: Long) : GamePart(mediator, gamePartId) {
 
     override fun notify(message: GameMessage) {
 
     }
+
+
 }

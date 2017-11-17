@@ -11,9 +11,9 @@ import ru.spaceinvasion.models.Coordinates
  * Created by egor on 17.11.17.
  */
 class Shot(mediator: GamePartMediator,
-           gamePartId: Int,
+           gamePartId: Long,
            override var coordinates: Coordinates,
-           private val direction: Direction?) : GamePart(mediator, gamePartId), Moving {
+           private val direction: Direction) : GamePart(mediator, gamePartId), Moving {
 
     override fun notify(message: GameMessage) {
 

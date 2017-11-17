@@ -1,5 +1,6 @@
 package ru.spaceinvasion.mechanic.game.messages;
 
+import ru.spaceinvasion.mechanic.game.GamePart;
 import ru.spaceinvasion.models.Message;
 
 /**
@@ -7,17 +8,24 @@ import ru.spaceinvasion.models.Message;
  */
 
 public abstract class GameMessage implements Message {
-    private Integer messageId;
+    private Long messageId;
 
-    public GameMessage(Integer messageId) {
+    private GamePart messageCreator;
+
+    public GameMessage(GamePart messageCreator, Long messageId) {
+        this.messageCreator = messageCreator;
         this.messageId = messageId;
     }
 
-    public Integer getMessageId() {
+    public Long getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(Integer messageId) {
+    public void setMessageId(Long messageId) {
         this.messageId = messageId;
+    }
+
+    public GamePart getMessageCreator() {
+        return messageCreator;
     }
 }
