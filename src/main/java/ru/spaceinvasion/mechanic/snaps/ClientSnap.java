@@ -44,9 +44,7 @@ public class ClientSnap implements Message {
 
     public Coordinates getCoordinates() {
         try {
-            Coordinates coords =  new Coordinates();
-            coords.setX(request[2]);
-            coords.setY(request[3]);
+            Coordinates coords =  new Coordinates(request[2],request[3]);
             return coords;
         } catch (IndexOutOfBoundsException e) { }
         throw new Exceptions.NotValidData();
