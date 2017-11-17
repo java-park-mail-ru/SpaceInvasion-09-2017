@@ -37,7 +37,7 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public Boolean validate(User user) {
+    public Boolean authenticate(User user) {
         final String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try {
             jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER,
@@ -49,29 +49,34 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public User getUser(User user) {
+    public User getUser(Integer userId) {
         String sql;
-        if (user == null) {
+        User user;
+        if (userId == null) {
             throw new Exceptions.NotFoundUser();
         }
-        if (user.getUsername() != null) {
-            sql = "SELECT * FROM users WHERE username = ?";
-            try {
-                user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, user.getUsername());
-            } catch (EmptyResultDataAccessException e) {
-                throw new Exceptions.NotFoundUser();
-            }
-        } else if (user.getId() != null) {
-            sql = "SELECT * FROM users WHERE id = ?";
-            try {
-                user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, user.getId());
-            } catch (EmptyResultDataAccessException e) {
-                throw new Exceptions.NotFoundUser();
-            }
-        } else {
+        sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, userId);
+        } catch (EmptyResultDataAccessException e) {
             throw new Exceptions.NotFoundUser();
         }
+        return user;
+    }
 
+    @Override
+    public User getUser(String username) {
+        String sql;
+        User user;
+        if (username == null) {
+            throw new Exceptions.NotFoundUser();
+        }
+        sql = "SELECT * FROM users WHERE username = ?";
+        try {
+            user = jdbcTemplateObject.queryForObject(sql, USER_ROW_MAPPER, username);
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exceptions.NotFoundUser();
+        }
         return user;
     }
 
@@ -83,25 +88,9 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public void delete(User user) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        try {
-            jdbcTemplateObject.update(sql, user.getId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new Exceptions.NotFoundUser();
-        }
-    }
-
-    @Override
     public void dropAll() {
         String sql = "DELETE FROM users *";
         jdbcTemplateObject.update(sql);
-    }
-
-    @Override
-    public User update(User user, String newUsername,
-                       String newEmail, String newPassword) {
-        throw new NotImplementedException();
     }
 
     @Override
