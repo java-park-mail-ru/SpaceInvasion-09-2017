@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.spaceinvasion.models.Coordinates;
+import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.utils.Exceptions;
 
 
-public class ClientSnap {
+public class ClientSnap implements Message {
 
     @JsonProperty
     Integer[] request;

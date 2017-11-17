@@ -22,7 +22,7 @@ public class ClientSnapService {
     }
 
     public List<ClientSnap> getSnapForUser(Integer userId) {
-        return snaps.get(userId);
+        return snaps.get(userId) != null ? snaps.get(userId) : Collections.emptyList();
     }
 
     public void processSnapshotsForSession(GameSession gameSession) {
@@ -53,16 +53,16 @@ public class ClientSnapService {
     }
 
     private void processMove(ClientSnap snap) {
-
+        //TODO
     }
     private void processTowerBuild(ClientSnap snap) {
-
+        //TODO
     }
     private void processBombAdding(ClientSnap snap) {
-
+        //TODO
     }
     private void processShot(ClientSnap snap) {
-
+        //TODO
     }
     private void processStateRequest(ClientSnap snap) {
         throw new NotImplementedException();
