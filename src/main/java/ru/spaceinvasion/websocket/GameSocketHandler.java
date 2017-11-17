@@ -48,7 +48,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Integer userId = (Integer)webSocketSession.getAttributes().get("userId");
         final User user = new User(userId);
         try {
-            userService.getUser(user);
+            userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
             LOGGER.warn("User requested web socket is not registred or not logged in. Openning websocket session is denied.");
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
@@ -65,7 +65,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Integer userId = (Integer)webSocketSession.getAttributes().get("userId");
         User user = new User(userId);
         try {
-            user = userService.getUser(user);
+            user = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
             return;

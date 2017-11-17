@@ -14,7 +14,7 @@ public class TypicalResponses {
                                     .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
     public static final ResponseEntity<RestJsonAnswer> FORBIDDEN_RESPONSE = ResponseEntity.status(HttpStatus.FORBIDDEN)
             .body(new RestJsonAnswer("Forbidden", "Sign in or sign up"));
-    public static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    public static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE = ResponseEntity.status(HttpStatus.FORBIDDEN)
                                             .body(new RestJsonAnswer("Is not sign in yet", "You can not logout if you are not singed in"));
     @SuppressWarnings("unused")
     private static final ResponseEntity<RestJsonAnswer> CONFIRMATION_FAILED_RESPONSE = ResponseEntity.badRequest()
