@@ -34,15 +34,17 @@ public class UserController {
             return TypicalResponses.BAD_REQUEST;
         }
 
-        final User curUser = (User) httpSession.getAttribute("user");
-        if (curUser != null) {
+        final Integer userId = (Integer) httpSession.getAttribute("user");
+        if (userId != null) {
+            User curUser = userService.getUser(userId);
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
         if (!userService.authenticate(user)) {
             return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
         }
-        httpSession.setAttribute("user", user);
+        User curUser = userService.getUser(user.getUsername());
+        httpSession.setAttribute("user", curUser.getId());
         return ResponseEntity.ok(user);
     }
 
@@ -52,8 +54,9 @@ public class UserController {
             return TypicalResponses.BAD_REQUEST;
         }
 
-        final User curUser = (User) httpSession.getAttribute("user");
-        if (curUser != null) {
+        final Integer userId = (Integer) httpSession.getAttribute("user");
+        if (userId != null) {
+            User curUser = userService.getUser(userId);
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
         try {
@@ -61,7 +64,7 @@ public class UserController {
         } catch (DuplicateKeyException e) {
             return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
         }
-        httpSession.setAttribute("user", user);
+        httpSession.setAttribute("user", user.getId());
 
         return ResponseEntity.ok(user);
     }
@@ -78,12 +81,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
-        User curUser = (User) httpSession.getAttribute("user");
-        if (curUser == null) {
+        Integer userId = (Integer) httpSession.getAttribute("user");
+        if (userId == null) {
             return TypicalResponses.FORBIDDEN_RESPONSE;
         }
+        User curUser;
         try {
-            curUser = userService.getUser(curUser.getId());
+            curUser = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
             return TypicalResponses.FORBIDDEN_RESPONSE;
         }

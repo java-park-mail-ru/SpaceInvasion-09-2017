@@ -70,8 +70,9 @@ public class UserControllerTest {
                                 "\"password\":\"soHardPassword\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("username").value("n02"));
-        assertEquals(((User)mockHttpSession.getAttribute("user"))
-                        .getUsername(), "n02");
+        assertEquals(
+                ((Integer)mockHttpSession.getAttribute("user")),
+                (Integer)userService.getUser("n02").getId());
     }
 
     @Test
