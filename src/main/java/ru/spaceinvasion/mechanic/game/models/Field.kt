@@ -11,7 +11,7 @@ import java.util.ArrayList
 /**
  * Created by egor on 17.11.17.
  */
-class Field(mediator: Mediator<GamePart>,
+class Field(mediator: GamePartMediator,
             gamePartId: Int) : GamePart(mediator, gamePartId) {
     private var unit1: Unit? = null
     private var unit2: Unit? = null
