@@ -1,6 +1,7 @@
-package ru.spaceinvasion.mechanic.game;
+package ru.spaceinvasion.mechanic.game.models;
 
 import org.jetbrains.annotations.NotNull;
+import ru.spaceinvasion.mechanic.game.Mediator;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
 
 import static ru.spaceinvasion.resources.Constants.HEALTH_OF_BASE;
@@ -8,7 +9,7 @@ import static ru.spaceinvasion.resources.Constants.HEALTH_OF_BASE;
 /**
  * Created by egor on 17.11.17.
  */
-public class Base extends Damaging{
+public class Base extends Damaging {
 
     public Base(@NotNull Mediator mediator,
                 @NotNull Integer gamePartId) {

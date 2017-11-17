@@ -1,7 +1,9 @@
-package ru.spaceinvasion.mechanic.game;
+package ru.spaceinvasion.mechanic.game.models;
 
 import org.jetbrains.annotations.NotNull;
+import ru.spaceinvasion.mechanic.game.Mediator;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
+import ru.spaceinvasion.mechanic.game.models.Damaging;
 
 import static ru.spaceinvasion.resources.Constants.HEALTH_OF_TOWER;
 

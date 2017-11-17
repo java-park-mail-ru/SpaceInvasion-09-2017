@@ -1,7 +1,8 @@
-package ru.spaceinvasion.mechanic.game;
+package ru.spaceinvasion.mechanic.game.models;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.spaceinvasion.mechanic.game.*;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
 
 import java.util.ArrayList;

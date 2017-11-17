@@ -1,6 +1,8 @@
-package ru.spaceinvasion.mechanic.game;
+package ru.spaceinvasion.mechanic.game.models;
 
 import org.jetbrains.annotations.NotNull;
+import ru.spaceinvasion.mechanic.game.GamePart;
+import ru.spaceinvasion.mechanic.game.Mediator;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
 
 /**

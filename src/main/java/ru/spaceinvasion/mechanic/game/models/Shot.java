@@ -1,7 +1,10 @@
-package ru.spaceinvasion.mechanic.game;
+package ru.spaceinvasion.mechanic.game.models;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.spaceinvasion.mechanic.game.Direction;
+import ru.spaceinvasion.mechanic.game.GamePart;
+import ru.spaceinvasion.mechanic.game.Mediator;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
 import ru.spaceinvasion.models.Coordinates;
 

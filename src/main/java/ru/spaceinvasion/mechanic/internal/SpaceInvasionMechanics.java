@@ -91,7 +91,9 @@ public class SpaceInvasionMechanics implements GameMechanics {
         for (GameSession session : gameSessionService.getSessions()) {
 
             try {
-                serverSnapService.sendSnapshotsFor(session, frameTime);
+                //TODO: Check it place
+                serverSnapService.sendSnapshotsFor(session.getPlayer1(), frameTime);
+                serverSnapService.sendSnapshotsFor(session.getPlayer2(), frameTime);
             } catch (RuntimeException ex) {
                 sessionsToTerminate.add(session);
             }

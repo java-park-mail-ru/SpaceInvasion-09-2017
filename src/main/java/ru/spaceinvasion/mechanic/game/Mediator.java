@@ -8,7 +8,9 @@ import ru.spaceinvasion.mechanic.game.messages.GameMessage;
  */
 
 public interface Mediator<T> {
+
     void send(GameMessage message, T colleague, @Nullable Integer colleagueId);
 
     <_T extends T> void registerColleague(Class<_T> clazz, T colleague);
+
 }

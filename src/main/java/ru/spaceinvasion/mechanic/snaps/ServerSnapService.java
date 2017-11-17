@@ -1,7 +1,11 @@
 package ru.spaceinvasion.mechanic.snaps;
 
+import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.models.GameSession;
+import ru.spaceinvasion.services.WebSocketSessionService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +13,14 @@ import java.util.List;
  */
 public class ServerSnapService {
 
-    public void sendSnapshotsFor(GameSession session, long frameTime) {
+    @NotNull
+    private WebSocketSessionService webSocketSessionService;
 
+    public ServerSnapService (@NotNull WebSocketSessionService webSocketSessionService) {
+        this.webSocketSessionService = webSocketSessionService;
+    }
+
+    public void sendSnapshotsFor(Integer userId, long frameTime) {
+        //TODO
     }
 }
