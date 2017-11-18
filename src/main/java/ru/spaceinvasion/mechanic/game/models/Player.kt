@@ -23,7 +23,4 @@ class Player(mediator: GamePartMediator,
     override fun notify(message: GameMessage) {
 
     }
-
-
-
 }

@@ -27,7 +27,8 @@ public class WebSocketSessionService {
         this.objectMapper = objectMapper;
     }
 
-    public void registerUser(Integer userId, WebSocketSession websocketSession) {
+    public void registerUser(@NotNull Integer userId,
+                             @NotNull WebSocketSession websocketSession) {
         sessions.put(userId, websocketSession);
     }
 

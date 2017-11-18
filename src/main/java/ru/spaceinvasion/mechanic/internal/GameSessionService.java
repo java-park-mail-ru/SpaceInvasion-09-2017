@@ -2,6 +2,10 @@ package ru.spaceinvasion.mechanic.internal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
+import ru.spaceinvasion.mechanic.game.GamePartMediator;
+import ru.spaceinvasion.mechanic.game.models.Player;
+import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.mechanic.responses.GameInitResponse;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
@@ -15,6 +19,8 @@ import java.util.Set;
 /**
  * Created by egor on 14.11.17.
  */
+
+@Service
 public class GameSessionService {
 
     @NotNull
@@ -44,7 +50,14 @@ public class GameSessionService {
 
     public void startGame(@NotNull Integer player1Id,
                           @NotNull Integer player2Id) {
-        GameSession gameSession = new GameSession(player1Id, player2Id, this);
+        GamePartMediator gamePartMediator = new GamePartMediator();
+        Server server = new Server(gamePartMediator,0L);
+        gamePartMediator.registerColleague(Server.class, server);
+        GameSession gameSession = new GameSession(
+                player1Id,
+                player2Id,
+                this,
+                server);
         gameSessions.add(gameSession);
         usersMap.put(player1Id, gameSession);
         usersMap.put(player2Id, gameSession);

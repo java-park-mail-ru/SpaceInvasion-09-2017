@@ -1,6 +1,7 @@
 package ru.spaceinvasion.mechanic.internal;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.TimeService;
 
@@ -9,6 +10,8 @@ import java.util.*;
 /**
  * Created by egor on 15.11.17.
  */
+
+@Service
 public class GameTaskScheduler {
 
     @NotNull private final TimeService timeService;
@@ -57,6 +60,7 @@ public class GameTaskScheduler {
         default void onError() {}
     }
 
+    //TODO: Отнаследовать взрыв бомбы от GameSessionTask
     public abstract static class GameSessionTask implements ScheduledTask{
         private final GameSession gameSession;
 

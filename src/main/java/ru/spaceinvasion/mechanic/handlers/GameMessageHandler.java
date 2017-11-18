@@ -1,6 +1,7 @@
 package ru.spaceinvasion.mechanic.handlers;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 import ru.spaceinvasion.mechanic.internal.GameMechanics;
 import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.websocket.MessageHandlerContainer;
@@ -10,6 +11,8 @@ import javax.annotation.PostConstruct;
 /**
  * Created by egor on 17.11.17.
  */
+
+@Component
 public class GameMessageHandler extends MessageHandler<ClientSnap> {
     @NotNull
     private GameMechanics gameMechanics;

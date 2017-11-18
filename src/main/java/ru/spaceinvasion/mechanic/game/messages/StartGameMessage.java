@@ -10,7 +10,7 @@ public class StartGameMessage extends GameMessage {
     private Integer player1Id;
     private Integer player2Id;
 
-    public StartGameMessage(GamePart messageCreator, Long messageId) {
+    public StartGameMessage(GamePart messageCreator, Long messageId, Integer player1Id, Integer player2Id) {
         super(messageCreator, messageId);
     }
 

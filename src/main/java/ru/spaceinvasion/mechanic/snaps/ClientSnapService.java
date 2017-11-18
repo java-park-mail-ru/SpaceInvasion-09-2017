@@ -1,6 +1,7 @@
 package ru.spaceinvasion.mechanic.snaps;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.utils.Exceptions;
@@ -11,6 +12,8 @@ import java.util.*;
 /**
  * Created by egor on 15.11.17.
  */
+
+@Service
 public class ClientSnapService {
 
     private final Map<Integer, List<ClientSnap>> snaps = new HashMap<>();

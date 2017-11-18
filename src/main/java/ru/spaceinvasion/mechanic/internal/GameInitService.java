@@ -2,6 +2,9 @@ package ru.spaceinvasion.mechanic.internal;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.CloseStatus;
+import ru.spaceinvasion.mechanic.game.messages.StartGameMessage;
+import ru.spaceinvasion.mechanic.game.models.Mechanics;
+import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.mechanic.responses.GameInitResponse;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
@@ -35,5 +38,6 @@ public class GameInitService {
             players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
                     CloseStatus.SERVER_ERROR));
         }
+        gameSession.getServer().startGame(gameSession.getPlayer1(), gameSession.getPlayer2());
     }
 }

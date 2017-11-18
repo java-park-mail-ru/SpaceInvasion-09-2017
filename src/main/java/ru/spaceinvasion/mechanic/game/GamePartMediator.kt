@@ -8,7 +8,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.concurrent.atomic.AtomicLong
 
-class GamePartMediator( player1 : Player, player2: Player ) : Mediator<GamePart> {
+class GamePartMediator : Mediator<GamePart> {
 
     init {
         registerColleague(Mechanics::class.java, Mechanics(this, ID_GENERATOR.decrementAndGet(), ID_GENERATOR))

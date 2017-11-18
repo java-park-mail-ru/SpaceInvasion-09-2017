@@ -1,6 +1,7 @@
 package ru.spaceinvasion.mechanic.snaps;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
 
@@ -11,6 +12,8 @@ import java.util.List;
 /**
  * Created by egor on 15.11.17.
  */
+
+@Service
 public class ServerSnapService {
 
     @NotNull

@@ -2,6 +2,7 @@ package ru.spaceinvasion.mechanic.internal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by egor on 07.11.17.
  */
+@Service
 public class SpaceInvasionMechanics implements GameMechanics {
 
     @NotNull
@@ -58,7 +60,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
     }
 
     public void addClientSnapshot(Integer userId, ClientSnap clientSnap) {
-
+        tasks.add(() -> clientSnapService.pushClientSnap(userId, clientSnap));
     }
 
     public void addUser(Integer userId) {

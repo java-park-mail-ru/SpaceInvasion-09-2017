@@ -45,8 +45,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) {
-        final Integer userId = (Integer)webSocketSession.getAttributes().get("userId");
-        final User user = new User(userId);
+        final Integer userId = (Integer)webSocketSession.getAttributes().get("user");
         try {
             userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
@@ -62,8 +61,8 @@ public class GameSocketHandler extends TextWebSocketHandler {
         if (!webSocketSession.isOpen()) {
             return;
         }
-        final Integer userId = (Integer)webSocketSession.getAttributes().get("userId");
-        User user = new User(userId);
+        final Integer userId = (Integer)webSocketSession.getAttributes().get("user");
+        User user;
         try {
             user = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
@@ -95,7 +94,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
-        final Integer userId = (Integer)webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer)webSocketSession.getAttributes().get("user");
         if (userId == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');
             return;
