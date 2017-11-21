@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.models.*;
 
-public class ServerSnap {
+public class ServerSnap implements Message {
 
     @JsonProperty
     @NotNull

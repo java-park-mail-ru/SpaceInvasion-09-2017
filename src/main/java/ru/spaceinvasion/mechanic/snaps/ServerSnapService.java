@@ -3,6 +3,7 @@ package ru.spaceinvasion.mechanic.snaps;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import ru.spaceinvasion.models.GameSession;
+import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.services.WebSocketSessionService;
 
 import java.io.IOException;
@@ -23,7 +24,13 @@ public class ServerSnapService {
         this.webSocketSessionService = webSocketSessionService;
     }
 
-    public void sendSnapshotsFor(Integer userId, long frameTime) {
-        //TODO
+    public void sendSnapshotsFor(Integer userId, List<Message> serverSnaps) {
+        for( Message message : serverSnaps ) {
+            sendSnapshotsFor(userId, message);
+        }
+    }
+
+    public void sendSnapshotsFor(Integer userId, Message serverSnap) {
+        //TODO:
     }
 }

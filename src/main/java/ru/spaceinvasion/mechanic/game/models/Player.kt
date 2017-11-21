@@ -5,6 +5,7 @@ import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.Race
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 import ru.spaceinvasion.mechanic.game.messages.NewUnitGameMessage
+import ru.spaceinvasion.resources.Constants.START_COINS
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -13,11 +14,13 @@ import java.util.concurrent.atomic.AtomicLong
 class Player(mediator: GamePartMediator,
              gamePartId: Long,
              private val userId: Int,
-             val ID_GENERATOR: AtomicLong,
+             ID_GENERATOR: AtomicLong,
              var race: Race) : GamePart(mediator, gamePartId) {
 
+    var coins: Int = START_COINS
+
     init {
-        mediator.send(NewUnitGameMessage(this,ID_GENERATOR.decrementAndGet()),Mechanics::class.java, null)
+        mediator.send(NewUnitGameMessage(this, ID_GENERATOR.decrementAndGet()), Server::class.java)
     }
 
     override fun notify(message: GameMessage) {

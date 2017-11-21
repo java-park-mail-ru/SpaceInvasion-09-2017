@@ -3,6 +3,7 @@ package ru.spaceinvasion.mechanic.snaps;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.spaceinvasion.mechanic.game.Direction;
 import ru.spaceinvasion.models.Coordinates;
 import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.utils.Exceptions;
@@ -50,9 +51,18 @@ public class ClientSnap implements Message {
         throw new Exceptions.NotValidData();
     }
 
-    public Integer getDirection() {
+    public Direction getDirection() {
         try {
-            return request[2];
+            switch (request[2]) {
+                case 0: return Direction.UP;
+                case 1: return Direction.UP_RIGHT;
+                case 2: return Direction.RIGHT;
+                case 3: return Direction.DOWN_RIGHT;
+                case 4: return Direction.DOWN;
+                case 5: return Direction.DOWN_LEFT;
+                case 6: return Direction.LEFT;
+                case 7: return Direction.UP_LEFT;
+            }
         } catch (IndexOutOfBoundsException e) { }
         throw new Exceptions.NotValidData();
     }

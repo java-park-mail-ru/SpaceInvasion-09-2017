@@ -7,26 +7,28 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class StartGameMessage extends GameMessage {
 
-    private Integer player1Id;
-    private Integer player2Id;
+    private Integer playerPeopleId;
+    private Integer playerAliensId;
 
-    public StartGameMessage(GamePart messageCreator, Long messageId, Integer player1Id, Integer player2Id) {
+    public StartGameMessage(GamePart messageCreator, Long messageId, Integer playerPeopleId, Integer playerAliensId) {
         super(messageCreator, messageId);
+        this.playerPeopleId = playerPeopleId;
+        this.playerAliensId = playerAliensId;
     }
 
-    public Integer getPlayer1Id() {
-        return player1Id;
+    public Integer getPlayerPeopleId() {
+        return playerPeopleId;
     }
 
-    public void setPlayer1Id(Integer player1Id) {
-        this.player1Id = player1Id;
+    public void setPlayerPeopleId(Integer playerPeopleId) {
+        this.playerPeopleId = playerPeopleId;
     }
 
-    public Integer getPlayer2Id() {
-        return player2Id;
+    public Integer getPlayerAliensId() {
+        return playerAliensId;
     }
 
-    public void setPlayer2Id(Integer player2Id) {
-        this.player2Id = player2Id;
+    public void setPlayer2Id(Integer playerAliensId) {
+        this.playerAliensId = playerAliensId;
     }
 }

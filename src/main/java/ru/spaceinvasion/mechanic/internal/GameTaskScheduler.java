@@ -12,6 +12,7 @@ import java.util.*;
  */
 
 @Service
+@Deprecated
 public class GameTaskScheduler {
 
     @NotNull private final TimeService timeService;

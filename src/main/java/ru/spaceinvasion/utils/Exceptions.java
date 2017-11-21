@@ -15,9 +15,11 @@ public class Exceptions {
 
     public static class NumberOfRequestsHasExceeded extends RuntimeException {
         private Integer idOfLastProcessedSnap;
+        private Integer userId;
 
-        public NumberOfRequestsHasExceeded(Integer idOfLastProcessedSnap) {
+        public NumberOfRequestsHasExceeded(Integer userId, Integer idOfLastProcessedSnap) {
             this.idOfLastProcessedSnap = idOfLastProcessedSnap;
+            this.userId = userId;
         }
 
         public Integer getIdOfLastProcessedSnap() {

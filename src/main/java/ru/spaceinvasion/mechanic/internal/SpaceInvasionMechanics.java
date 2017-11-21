@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
+import ru.spaceinvasion.mechanic.responses.RollbackResponse;
 import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
 import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.mechanic.snaps.ServerSnapService;
 import ru.spaceinvasion.models.GameSession;
+import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.services.TimeService;
 import ru.spaceinvasion.services.WebSocketSessionService;
 
@@ -81,9 +83,12 @@ public class SpaceInvasionMechanics implements GameMechanics {
                 }
             }
         }
-
         for (GameSession session : gameSessionService.getSessions()) {
-            clientSnapService.processSnapshotsForSession(session);
+            List<Map.Entry<Integer,RollbackResponse>> rollbacks = clientSnapService.processSnapshotsForSession(session);
+            for( Map.Entry<Integer,RollbackResponse> rollback : rollbacks) {
+                serverSnapService.sendSnapshotsFor(rollback.getKey(), rollback.getValue());
+            }
+            session.getServer().tick();
         }
 
         gameTaskScheduler.tick();
@@ -94,8 +99,14 @@ public class SpaceInvasionMechanics implements GameMechanics {
 
             try {
                 //TODO: Check it place
-                serverSnapService.sendSnapshotsFor(session.getPlayer1(), frameTime);
-                serverSnapService.sendSnapshotsFor(session.getPlayer2(), frameTime);
+                serverSnapService.sendSnapshotsFor(
+                        session.getPlayer1(),
+                        (List<Message>) session.getServer().getSnaps().get(session.getPlayer1())
+                );
+                serverSnapService.sendSnapshotsFor(
+                        session.getPlayer2(),
+                        (List<Message>) session.getServer().getSnaps().get(session.getPlayer2())
+                );
             } catch (RuntimeException ex) {
                 sessionsToTerminate.add(session);
             }

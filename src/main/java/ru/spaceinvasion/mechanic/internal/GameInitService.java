@@ -2,9 +2,7 @@ package ru.spaceinvasion.mechanic.internal;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.CloseStatus;
-import ru.spaceinvasion.mechanic.game.messages.StartGameMessage;
-import ru.spaceinvasion.mechanic.game.models.Mechanics;
-import ru.spaceinvasion.mechanic.game.models.Server;
+import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.responses.GameInitResponse;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
@@ -30,10 +28,8 @@ public class GameInitService {
         players.add(gameSession.getPlayer1());
         players.add(gameSession.getPlayer2());
         try {
-            for (Integer player : players) {
-                webSocketSessionService.sendMessageToUser(
-                        player, new GameInitResponse());
-            }
+            webSocketSessionService.sendMessageToUser(players.get(0), new GameInitResponse(Race.PEOPLE));
+            webSocketSessionService.sendMessageToUser(players.get(1), new GameInitResponse(Race.ALIENS));
         } catch (IOException e) {
             players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
                     CloseStatus.SERVER_ERROR));
