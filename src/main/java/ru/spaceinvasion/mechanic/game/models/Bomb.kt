@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class Bomb(mediator: GamePartMediator,
            gamePartId: Long,
-           playerWhoInstalled: Int,
+           playerWhoInstalled: Long,
            ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR) {
     override fun notify(message: GameMessage) {
 

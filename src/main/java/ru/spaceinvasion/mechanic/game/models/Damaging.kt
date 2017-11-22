@@ -10,6 +10,7 @@ import ru.spaceinvasion.mechanic.game.Mediator
  interface Damaging{
 
     var health: Int
+    var isAlive: Boolean
 
     fun damage(damage: Int) {
         health -= damage
@@ -24,5 +25,6 @@ import ru.spaceinvasion.mechanic.game.Mediator
 
     fun kill() {
         health = 0
+        isAlive = false
     }
 }

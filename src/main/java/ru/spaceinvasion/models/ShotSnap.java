@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Created by egor on 15.11.17.
  */
-public class Shot {
+public class ShotSnap {
     @Nullable
     private Integer id;
 
@@ -20,11 +20,11 @@ public class Shot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Shot shot = (Shot) o;
+        ShotSnap shotSnap = (ShotSnap) o;
 
-        if (id != null ? !id.equals(shot.id) : shot.id != null) return false;
-        if (coordinates != null ? !coordinates.equals(shot.coordinates) : shot.coordinates != null) return false;
-        return direction != null ? direction.equals(shot.direction) : shot.direction == null;
+        if (id != null ? !id.equals(shotSnap.id) : shotSnap.id != null) return false;
+        if (coordinates != null ? !coordinates.equals(shotSnap.coordinates) : shotSnap.coordinates != null) return false;
+        return direction != null ? direction.equals(shotSnap.direction) : shotSnap.direction == null;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Shot {
         return result;
     }
 
-    public Shot() { }
+    public ShotSnap() { }
 
     public Integer getId() {
         return id;

@@ -80,6 +80,44 @@ abstract class Player(
                     }
                 }
             }
+            (ShootMessage::class.java) -> {
+                if (curUnit == null) {
+                    mediator.send(
+                            RollbackMessage(
+                                    this,
+                                    message.messageId,
+                                    message.messageId,
+                                    "No existing unit => no shots"
+                            ),
+                            Server::class.java
+                    )
+                } else {
+                    mediator.send(
+                            ShootMessage(message as ShootMessage, this),
+                            Unit::class.java,
+                            curUnit!!
+                    )
+                }
+            }
+            (BombInstallingMessage::class.java) -> {
+                if (curUnit == null) {
+                    mediator.send(
+                            RollbackMessage(
+                                    this,
+                                    message.messageId,
+                                    message.messageId,
+                                    "No existing unit => no bomb"
+                            ),
+                            Server::class.java
+                    )
+                } else {
+                    mediator.send(
+                            BombInstallingMessage(message as BombInstallingMessage, this),
+                            Unit::class.java,
+                            curUnit!!
+                    )
+                }
+            }
         }
     }
 
@@ -93,5 +131,16 @@ abstract class Player(
         )
         curUnit = unit.gamePartId
         mediator.registerColleague(Unit::class.java, unit)
+    }
+
+    protected fun createBase(coordinates: Coordinates) {
+        val base: Base = Base(
+                mediator,
+                ID_GENERATOR.decrementAndGet(),
+                this,
+                coordinates,
+                ID_GENERATOR
+        )
+        mediator.registerColleague(Base::class.java, base)
     }
 }

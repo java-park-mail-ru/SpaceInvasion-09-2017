@@ -7,15 +7,15 @@ import ru.spaceinvasion.models.Coordinates;
 /**
  * Created by egor on 17.11.17.
  */
-public class BuildTowerMessage extends GameMessage {
-    public Direction direction;
+public class ShootMessage extends GameMessage {
+    Direction direction;
 
-    public BuildTowerMessage(GamePart messageCreator, Long messageId, Direction direction) {
+    public ShootMessage(GamePart messageCreator, Long messageId, Direction direction) {
         super(messageCreator, messageId);
         this.direction = direction;
     }
 
-    public BuildTowerMessage(BuildTowerMessage buildTowerMessage, GamePart messageCreator) {
+    public ShootMessage(ShootMessage buildTowerMessage, GamePart messageCreator) {
         super(messageCreator, buildTowerMessage.getMessageId());
         this.direction = buildTowerMessage.getDirection();
     }

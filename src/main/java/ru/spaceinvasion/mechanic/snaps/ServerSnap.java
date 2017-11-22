@@ -35,35 +35,35 @@ public class ServerSnap implements Message {
         response[3] = idOfDamageTarget;
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, Move move) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, MoveSnap moveSnap) {
         response = new Integer[3];
         response[0] = idOfLastAcceptedCommitFromUser;
         response[1] = 3;
-        response[2] = move.getCoordinates().getX();
-        response[3] = move.getCoordinates().getY();
+        response[2] = moveSnap.getCoordinates().getX();
+        response[3] = moveSnap.getCoordinates().getY();
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, Tower tower) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, TowerSnap towerSnap) {
         response = new Integer[4];
         response[0] = idOfLastAcceptedCommitFromUser;
         response[1] = 4;
-        response[2] = tower.getCoordinates().getX();
-        response[3] = tower.getCoordinates().getY();
-        response[4] = tower.getDirection();
+        response[2] = towerSnap.getCoordinates().getX();
+        response[3] = towerSnap.getCoordinates().getY();
+        response[4] = towerSnap.getDirection();
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, Bomb bomb) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, BombSnap bombSnap) {
         response = new Integer[1];
         response[0] = idOfLastAcceptedCommitFromUser;
         response[1] = 5;
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, Shot shot) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, ShotSnap shotSnap) {
         response = new Integer[4];
         response[0] = idOfLastAcceptedCommitFromUser;
         response[1] = 6;
-        response[2] = shot.getCoordinates().getX();
-        response[3] = shot.getCoordinates().getY();
-        response[4] = shot.getDirection();
+        response[2] = shotSnap.getCoordinates().getX();
+        response[3] = shotSnap.getCoordinates().getY();
+        response[4] = shotSnap.getDirection();
     }
 }

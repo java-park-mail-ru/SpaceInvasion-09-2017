@@ -51,6 +51,19 @@ class CollisionEngine(mediator: GamePartMediator,
                                         CashChangeMessage(this,message.messageId, COST_OF_ONE_COIN),
                                         Unit::class.java,
                                         message.messageCreator.gamePartId)
+                            } else {
+                                val base: Base? = collisionWithBase(message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
+                                if (base != null && base.owner.gamePartId != (message.messageCreator as Unit).owner.gamePartId) {
+                                    mediator.registerColleague(
+                                            Bomb::class.java,
+                                            Bomb(
+                                                    mediator,
+                                                    message.messageId,
+                                                    (message.messageCreator as Unit).owner.gamePartId,
+                                                    ID_GENERATOR
+                                            )
+                                    )
+                                }
                             }
                             mediator.send(
                                     AcceptedMoveMessage(this,message.messageId, message.potentialCoordinates),
@@ -60,6 +73,9 @@ class CollisionEngine(mediator: GamePartMediator,
                     }
                     (Shot::class.java) -> {
                         //TODO;
+                    }
+                    (BombInstallingMessage::class.java) -> {
+
                     }
                 }
             }
@@ -83,7 +99,20 @@ class CollisionEngine(mediator: GamePartMediator,
                 return it;
             }
         }
-        return null;
+        return null
+    }
+
+    private fun  collisionWithBase(coordinates: Coordinates, widthOfObject: Int, heightOfObject: Int): Base? {
+        val bases: List<Base>? = mediator.returnColleagues(Base::class.java) as List<Base>?
+        if (bases == null) {
+            return null
+        }
+        bases.forEach { it ->
+            if (isIntersect(coordinates, widthOfObject, heightOfObject, it.coordinates, BASE_WIDTH, BASE_HEIGTH)) {
+                return it;
+            }
+        }
+        return null
     }
 
     private fun isIntersect(coordinates1: Coordinates,

@@ -7,7 +7,6 @@ import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.models.Message
 import ru.spaceinvasion.resources.Constants
 import java.util.concurrent.atomic.AtomicLong
-import kotlin.Unit
 
 /**
  * Created by egor on 17.11.17.
@@ -38,6 +37,12 @@ class Server(mediator: GamePartMediator,
             (MoveMessage::class.java) -> {
                 snaps.filter { it.key != (message.messageCreator as Player).userId  }.forEach { it.value.add(message)}
             }
+            (BuildTowerMessage::class.java) -> {
+                snaps.filter { it.key != (message.messageCreator as Unit).owner.userId  }.forEach { it.value.add(message)}
+            }
+            (ShootMessage::class.java) -> {
+                snaps.filter { it.key != (message.messageCreator as Unit).owner.userId }.forEach { it.value.add(message)}
+            }
             (CashChangeMessage::class.java) -> {
                 snaps.filter { it.key == (message.messageCreator as Player).userId }.forEach { it.value.add(message)}
             }
@@ -66,17 +71,19 @@ class Server(mediator: GamePartMediator,
         mediator.send(MoveMessage(this, snapId, coords), Player::class.java, clientId)
     }
 
-    fun newClientTower(clientId: Long, snapId: Long, coords: Coordinates, direction: Direction) {
-        mediator.send(BuildTowerMessage(this,snapId,coords,direction), Player::class.java, clientId)
+    fun newClientTower(clientId: Long, snapId: Long, direction: Direction) {
+        mediator.send(BuildTowerMessage(this,snapId,direction), Player::class.java, clientId)
+    }
+
+    fun newClientShot(clientId: Long, snapId: Long, direction: Direction) {
+        mediator.send(ShootMessage(this, snapId, direction),Player::class.java, clientId)
+    }
+
+    fun newClientStateRequest(clientId: Long, snapId: Long) {
+        throw NotImplementedError()
     }
 
     fun newClientBomb(clientId: Long, snapId: Long) {
-    }
-
-    fun newClientShot(clientId: Long, snapId: Long, coords: Coordinates, direction: Direction) {
-    }
-
-    fun newClientStateRequest(clientId: Long, snapId: Long): Unit {
         throw NotImplementedError()
     }
 

@@ -2,20 +2,18 @@ package ru.spaceinvasion.models;
 
 import org.jetbrains.annotations.Nullable;
 
-import javax.validation.constraints.Null;
-
 /**
  * Created by egor on 15.11.17.
  */
-public class Move {
+public class MoveSnap {
     @Nullable
     private Coordinates coordinates;
 
-    public Move(Coordinates coordinates) {
+    public MoveSnap(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
-    public Move() {
+    public MoveSnap() {
 
     }
 
@@ -32,9 +30,9 @@ public class Move {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Move move = (Move) o;
+        MoveSnap moveSnap = (MoveSnap) o;
 
-        return coordinates != null ? coordinates.equals(move.coordinates) : move.coordinates == null;
+        return coordinates != null ? coordinates.equals(moveSnap.coordinates) : moveSnap.coordinates == null;
     }
 
     @Override

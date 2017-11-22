@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Created by egor on 15.11.17.
  */
-public class Tower {
+public class TowerSnap {
     @Nullable
     private Integer id;
 
@@ -15,7 +15,7 @@ public class Tower {
     @Nullable
     private Integer direction;
 
-    public Tower() { }
+    public TowerSnap() { }
 
     public Coordinates getCoordinates() {
         return coordinates;
@@ -46,9 +46,9 @@ public class Tower {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Tower tower = (Tower) o;
+        TowerSnap towerSnap = (TowerSnap) o;
 
-        return coordinates != null ? coordinates.equals(tower.coordinates) : tower.coordinates == null;
+        return coordinates != null ? coordinates.equals(towerSnap.coordinates) : towerSnap.coordinates == null;
     }
 
     @Override

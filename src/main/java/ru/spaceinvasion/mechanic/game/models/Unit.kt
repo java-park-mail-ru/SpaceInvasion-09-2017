@@ -1,12 +1,9 @@
 package ru.spaceinvasion.mechanic.game.models
 
-import ch.qos.logback.core.util.ContextUtil
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
-import ru.spaceinvasion.mechanic.game.Race
 import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.models.Coordinates
-import ru.spaceinvasion.models.Tower
 import ru.spaceinvasion.resources.Constants.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -18,6 +15,7 @@ class Unit(mediator: GamePartMediator,
            override var coordinates: Coordinates,
            val owner: Player,
            ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Moving, Damaging {
+    override var isAlive: Boolean = true
     override var health: Int = HEALTH_OF_UNIT
     override var speed: Int = SPEED_OF_UNIT
     val damage_power: Int = DAMAGE_POWER_OF_UNIT
@@ -42,7 +40,42 @@ class Unit(mediator: GamePartMediator,
                 mediator.send(message, Player::class.java, owner.gamePartId)
             }
             (BuildTowerMessage::class.java) -> {
-            
+                if ((owner.javaClass == PlayerPeople::class.java && coordinates.x > X_OF_MIDDLE_MAP) ||
+                        (owner.javaClass == PlayerAliens::class.java && coordinates.y > X_OF_MIDDLE_MAP)) {
+                    mediator.send(RollbackMessage(
+                            this,
+                            message.messageId,
+                            message.messageId,"Not your ground => No tower"),
+                            Player::class.java,
+                            owner.curUnit!!
+                    )
+                } else {
+                    mediator.registerColleague(
+                            Tower::class.java,
+                            Tower(
+                                    mediator,
+                                    message.messageId,
+                                    coordinates,
+                                    (message as BuildTowerMessage).direction,
+                                    ID_GENERATOR
+                            )
+                    )
+                    mediator.send(BuildTowerMessage(message, this), Server::class.java)
+                }
+            }
+            (ShootMessage::class.java) -> {
+                mediator.registerColleague(
+                        Shot::class.java,
+                        Shot(
+                                mediator,
+                                message.messageId,
+                                coordinates,
+                                (message as ShootMessage).direction,
+                                damage_power,
+                                ID_GENERATOR
+                        )
+                )
+                mediator.send(ShootMessage(message, this), Server::class.java)
             }
         }
     }

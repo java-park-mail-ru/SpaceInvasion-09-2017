@@ -70,13 +70,13 @@ public class ClientSnapService {
         session.getServer().newClientMove(userId, snap.getIdOfRequest(), snap.getCoordinates());
     }
     private void processTowerBuild(ClientSnap snap, Integer userId, GameSession session) {
-        session.getServer().newClientTower(userId, snap.getIdOfRequest(), snap.getCoordinates(), snap.getDirection());
+        session.getServer().newClientTower(userId, snap.getIdOfRequest(), snap.getDirection());
     }
     private void processBombAdding(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientBomb(userId, snap.getIdOfRequest());
     }
     private void processShot(ClientSnap snap, Integer userId, GameSession session) {
-        session.getServer().newClientShot(userId, snap.getIdOfRequest(), snap.getCoordinates(), snap.getDirection());
+        session.getServer().newClientShot(userId, snap.getIdOfRequest(), snap.getDirection());
     }
     private void processStateRequest(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientStateRequest(userId, snap.getIdOfRequest());
