@@ -14,4 +14,6 @@ interface Mediator<in T> {
 
     fun <_T : T> registerColleague(clazz: Class<_T>, colleague: T)
 
+    fun <_T : T> removeColleague(clazz: Class<_T>, colleague: T)
+
 }

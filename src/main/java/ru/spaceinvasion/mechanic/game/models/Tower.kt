@@ -8,12 +8,14 @@ import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.resources.Constants.DAMAGE_POWER_OF_TOWER
 
 import ru.spaceinvasion.resources.Constants.HEALTH_OF_TOWER
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Created by egor on 17.11.17.
  */
 class Tower(mediator: GamePartMediator, gamePartId: Long,
-            override var coordinates: Coordinates) : GamePart(mediator, gamePartId), Damaging, Placed {
+            override var coordinates: Coordinates,
+            ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Damaging, Placed {
     override var health: Int = HEALTH_OF_TOWER;
     val damage_power: Int = DAMAGE_POWER_OF_TOWER;
 

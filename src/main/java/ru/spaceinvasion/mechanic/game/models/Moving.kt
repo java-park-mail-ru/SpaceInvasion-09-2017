@@ -14,4 +14,13 @@ interface Moving: Placed {
         coordinates.x += dx;
         coordinates.y += dy;
     }
+
+    fun locate(x: Int, y: Int) {
+        coordinates.x = x
+        coordinates.y = y
+    }
+
+    fun locate(coordinates: Coordinates) {
+        this.coordinates = coordinates
+    }
 }

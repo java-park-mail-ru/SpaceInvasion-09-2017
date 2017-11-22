@@ -3,7 +3,9 @@ package ru.spaceinvasion.mechanic.internal;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
+import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.models.Player;
 import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.mechanic.responses.GameInitResponse;
@@ -11,10 +13,9 @@ import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by egor on 14.11.17.
@@ -30,10 +31,10 @@ public class GameSessionService {
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
 
     @NotNull
-    private final GameInitService gameInitService;
+    private final WebSocketSessionService webSocketSessionService;
 
     public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService) {
-        this.gameInitService = new GameInitService(webSocketSessionService);
+        this.webSocketSessionService = webSocketSessionService;
     }
 
     public boolean isPlaying(Integer userId) {
@@ -51,7 +52,7 @@ public class GameSessionService {
     public void startGame(@NotNull Integer player1Id,
                           @NotNull Integer player2Id) {
         GamePartMediator gamePartMediator = new GamePartMediator();
-        Server server = new Server(gamePartMediator,0L);
+        Server server = new Server(gamePartMediator,0L, new AtomicLong());
         gamePartMediator.registerColleague(Server.class, server);
         GameSession gameSession = new GameSession(
                 player1Id,
@@ -61,7 +62,17 @@ public class GameSessionService {
         gameSessions.add(gameSession);
         usersMap.put(player1Id, gameSession);
         usersMap.put(player2Id, gameSession);
-        gameInitService.initGameFor(gameSession);
+        final List<Integer> players = new ArrayList<>();
+        players.add(gameSession.getPlayer1());
+        players.add(gameSession.getPlayer2());
+        try {
+            webSocketSessionService.sendMessageToUser(players.get(0), new GameInitResponse(Race.PEOPLE));
+            webSocketSessionService.sendMessageToUser(players.get(1), new GameInitResponse(Race.ALIENS));
+        } catch (IOException e) {
+            players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
+                    CloseStatus.SERVER_ERROR));
+        }
+        gameSession.getServer().startGame(gameSession.getPlayer1(), gameSession.getPlayer2());
 
     }
 
