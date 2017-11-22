@@ -6,6 +6,7 @@ import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.Race
 import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.models.Coordinates
+import ru.spaceinvasion.models.Tower
 import ru.spaceinvasion.resources.Constants.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -39,6 +40,9 @@ class Unit(mediator: GamePartMediator,
             }
             (CashChangeMessage::class.java) -> {
                 mediator.send(message, Player::class.java, owner.gamePartId)
+            }
+            (BuildTowerMessage::class.java) -> {
+            
             }
         }
     }

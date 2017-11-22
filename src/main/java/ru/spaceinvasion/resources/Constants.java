@@ -17,6 +17,7 @@ public class Constants {
     public final static Integer COIN_HEIGHT = 10;
     public final static Integer SHOT_WIDTH = 10;
     public final static Integer SHOT_HEIGHT = 10;
+    public final static Integer COST_OF_TOWER = 10;
     public final static Integer Y_OF_UPPER_MAP_BORDER = 0;
     public final static Integer Y_OF_LOWER_MAP_BORDER = 500;
     public final static Integer X_OF_LEFT_MAP_BORDER = 0;

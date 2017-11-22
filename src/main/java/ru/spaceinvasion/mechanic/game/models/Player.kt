@@ -3,13 +3,11 @@ package ru.spaceinvasion.mechanic.game.models
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.Race
-import ru.spaceinvasion.mechanic.game.messages.CashChangeMessage
-import ru.spaceinvasion.mechanic.game.messages.GameMessage
-import ru.spaceinvasion.mechanic.game.messages.MoveMessage
-import ru.spaceinvasion.mechanic.game.messages.RollbackMessage
+import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.mechanic.snaps.ServerSnap
 import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.resources.Constants
+import ru.spaceinvasion.resources.Constants.COST_OF_TOWER
 import ru.spaceinvasion.resources.Constants.START_COINS
 import java.util.concurrent.atomic.AtomicLong
 
@@ -52,6 +50,35 @@ abstract class Player(
             }
             (RollbackMessage::class.java) -> {
                 mediator.send(RollbackMessage(message as RollbackMessage, this), Server::class.java)
+            }
+            (BuildTowerMessage::class.java) -> {
+                if (curUnit == null) {
+                    mediator.send(
+                            RollbackMessage(
+                                    this,
+                                    message.messageId,
+                                    message.messageId,
+                                    "No existing unit => no tower"
+                            ),
+                            Server::class.java
+                    )
+                } else {
+                    if (coins >= COST_OF_TOWER) {
+                        coins -= COST_OF_TOWER
+                        mediator.send(BuildTowerMessage(message as BuildTowerMessage, this),
+                                Unit::class.java, curUnit!!)
+                    } else {
+                        mediator.send(
+                                RollbackMessage(
+                                    this,
+                                    message.messageId,
+                                    message.messageId,
+                                    "No money => no tower"
+                            ),
+                            Server::class.java
+                        )
+                    }
+                }
             }
         }
     }

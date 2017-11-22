@@ -17,6 +17,12 @@ public class BuildTowerMessage extends GameMessage {
         this.direction = direction;
     }
 
+    public BuildTowerMessage(BuildTowerMessage buildTowerMessage, GamePart messageCreator) {
+        super(messageCreator, buildTowerMessage.getMessageId());
+        this.coordinates = buildTowerMessage.getCoordinates();
+        this.direction = buildTowerMessage.getDirection();
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
