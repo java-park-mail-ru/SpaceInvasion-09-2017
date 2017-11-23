@@ -7,6 +7,8 @@ import ru.spaceinvasion.models.Coordinates
  */
 interface Placed {
     var coordinates: Coordinates;
+    val width: Int
+    val height: Int
 
     fun setCoordinates(x: Int, y: Int) {
         coordinates.x = x;

@@ -16,7 +16,9 @@ public class Constants {
     public final static Integer COIN_WIDTH = 10;
     public final static Integer COIN_HEIGHT = 10;
     public final static Integer BASE_WIDTH = 20;
-    public final static Integer BASE_HEIGTH = 20;
+    public final static Integer BASE_HEIGHT = 20;
+    public final static Integer TOWER_WIDTH = 10;
+    public final static Integer TOWER_HEIGHT = 20;
     public final static Integer SHOT_WIDTH = 10;
     public final static Integer SHOT_HEIGHT = 10;
     public final static Integer COST_OF_TOWER = 10;
@@ -30,4 +32,10 @@ public class Constants {
     public final static Coordinates COORDINATES_OF_BASE_PEOPLE_START = new Coordinates(0, 230);
     public final static Coordinates COORDINATES_OF_UNIT_ALIENS_START = new Coordinates(600, 230);
     public final static Coordinates COORDINATES_OF_BASE_ALIENS_START = new Coordinates(630, 230);
+    public final static Integer SERVER_TICKS_PER_SECOND = 25;
+    public final static Integer TOWER_SHOOTS_PER_SECOND = 1;
+    public final static Integer TICKS_UNTIL_TOWER_SHOOT = SERVER_TICKS_PER_SECOND / TOWER_SHOOTS_PER_SECOND;
+    public final static Integer SECONDS_TO_BOMB_ACTION = 5;
+    public final static Integer TICKS_UNITL_BOMB_ACTION = SERVER_TICKS_PER_SECOND * SECONDS_TO_BOMB_ACTION;
+
 }

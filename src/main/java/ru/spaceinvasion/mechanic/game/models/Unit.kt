@@ -1,5 +1,6 @@
 package ru.spaceinvasion.mechanic.game.models
 
+import ru.spaceinvasion.mechanic.game.Direction
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.messages.*
@@ -19,6 +20,8 @@ class Unit(mediator: GamePartMediator,
     override var health: Int = HEALTH_OF_UNIT
     override var speed: Int = SPEED_OF_UNIT
     val damage_power: Int = DAMAGE_POWER_OF_UNIT
+    override val width = UNIT_WIDTH
+    override val height = UNIT_HEIGHT
 
     override fun notify(message: GameMessage) {
         when (message) {
@@ -27,14 +30,19 @@ class Unit(mediator: GamePartMediator,
                         RequestCollisionsMessage(
                                 this,
                                 message.messageId,
-                                (message as MoveMessage).coordinates
+                                Coordinates(
+                                        (message as MoveMessage).coordinates.x + coordinates.x,
+                                        message.coordinates.y + coordinates.y
+                                )
                         ),
                         CollisionEngine::class.java
                 )
             }
             (AcceptedMoveMessage::class.java) -> {
-                locate((message as AcceptedMoveMessage).coordinates)
-                mediator.send(MoveMessage(this, message.messageId, message.coordinates), Server::class.java)
+                val dx = ((message as AcceptedMoveMessage).coordinates.x - coordinates.x)
+                val dy = ((message as AcceptedMoveMessage).coordinates.y - coordinates.y)
+                move(dx,dy)
+                mediator.send(MoveMessage(this, message.messageId, Coordinates(dx,dy)), Server::class.java)
             }
             (CashChangeMessage::class.java) -> {
                 mediator.send(message, Player::class.java, owner.gamePartId)
@@ -69,14 +77,52 @@ class Unit(mediator: GamePartMediator,
                         Shot(
                                 mediator,
                                 message.messageId,
-                                coordinates,
-                                (message as ShootMessage).direction,
+                                gamePartId,
+                                getCoordinatesOfShot((message as ShootMessage).direction),
+                                message.direction,
                                 damage_power,
                                 ID_GENERATOR
                         )
                 )
-                mediator.send(ShootMessage(message, this), Server::class.java)
             }
+            (DamageMessage::class.java) -> {
+                damage(((message as DamageMessage).srcOfDamageId as Shot).damage)
+                if (!isAlive) {
+                    mediator.removeColleague(Tower::class.java, this)
+                    //TODO: send info to player and prepare to creating new Unit
+                }
+                mediator.send(DamageMessage(message, this), Server::class.java)
+            }
+        }
+    }
+
+    private fun getCoordinatesOfShot(directionOfLastMove: Direction) : Coordinates{
+        when (directionOfLastMove) {
+            (Direction.UP) -> {
+                return Coordinates(coordinates.x, coordinates.y - SHOT_HEIGHT - 1)
+            }
+            (Direction.UP_RIGHT) -> {
+                return Coordinates(coordinates.x + SHOT_WIDTH + 1, coordinates.y - SHOT_HEIGHT - 1)
+            }
+            (Direction.RIGHT) -> {
+                return Coordinates(coordinates.x + SHOT_WIDTH + 1,coordinates.y)
+            }
+            (Direction.DOWN_RIGHT) -> {
+                return Coordinates(coordinates.x + SHOT_WIDTH + 1,coordinates.y + SHOT_HEIGHT + 1)
+            }
+            (Direction.DOWN) -> {
+                return Coordinates(coordinates.x,coordinates.y + SHOT_HEIGHT + 1)
+            }
+            (Direction.DOWN_LEFT) -> {
+                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y + SHOT_HEIGHT + 1)
+            }
+            (Direction.LEFT) -> {
+                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y)
+            }
+            (Direction.UP_LEFT) -> {
+                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y - SHOT_HEIGHT - 1)
+            }
+            else -> return coordinates
         }
     }
 }

@@ -6,6 +6,7 @@ import ru.spaceinvasion.mechanic.game.Mediator
 import ru.spaceinvasion.mechanic.game.messages.DisappearingMessage
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 import ru.spaceinvasion.models.Coordinates
+import ru.spaceinvasion.resources.Constants
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -13,9 +14,10 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class Coin(mediator: GamePartMediator,
            gamePartId: Long,
-           playerWhoInstalled: Int,
            ID_GENERATOR: AtomicLong,
            override var coordinates: Coordinates) : GamePart(mediator, gamePartId, ID_GENERATOR), Placed {
+    override val width = Constants.COIN_WIDTH
+    override val height = Constants.COIN_HEIGHT
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
             (DisappearingMessage::class.java) -> {

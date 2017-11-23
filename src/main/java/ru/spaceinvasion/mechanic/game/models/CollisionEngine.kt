@@ -5,7 +5,6 @@ import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.resources.Constants.*
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -41,7 +40,7 @@ class CollisionEngine(mediator: GamePartMediator,
                                     (message.messageCreator as Unit).owner.gamePartId
                             )
                         } else {
-                            val coin: Coin? = collisionWithCoin(message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
+                            val coin: Coin? = collisionWith(Coin::class.java, message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
                             if (coin != null) {
                                 mediator.send(
                                         DisappearingMessage(this,message.messageId),
@@ -52,14 +51,14 @@ class CollisionEngine(mediator: GamePartMediator,
                                         Unit::class.java,
                                         message.messageCreator.gamePartId)
                             } else {
-                                val base: Base? = collisionWithBase(message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
+                                val base: Base? = collisionWith(Base::class.java, message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
                                 if (base != null && base.owner.gamePartId != (message.messageCreator as Unit).owner.gamePartId) {
                                     mediator.registerColleague(
                                             Bomb::class.java,
                                             Bomb(
                                                     mediator,
                                                     message.messageId,
-                                                    (message.messageCreator as Unit).owner.gamePartId,
+                                                    base.gamePartId,
                                                     ID_GENERATOR
                                             )
                                     )
@@ -72,7 +71,40 @@ class CollisionEngine(mediator: GamePartMediator,
                         }
                     }
                     (Shot::class.java) -> {
-                        //TODO;
+                        if (isCrossedMapLimits(
+                                (message as RequestCollisionsMessage).potentialCoordinates,
+                                SHOT_WIDTH,
+                                SHOT_HEIGHT)
+                                ) {
+                            mediator.removeColleague(
+                                    Shot::class.java,
+                                    (message.messageCreator)
+                            )
+                        } else {
+                            val tower: Tower? = collisionWith(Tower::class.java, message.potentialCoordinates, SHOT_WIDTH, SHOT_HEIGHT)
+                            if (tower == null) {
+                                val unit: Unit? = collisionWith(Unit::class.java, message.potentialCoordinates, SHOT_WIDTH, SHOT_HEIGHT)
+                                if (unit == null) {
+                                    mediator.send(
+                                            AcceptedMoveMessage(this,message.messageId, message.potentialCoordinates),
+                                            Shot::class.java,
+                                            message.messageCreator.gamePartId)
+                                } else {
+                                    mediator.send(
+                                            DamageMessage(this, message.messageId, message.messageCreator.gamePartId),
+                                            Unit::class.java,
+                                            unit.gamePartId)
+                                    mediator.removeColleague(Shot::class.java, message.messageCreator)
+                                }
+                            } else {
+                                mediator.send(
+                                        DamageMessage(this, message.messageId, message.messageCreator.gamePartId),
+                                        Tower::class.java,
+                                        tower.gamePartId)
+                                mediator.removeColleague(Shot::class.java, message.messageCreator)
+                            }
+
+                        }
                     }
                     (BombInstallingMessage::class.java) -> {
 
@@ -89,26 +121,16 @@ class CollisionEngine(mediator: GamePartMediator,
                 (coordinates.y + heightOfObject > yOfLowerMapBorder)
     }
 
-    private fun collisionWithCoin(coordinates: Coordinates, widthOfObject: Int, heightOfObject: Int): Coin? {
-        val coins: List<Coin>? = mediator.returnColleagues(Coin::class.java) as List<Coin>?
-        if (coins == null) {
+    private fun <T> collisionWith(
+            clazz: Class<T>, coordinates: Coordinates,
+            widthOfObject: Int, heightOfObject: Int
+    ): T? where T: GamePart, T: Placed{
+        val gameParts: List<T>? = mediator.returnColleagues(clazz) as List<T>?
+        if (gameParts == null) {
             return null
         }
-        coins.forEach { it ->
-            if (isIntersect(coordinates, widthOfObject, heightOfObject, it.coordinates, COIN_WIDTH, COIN_HEIGHT)) {
-                return it;
-            }
-        }
-        return null
-    }
-
-    private fun  collisionWithBase(coordinates: Coordinates, widthOfObject: Int, heightOfObject: Int): Base? {
-        val bases: List<Base>? = mediator.returnColleagues(Base::class.java) as List<Base>?
-        if (bases == null) {
-            return null
-        }
-        bases.forEach { it ->
-            if (isIntersect(coordinates, widthOfObject, heightOfObject, it.coordinates, BASE_WIDTH, BASE_HEIGTH)) {
+        gameParts.forEach { it ->
+            if (isIntersect(coordinates, widthOfObject, heightOfObject, it.coordinates, it.width, it.height)) {
                 return it;
             }
         }

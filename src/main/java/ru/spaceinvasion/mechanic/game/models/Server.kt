@@ -49,6 +49,11 @@ class Server(mediator: GamePartMediator,
             (DisappearingMessage::class.java) -> {
                 snaps.forEach { it.value.add(message) }
             }
+            (DamageMessage::class.java) -> {
+                //MessageCreator reports about damage to him
+                //SrcOfDamage reports about guy who inflict damage
+                snaps.forEach { it.value.add(message) }
+            }
         }
     }
 
@@ -88,7 +93,10 @@ class Server(mediator: GamePartMediator,
     }
 
     fun tick() {
-        //TODO:
+        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Shot::class.java)
+        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Tower::class.java)
+        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Bomb::class.java)
+        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Player::class.java)
     }
 
 

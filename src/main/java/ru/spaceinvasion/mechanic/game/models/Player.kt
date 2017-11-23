@@ -23,6 +23,7 @@ abstract class Player(
 
     var coins: Int = START_COINS
     var curUnit: Long? = null
+    var base: Base? = null
 
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
@@ -118,6 +119,12 @@ abstract class Player(
                     )
                 }
             }
+            (LosingMessage::class.java) -> {
+                mediator.send(LosingMessage(message as LosingMessage, this), Server::class.java)
+            }
+            (WiningMessage::class.java) -> {
+                mediator.send(WiningMessage(message as WiningMessage, this), Server::class.java)
+            }
         }
     }
 
@@ -134,13 +141,13 @@ abstract class Player(
     }
 
     protected fun createBase(coordinates: Coordinates) {
-        val base: Base = Base(
+        base = Base(
                 mediator,
                 ID_GENERATOR.decrementAndGet(),
                 this,
                 coordinates,
                 ID_GENERATOR
         )
-        mediator.registerColleague(Base::class.java, base)
+        mediator.registerColleague(Base::class.java, base!!)
     }
 }
