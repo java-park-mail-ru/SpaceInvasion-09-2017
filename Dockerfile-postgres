@@ -1,0 +1,4 @@
+FROM library/postgres
+MAINTAINER SpaceInvasionLab <spaceinvasionlab@yandex.ru>
+
+ADD ./init.sql /docker-entrypoint-initdb.d/

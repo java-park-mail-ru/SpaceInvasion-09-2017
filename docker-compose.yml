@@ -1,14 +1,13 @@
-version: '2'
+version: '3'
 
 services:
   web:
-    build: .
-    working_dir: /var/www/SpaceInvasion
+    build:
+      context: .
+      dockerfile: Dockerfile-java
     command:
-      psql --host=db -c "CREATE ROLE space_invasion WITH SUPERUSER LOGIN ENCRYPTED PASSWORD 'space_invasion_admin_pass';" &&
-      psql --host=db -c "CREATE DATABASE space_invasion_db DEFAULT CHARSET 'utf8';" &&
-      psql --host=db -c "GRANT ALL ON DATABASE space_invasion_db TO space_invasion;" &&
-      java -jar ./SpaceInvasion-1.0.0-SNAPSHOT.jar
+      java -jar /root/.m2/repository/ru/space_invasion/SpaceInvasion/1.0.0-SNAPSHOT/SpaceInvasion-1.0.0-SNAPSHOT.jar
+      --PGPASSWORD=$PGPASSWORD --PORT=$PORT --JDBC_DATABASE_URL=$JDBC_DATABASE_URL --PGUSER=$PGUSER --PGHOST=$PGHOST --PGPORT=$PGPORT --PGDATABASE=$PGDATABASE
     depends_on:
     - db
     ports:
@@ -18,11 +17,12 @@ services:
     restart: always
 
   db:
-    image: postgres
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
     ports:
     - "5432:5432"
     volumes:
     - ./postgres:/var/lib/postgresql
     - ./log/postgres:/var/log/postgresql
     - ./ets/postgres:/etc/postgresql
-    restart: always
