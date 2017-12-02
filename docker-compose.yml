@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile-java
+      dockerfile: docker/Dockerfile-java
     command:
       java -jar /root/.m2/repository/ru/space_invasion/SpaceInvasion/1.0.0-SNAPSHOT/SpaceInvasion-1.0.0-SNAPSHOT.jar
       --PGPASSWORD=$PGPASSWORD --PORT=$PORT --JDBC_DATABASE_URL=$JDBC_DATABASE_URL --PGUSER=$PGUSER --PGHOST=$PGHOST --PGPORT=$PGPORT --PGDATABASE=$PGDATABASE
@@ -19,7 +19,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: Dockerfile-postgres
+      dockerfile: docker/Dockerfile-postgres
     ports:
     - "5432:5432"
     volumes:
