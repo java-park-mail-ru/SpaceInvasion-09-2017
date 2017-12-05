@@ -30,8 +30,8 @@ class Base(mediator: GamePartMediator,
                 if(isAlive) {
                     mediator.send(DamageMessage(message as DamageMessage, this), Server::class.java)
                 } else {
-                    mediator.send(LosingMessage(this,message.messageId),Player::class.java, owner.gamePartId)
-                    mediator.sendToAllExclude(WiningMessage(this,message.messageId),Player::class.java, owner.gamePartId)
+                    mediator.send(LosingMessage(this,message.requestId),Player::class.java, owner.gamePartId)
+                    mediator.sendToAllExclude(WiningMessage(this,message.requestId),Player::class.java, owner.gamePartId)
                 }
             }
         }

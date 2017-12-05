@@ -3,6 +3,8 @@ package ru.spaceinvasion.mechanic.snaps;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.mechanic.game.Race;
+import ru.spaceinvasion.mechanic.game.messages.BuildTowerMessage;
+import ru.spaceinvasion.mechanic.game.messages.MoveMessage;
 import ru.spaceinvasion.models.*;
 
 public class ServerSnap implements Message {
@@ -23,7 +25,6 @@ public class ServerSnap implements Message {
 //    8: change account
 
 
-
     public ServerSnap(Integer idOfLastAcceptedCommitFromUser) {
         data = new Integer[2];
         data[0] = idOfLastAcceptedCommitFromUser;
@@ -40,7 +41,7 @@ public class ServerSnap implements Message {
         data[3] = idOfDamageTarget;
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, MoveSnap moveSnap) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, MoveMessage moveSnap) {
         data = new Integer[3];
         data[0] = idOfLastAcceptedCommitFromUser;
         data[1] = 3;
@@ -48,13 +49,13 @@ public class ServerSnap implements Message {
         data[3] = moveSnap.getCoordinates().getY();
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, TowerSnap towerSnap) {
+    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, BuildTowerMessage towerSnap) {
         data = new Integer[4];
         data[0] = idOfLastAcceptedCommitFromUser;
         data[1] = 4;
         data[2] = towerSnap.getCoordinates().getX();
         data[3] = towerSnap.getCoordinates().getY();
-        data[4] = towerSnap.getDirection();
+        data[4] = towerSnap.getDirection().getValue();
     }
 
     public ServerSnap(Integer idOfLastAcceptedCommitFromUser, BombSnap bombSnap) {

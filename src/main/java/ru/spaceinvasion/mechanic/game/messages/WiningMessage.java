@@ -7,12 +7,12 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class WiningMessage extends GameMessage {
 
-    public WiningMessage(GamePart messageCreator, Long messageId) {
-        super(messageCreator, messageId);
+    public WiningMessage(GamePart messageCreator, Long requestId) {
+        super(messageCreator, requestId);
     }
 
     public WiningMessage(WiningMessage damageMessage, GamePart messageCreator) {
-        super(messageCreator, damageMessage.getMessageId());
+        super(messageCreator, damageMessage.getRequestId());
     }
 
 }

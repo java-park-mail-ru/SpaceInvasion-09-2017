@@ -13,21 +13,21 @@ public class RollbackMessage extends GameMessage {
     @NotNull
     private String description;
 
-    public RollbackMessage(GamePart messageCreator, Long messageId, Long problemSnapId) {
-        super(messageCreator, messageId);
+    public RollbackMessage(GamePart messageCreator, Long requestId, Long problemSnapId) {
+        super(messageCreator, requestId);
         this.problemSnapId = problemSnapId;
         this.description = "";
 
     }
 
-    public RollbackMessage(GamePart messageCreator, Long messageId, Long problemSnapId, String description) {
-        super(messageCreator, messageId);
+    public RollbackMessage(GamePart messageCreator, Long requestId, Long problemSnapId, String description) {
+        super(messageCreator, requestId);
         this.problemSnapId = problemSnapId;
         this.description = description;
     }
 
     public RollbackMessage(RollbackMessage rollbackMessage, GamePart messageCreator) {
-        super(messageCreator, rollbackMessage.getMessageId());
+        super(messageCreator, rollbackMessage.getRequestId());
         this.problemSnapId = rollbackMessage.getProblemSnapId();
         this.description = rollbackMessage.getDescription();
     }

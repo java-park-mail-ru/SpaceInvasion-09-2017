@@ -9,7 +9,7 @@ import ru.spaceinvasion.models.Coordinates;
 public class AcceptedMoveMessage extends MoveMessage {
 
     //coordinates is new coordinates
-    public AcceptedMoveMessage(GamePart messageCreator, Long messageId, Coordinates coordinates) {
-        super(messageCreator, messageId, coordinates);
+    public AcceptedMoveMessage(GamePart messageCreator, Long requestId, Coordinates coordinates) {
+        super(messageCreator, requestId, coordinates);
     }
 }

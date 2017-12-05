@@ -18,6 +18,8 @@ public class ClientSnap implements Message {
         this.request = request;
     }
 
+    public ClientSnap() {}
+
     public Integer getIdOfRequest() {
         try {
             return request[0];

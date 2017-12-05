@@ -9,13 +9,13 @@ public class DamageMessage extends GameMessage {
 
     private Long srcOfDamageId;
 
-    public DamageMessage(GamePart messageCreator, Long messageId, Long srcOfDamageId) {
-        super(messageCreator, messageId);
+    public DamageMessage(GamePart messageCreator, Long requestId, Long srcOfDamageId) {
+        super(messageCreator, requestId);
         this.srcOfDamageId = srcOfDamageId;
     }
 
     public DamageMessage(DamageMessage damageMessage, GamePart messageCreator) {
-        super(messageCreator, damageMessage.getMessageId());
+        super(messageCreator, damageMessage.getRequestId());
         this.srcOfDamageId = damageMessage.getSrcOfDamageId();
     }
 

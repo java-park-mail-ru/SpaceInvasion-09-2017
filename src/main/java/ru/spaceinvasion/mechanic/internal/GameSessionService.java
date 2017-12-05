@@ -1,15 +1,12 @@
 package ru.spaceinvasion.mechanic.internal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
 import ru.spaceinvasion.mechanic.game.Race;
-import ru.spaceinvasion.mechanic.game.models.Player;
 import ru.spaceinvasion.mechanic.game.models.Server;
-import ru.spaceinvasion.mechanic.responses.GameInitResponse;
-import ru.spaceinvasion.mechanic.snaps.ServerSnap;
+import ru.spaceinvasion.mechanic.snaps.GameInitResponse;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;

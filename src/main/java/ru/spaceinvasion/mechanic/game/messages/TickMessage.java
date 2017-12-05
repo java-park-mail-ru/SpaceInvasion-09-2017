@@ -8,11 +8,11 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class TickMessage extends GameMessage {
 
-    public TickMessage(GamePart messageCreator, Long messageId) {
-        super(messageCreator, messageId);
+    public TickMessage(GamePart messageCreator, Long requestId) {
+        super(messageCreator, requestId);
     }
 
     public TickMessage(TickMessage buildTowerMessage, GamePart messageCreator) {
-        super(messageCreator, buildTowerMessage.getMessageId());
+        super(messageCreator, buildTowerMessage.getRequestId());
     }
 }

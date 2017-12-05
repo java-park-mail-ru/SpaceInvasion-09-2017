@@ -10,13 +10,13 @@ import ru.spaceinvasion.models.Coordinates;
 public class ShootMessage extends GameMessage {
     Direction direction;
 
-    public ShootMessage(GamePart messageCreator, Long messageId, Direction direction) {
-        super(messageCreator, messageId);
+    public ShootMessage(GamePart messageCreator, Long requestId, Direction direction) {
+        super(messageCreator, requestId);
         this.direction = direction;
     }
 
     public ShootMessage(ShootMessage buildTowerMessage, GamePart messageCreator) {
-        super(messageCreator, buildTowerMessage.getMessageId());
+        super(messageCreator, buildTowerMessage.getRequestId());
         this.direction = buildTowerMessage.getDirection();
     }
 

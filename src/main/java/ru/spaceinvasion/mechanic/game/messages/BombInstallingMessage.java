@@ -7,12 +7,12 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class BombInstallingMessage extends GameMessage {
 
-    public BombInstallingMessage(GamePart messageCreator, Long messageId) {
-        super(messageCreator, messageId);
+    public BombInstallingMessage(GamePart messageCreator, Long requestId) {
+        super(messageCreator, requestId);
     }
 
     public BombInstallingMessage(BombInstallingMessage bombInstallingMessage, GamePart messageCreator) {
-        super(messageCreator, bombInstallingMessage.getMessageId());
+        super(messageCreator, bombInstallingMessage.getRequestId());
     }
 
 }

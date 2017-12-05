@@ -11,8 +11,8 @@ public class MoveMessage extends GameMessage {
     //deltaCoordinates
     private Coordinates coordinates;
 
-    public MoveMessage(GamePart messageCreator, Long messageId, Coordinates coordinates) {
-        super(messageCreator, messageId);
+    public MoveMessage(GamePart messageCreator, Long requestId, Coordinates coordinates) {
+        super(messageCreator, requestId);
         this.coordinates = coordinates;
     }
 

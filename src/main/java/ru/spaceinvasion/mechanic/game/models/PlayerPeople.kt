@@ -12,9 +12,8 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class PlayerPeople(mediator: GamePartMediator,
                    gamePartId: Long,
-                   userId: Int,
                    ID_GENERATOR: AtomicLong
-): Player(mediator, gamePartId, userId, ID_GENERATOR) {
+): Player(mediator, gamePartId, ID_GENERATOR) {
     init {
         createUnit()
         createBase(Constants.COORDINATES_OF_BASE_PEOPLE_START)

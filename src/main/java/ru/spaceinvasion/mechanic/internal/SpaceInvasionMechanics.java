@@ -1,16 +1,13 @@
 package ru.spaceinvasion.mechanic.internal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
-import ru.spaceinvasion.mechanic.responses.RollbackResponse;
+import ru.spaceinvasion.mechanic.snaps.RollbackResponse;
 import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
-import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.mechanic.snaps.ServerSnapService;
 import ru.spaceinvasion.models.GameSession;
-import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.services.TimeService;
 import ru.spaceinvasion.services.WebSocketSessionService;
 

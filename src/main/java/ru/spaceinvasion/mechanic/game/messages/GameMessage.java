@@ -8,21 +8,21 @@ import ru.spaceinvasion.models.Message;
  */
 
 public abstract class GameMessage implements Message {
-    private Long messageId;
+    private Long requestId;
 
     private GamePart messageCreator;
 
-    public GameMessage(GamePart messageCreator, Long messageId) {
+    public GameMessage(GamePart messageCreator, Long requestId) {
         this.messageCreator = messageCreator;
-        this.messageId = messageId;
+        this.requestId = requestId;
     }
 
-    public Long getMessageId() {
-        return messageId;
+    public Long getRequestId() {
+        return requestId;
     }
 
-    public void setMessageId(Long messageId) {
-        this.messageId = messageId;
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
     }
 
     public GamePart getMessageCreator() {

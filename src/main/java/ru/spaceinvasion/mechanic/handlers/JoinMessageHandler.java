@@ -3,7 +3,7 @@ package ru.spaceinvasion.mechanic.handlers;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import ru.spaceinvasion.mechanic.internal.GameMechanics;
-import ru.spaceinvasion.mechanic.requests.JoinRequest;
+import ru.spaceinvasion.mechanic.snaps.JoinRequest;
 import ru.spaceinvasion.websocket.MessageHandlerContainer;
 
 import javax.annotation.PostConstruct;

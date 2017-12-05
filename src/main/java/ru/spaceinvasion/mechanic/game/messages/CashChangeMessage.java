@@ -9,8 +9,8 @@ import ru.spaceinvasion.models.Coordinates;
 public class CashChangeMessage extends GameMessage {
     private Integer dCash;
 
-    public CashChangeMessage(GamePart messageCreator, Long messageId, Integer dCash) {
-        super(messageCreator, messageId);
+    public CashChangeMessage(GamePart messageCreator, Long requestId, Integer dCash) {
+        super(messageCreator, requestId);
         this.dCash = dCash;
     }
 

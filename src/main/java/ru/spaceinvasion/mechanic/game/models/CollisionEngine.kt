@@ -32,8 +32,8 @@ class CollisionEngine(mediator: GamePartMediator,
                             mediator.send(
                                     RollbackMessage(
                                             this,
-                                            message.messageId,
-                                            message.messageId,
+                                            message.requestId,
+                                            message.requestId,
                                             "Unit try to leave field"
                                     ),
                                     Player::class.java,
@@ -43,11 +43,11 @@ class CollisionEngine(mediator: GamePartMediator,
                             val coin: Coin? = collisionWith(Coin::class.java, message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
                             if (coin != null) {
                                 mediator.send(
-                                        DisappearingMessage(this,message.messageId),
+                                        DisappearingMessage(this,message.requestId),
                                         Coin::class.java,
                                         coin.gamePartId)
                                 mediator.send(
-                                        CashChangeMessage(this,message.messageId, COST_OF_ONE_COIN),
+                                        CashChangeMessage(this,message.requestId, COST_OF_ONE_COIN),
                                         Unit::class.java,
                                         message.messageCreator.gamePartId)
                             } else {
@@ -57,7 +57,7 @@ class CollisionEngine(mediator: GamePartMediator,
                                             Bomb::class.java,
                                             Bomb(
                                                     mediator,
-                                                    message.messageId,
+                                                    message.requestId,
                                                     base.gamePartId,
                                                     ID_GENERATOR
                                             )
@@ -65,7 +65,7 @@ class CollisionEngine(mediator: GamePartMediator,
                                 }
                             }
                             mediator.send(
-                                    AcceptedMoveMessage(this,message.messageId, message.potentialCoordinates),
+                                    AcceptedMoveMessage(this,message.requestId, message.potentialCoordinates),
                                     Unit::class.java,
                                     message.messageCreator.gamePartId)
                         }
@@ -86,19 +86,19 @@ class CollisionEngine(mediator: GamePartMediator,
                                 val unit: Unit? = collisionWith(Unit::class.java, message.potentialCoordinates, SHOT_WIDTH, SHOT_HEIGHT)
                                 if (unit == null) {
                                     mediator.send(
-                                            AcceptedMoveMessage(this,message.messageId, message.potentialCoordinates),
+                                            AcceptedMoveMessage(this,message.requestId, message.potentialCoordinates),
                                             Shot::class.java,
                                             message.messageCreator.gamePartId)
                                 } else {
                                     mediator.send(
-                                            DamageMessage(this, message.messageId, message.messageCreator.gamePartId),
+                                            DamageMessage(this, message.requestId, message.messageCreator.gamePartId),
                                             Unit::class.java,
                                             unit.gamePartId)
                                     mediator.removeColleague(Shot::class.java, message.messageCreator)
                                 }
                             } else {
                                 mediator.send(
-                                        DamageMessage(this, message.messageId, message.messageCreator.gamePartId),
+                                        DamageMessage(this, message.requestId, message.messageCreator.gamePartId),
                                         Tower::class.java,
                                         tower.gamePartId)
                                 mediator.removeColleague(Shot::class.java, message.messageCreator)

@@ -1,4 +1,4 @@
-package ru.spaceinvasion.mechanic.requests;
+package ru.spaceinvasion.mechanic.snaps;
 
 import ru.spaceinvasion.models.Message;
 

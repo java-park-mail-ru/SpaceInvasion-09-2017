@@ -21,7 +21,7 @@ class Coin(mediator: GamePartMediator,
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
             (DisappearingMessage::class.java) -> {
-                mediator.send(DisappearingMessage(this, message.messageId),Server::class.java)
+                mediator.send(DisappearingMessage(this, message.requestId),Server::class.java)
                 mediator.removeColleague(Coin::class.java, this)
             }
         }

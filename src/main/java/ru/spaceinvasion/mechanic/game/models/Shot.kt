@@ -34,7 +34,7 @@ class Shot(mediator: GamePartMediator,
                 mediator.send(
                         RequestCollisionsMessage(
                                 this,
-                                message.messageId,
+                                message.requestId,
                                 getPotentialCoordinates()
                         ),
                         CollisionEngine::class.java

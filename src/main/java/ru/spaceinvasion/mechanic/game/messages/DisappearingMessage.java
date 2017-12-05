@@ -7,7 +7,7 @@ import ru.spaceinvasion.models.Coordinates;
  * Created by egor on 17.11.17.
  */
 public class DisappearingMessage extends GameMessage {
-    public DisappearingMessage(GamePart messageCreator, Long messageId) {
-        super(messageCreator, messageId);
+    public DisappearingMessage(GamePart messageCreator, Long requestId) {
+        super(messageCreator, requestId);
     }
 }

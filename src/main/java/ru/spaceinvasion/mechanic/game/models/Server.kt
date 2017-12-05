@@ -15,7 +15,7 @@ class Server(mediator: GamePartMediator,
              gamePartId: Long,
              ID_GENERATOR: AtomicLong = AtomicLong()) : GamePart(mediator, gamePartId, ID_GENERATOR) {
 
-    val snaps: MutableMap<Int, MutableList<Message>> = HashMap()
+    val snaps: MutableMap<Long, MutableList<Message>> = HashMap()
 
     init {
         mediator.registerColleague(
@@ -32,19 +32,19 @@ class Server(mediator: GamePartMediator,
         when (message.javaClass) {
         //TODO: Maybe not message of this type put into snaps? Think about it and change it
             (RollbackMessage::class.java) -> {
-                snaps.filter { it.key == (message.messageCreator as Player).userId }.forEach { it.value.add(message)}
+                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(message)}
             }
             (MoveMessage::class.java) -> {
-                snaps.filter { it.key != (message.messageCreator as Player).userId  }.forEach { it.value.add(message)}
+                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(message)}
             }
             (BuildTowerMessage::class.java) -> {
-                snaps.filter { it.key != (message.messageCreator as Unit).owner.userId  }.forEach { it.value.add(message)}
+                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(ServerSnap((message.requestId).toInt(), (message as BuildTowerMessage)))}
             }
             (ShootMessage::class.java) -> {
-                snaps.filter { it.key != (message.messageCreator as Unit).owner.userId }.forEach { it.value.add(message)}
+                snaps.filter { it.key != message.messageCreator.gamePartId }.forEach { it.value.add(message)}
             }
             (CashChangeMessage::class.java) -> {
-                snaps.filter { it.key == (message.messageCreator as Player).userId }.forEach { it.value.add(message)}
+                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(message)}
             }
             (DisappearingMessage::class.java) -> {
                 snaps.forEach { it.value.add(message) }
@@ -57,16 +57,14 @@ class Server(mediator: GamePartMediator,
         }
     }
 
-    fun startGame(playerPeopleId : Int, playerAliensId : Int) {
+    fun startGame(playerPeopleId : Long, playerAliensId : Long) {
         mediator.registerColleague(
                 Player::class.java,
-                PlayerPeople(mediator, ID_GENERATOR.decrementAndGet(),
-                        playerPeopleId,
+                PlayerPeople(mediator, playerPeopleId,
                         ID_GENERATOR))
         mediator.registerColleague(
                 Player::class.java,
-                PlayerAliens(mediator, ID_GENERATOR.decrementAndGet(),
-                        playerAliensId,
+                PlayerAliens(mediator, playerAliensId,
                         ID_GENERATOR))
         snaps.put(playerPeopleId, ArrayList())
         snaps.put(playerAliensId, ArrayList())
@@ -98,6 +96,5 @@ class Server(mediator: GamePartMediator,
         mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Bomb::class.java)
         mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Player::class.java)
     }
-
 
 }

@@ -1,12 +1,9 @@
 package ru.spaceinvasion.mechanic.snaps;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import ru.spaceinvasion.mechanic.responses.RollbackResponse;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.utils.Exceptions;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 

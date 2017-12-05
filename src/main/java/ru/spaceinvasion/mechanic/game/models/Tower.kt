@@ -45,7 +45,7 @@ class Tower(mediator: GamePartMediator, gamePartId: Long,
             (DamageMessage::class.java) -> {
                 damage(((message as DamageMessage).srcOfDamageId as Shot).damage)
                 if (!isAlive) {
-                    mediator.registerColleague(Coin::class.java, Coin(mediator,message.messageId,ID_GENERATOR,coordinates))
+                    mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
                     mediator.removeColleague(Tower::class.java, this)
                 }
                 mediator.send(DamageMessage(message, this), Server::class.java)

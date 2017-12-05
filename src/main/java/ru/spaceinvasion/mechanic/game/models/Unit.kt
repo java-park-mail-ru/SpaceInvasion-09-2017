@@ -30,7 +30,7 @@ class Unit(mediator: GamePartMediator,
                 mediator.send(
                         RequestCollisionsMessage(
                                 this,
-                                message.messageId,
+                                message.requestId,
                                 Coordinates(
                                         (message as MoveMessage).coordinates.x + coordinates.x,
                                         message.coordinates.y + coordinates.y
@@ -43,7 +43,7 @@ class Unit(mediator: GamePartMediator,
                 val dx = ((message as AcceptedMoveMessage).coordinates.x - coordinates.x)
                 val dy = ((message as AcceptedMoveMessage).coordinates.y - coordinates.y)
                 move(dx,dy)
-                mediator.send(MoveMessage(this, message.messageId, Coordinates(dx,dy)), Server::class.java)
+                mediator.send(MoveMessage(this, message.requestId, Coordinates(dx,dy)), Server::class.java)
             }
             (CashChangeMessage::class.java) -> {
                 mediator.send(message, Player::class.java, owner.gamePartId)
@@ -53,8 +53,8 @@ class Unit(mediator: GamePartMediator,
                         (owner.javaClass == PlayerAliens::class.java && coordinates.y > X_OF_MIDDLE_MAP)) {
                     mediator.send(RollbackMessage(
                             this,
-                            message.messageId,
-                            message.messageId,"Not your ground => No tower"),
+                            message.requestId,
+                            message.requestId,"Not your ground => No tower"),
                             Player::class.java,
                             owner.curUnit!!
                     )
@@ -63,13 +63,14 @@ class Unit(mediator: GamePartMediator,
                             Tower::class.java,
                             Tower(
                                     mediator,
-                                    message.messageId,
+                                    message.requestId,
                                     coordinates,
                                     (message as BuildTowerMessage).direction,
                                     ID_GENERATOR
                             )
+
                     )
-                    mediator.send(BuildTowerMessage(message, this), Server::class.java)
+                    mediator.send(BuildTowerMessage(message,this,coordinates), Server::class.java)
                 }
             }
             (ShootMessage::class.java) -> {
@@ -77,7 +78,7 @@ class Unit(mediator: GamePartMediator,
                         Shot::class.java,
                         Shot(
                                 mediator,
-                                message.messageId,
+                                message.requestId,
                                 gamePartId,
                                 getCoordinatesOfShot((message as ShootMessage).direction),
                                 message.direction,
@@ -89,7 +90,7 @@ class Unit(mediator: GamePartMediator,
             (DamageMessage::class.java) -> {
                 damage(((message as DamageMessage).srcOfDamageId as Shot).damage)
                 if (!isAlive) {
-                    mediator.send(UnitStatusMessage(this, message.messageId, false), Player::class.java, owner.gamePartId)
+                    mediator.send(UnitStatusMessage(this, message.requestId, false), Player::class.java, owner.gamePartId)
                     mediator.removeColleague(Unit::class.java, this)
                 }
                 mediator.send(DamageMessage(message, this), Server::class.java)

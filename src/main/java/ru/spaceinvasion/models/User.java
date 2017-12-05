@@ -36,7 +36,7 @@ public class User {
 
     @JsonCreator
     public User(@Nullable @JsonProperty(value = "username", required = true) String username,
-                @Nullable@JsonProperty(value = "password", required = true) String password,
+                @Nullable @JsonProperty(value = "password", required = true) String password,
                 @JsonProperty("email") String email) {
         this.username = username;
         this.password = password;
@@ -81,12 +81,13 @@ public class User {
         return email;
     }
 
+
+    @JsonProperty
     public Integer getId() {
         return id;
     }
 
-    @JsonIgnore
-    @SuppressWarnings("unused")
+    @JsonProperty
     public void setId(Integer id) {
         this.id = id;
     }

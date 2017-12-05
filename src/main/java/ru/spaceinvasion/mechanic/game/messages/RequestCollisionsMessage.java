@@ -9,8 +9,8 @@ import ru.spaceinvasion.models.Coordinates;
 public class RequestCollisionsMessage extends GameMessage {
     private Coordinates potentialCoordinates;
 
-    public RequestCollisionsMessage(GamePart messageCreator, Long messageId, Coordinates potentialCoordinates) {
-        super(messageCreator, messageId);
+    public RequestCollisionsMessage(GamePart messageCreator, Long requestId, Coordinates potentialCoordinates) {
+        super(messageCreator, requestId);
         this.potentialCoordinates = potentialCoordinates;
     }
 

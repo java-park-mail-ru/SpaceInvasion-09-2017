@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicLong
 abstract class Player(
         mediator: GamePartMediator,
         gamePartId: Long,
-        val userId: Int,
         ID_GENERATOR: AtomicLong
 ) : GamePart(mediator, gamePartId, ID_GENERATOR) {
 
@@ -33,7 +32,7 @@ abstract class Player(
                             RollbackMessage(
                                     this,
                                     ID_GENERATOR.decrementAndGet(),
-                                    message.messageId,
+                                    message.requestId,
                                     "No existing unit => no move"
                             ),
                             Server::class.java
@@ -46,7 +45,7 @@ abstract class Player(
                 coins += (message as CashChangeMessage).getdCash()
                 mediator.send(CashChangeMessage(
                         this,
-                        message.messageId, message.getdCash()),
+                        message.requestId, message.getdCash()),
                         Server::class.java)
             }
             (RollbackMessage::class.java) -> {
@@ -57,8 +56,8 @@ abstract class Player(
                     mediator.send(
                             RollbackMessage(
                                     this,
-                                    message.messageId,
-                                    message.messageId,
+                                    message.requestId,
+                                    message.requestId,
                                     "No existing unit => no tower"
                             ),
                             Server::class.java
@@ -72,8 +71,8 @@ abstract class Player(
                         mediator.send(
                                 RollbackMessage(
                                     this,
-                                    message.messageId,
-                                    message.messageId,
+                                    message.requestId,
+                                    message.requestId,
                                     "No money => no tower"
                             ),
                             Server::class.java
@@ -86,8 +85,8 @@ abstract class Player(
                     mediator.send(
                             RollbackMessage(
                                     this,
-                                    message.messageId,
-                                    message.messageId,
+                                    message.requestId,
+                                    message.requestId,
                                     "No existing unit => no shots"
                             ),
                             Server::class.java
@@ -105,8 +104,8 @@ abstract class Player(
                     mediator.send(
                             RollbackMessage(
                                     this,
-                                    message.messageId,
-                                    message.messageId,
+                                    message.requestId,
+                                    message.requestId,
                                     "No existing unit => no bomb"
                             ),
                             Server::class.java
