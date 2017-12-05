@@ -31,6 +31,10 @@ public class ServerSnapService {
     }
 
     public void sendSnapshotsFor(Integer userId, Message serverSnap) {
-        //TODO:
+        try {
+            webSocketSessionService.sendMessageToUser(userId, serverSnap);
+        } catch (IOException ex) {
+            throw new RuntimeException("Failed  sending snapshot", ex);
+        }
     }
 }

@@ -14,8 +14,13 @@ class PlayerAliens(mediator: GamePartMediator,
                    userId: Int,
                    ID_GENERATOR: AtomicLong
 ): Player(mediator, gamePartId, userId, ID_GENERATOR) {
+
     init {
-        createUnit(COORDINATES_OF_UNIT_ALIENS_START)
+        createUnit()
         createBase(COORDINATES_OF_BASE_ALIENS_START)
+    }
+
+    override fun createUnit() {
+        createUnit(COORDINATES_OF_UNIT_ALIENS_START)
     }
 }

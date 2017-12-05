@@ -32,10 +32,12 @@ public class Constants {
     public final static Coordinates COORDINATES_OF_BASE_PEOPLE_START = new Coordinates(0, 230);
     public final static Coordinates COORDINATES_OF_UNIT_ALIENS_START = new Coordinates(600, 230);
     public final static Coordinates COORDINATES_OF_BASE_ALIENS_START = new Coordinates(630, 230);
-    public final static Integer SERVER_TICKS_PER_SECOND = 25;
+    public final static Integer SERVER_FRAME_MILLIS = 25;
     public final static Integer TOWER_SHOOTS_PER_SECOND = 1;
-    public final static Integer TICKS_UNTIL_TOWER_SHOOT = SERVER_TICKS_PER_SECOND / TOWER_SHOOTS_PER_SECOND;
+    public final static Integer TICKS_UNTIL_TOWER_SHOOT = SERVER_FRAME_MILLIS / TOWER_SHOOTS_PER_SECOND;
     public final static Integer SECONDS_TO_BOMB_ACTION = 5;
-    public final static Integer TICKS_UNITL_BOMB_ACTION = SERVER_TICKS_PER_SECOND * SECONDS_TO_BOMB_ACTION;
+    public final static Integer TICKS_UNITL_BOMB_ACTION = SERVER_FRAME_MILLIS * SECONDS_TO_BOMB_ACTION;
+    public final static Integer SECONDS_TO_REBORN_UNIT = 3;
+    public final static Integer TICKS_TO_REBORN_UNIT = SECONDS_TO_REBORN_UNIT * SERVER_FRAME_MILLIS;
 
 }

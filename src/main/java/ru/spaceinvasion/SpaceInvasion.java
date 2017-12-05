@@ -20,7 +20,7 @@ public class SpaceInvasion {
     private static final Logger LOG = LoggerFactory.getLogger(SpaceInvasion.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(SpaceInvasion.class, args);
+        SpringApplication.run(new Class[]{WebSocketConfig.class, SpaceInvasion.class}, args);
     }
 
     @Bean

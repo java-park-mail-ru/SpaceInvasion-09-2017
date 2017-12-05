@@ -17,6 +17,19 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = {
+        "*", // Для тестирования
+                        /* Продакш машина */
+        "http://space-invasion.ru",
+        "https://space-invasion.ru",
+        "http://www.space-invasion.ru",
+        "https://www.space-invasion.ru",
+                        /* Дев машина */
+        "http://space-invasion-frontend.herokuapp.com",
+        "https://space-invasion-frontend.herokuapp.com",
+        "http://www.space-invasion-frontend.herokuapp.com",
+        "https://www.space-invasion-frontend.herokuapp.com"
+})
 @RequestMapping(
         path = Constants.ApiConstants.USER_API_PATH,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,

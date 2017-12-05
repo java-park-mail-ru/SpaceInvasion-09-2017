@@ -7,8 +7,7 @@ import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.mechanic.snaps.ServerSnap
 import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.resources.Constants
-import ru.spaceinvasion.resources.Constants.COST_OF_TOWER
-import ru.spaceinvasion.resources.Constants.START_COINS
+import ru.spaceinvasion.resources.Constants.*
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -24,6 +23,7 @@ abstract class Player(
     var coins: Int = START_COINS
     var curUnit: Long? = null
     var base: Base? = null
+    var ttc: Int? = null
 
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
@@ -125,8 +125,26 @@ abstract class Player(
             (WiningMessage::class.java) -> {
                 mediator.send(WiningMessage(message as WiningMessage, this), Server::class.java)
             }
+            (UnitStatusMessage::class.java) -> {
+                if (!(message as UnitStatusMessage).isAlive) {
+                    curUnit = null
+                    ttc = TICKS_TO_REBORN_UNIT
+                }
+            }
+            (TickMessage::class.java) -> {
+                //TODO: Rewrite this place after tests
+                if (ttc != null) {
+                    ttc = ttc!! - 1
+                    if (ttc!! == 0) {
+                        createUnit()
+                        ttc == null
+                    }
+                }
+            }
         }
     }
+
+    abstract fun createUnit()
 
     protected fun createUnit(coordinates: Coordinates) {
         val unit: Unit = Unit(

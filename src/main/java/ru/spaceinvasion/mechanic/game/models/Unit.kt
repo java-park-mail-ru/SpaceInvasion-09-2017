@@ -1,5 +1,6 @@
 package ru.spaceinvasion.mechanic.game.models
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import ru.spaceinvasion.mechanic.game.Direction
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
@@ -88,8 +89,8 @@ class Unit(mediator: GamePartMediator,
             (DamageMessage::class.java) -> {
                 damage(((message as DamageMessage).srcOfDamageId as Shot).damage)
                 if (!isAlive) {
-                    mediator.removeColleague(Tower::class.java, this)
-                    //TODO: send info to player and prepare to creating new Unit
+                    mediator.send(UnitStatusMessage(this, message.messageId, false), Player::class.java, owner.gamePartId)
+                    mediator.removeColleague(Unit::class.java, this)
                 }
                 mediator.send(DamageMessage(message, this), Server::class.java)
             }
@@ -125,4 +126,5 @@ class Unit(mediator: GamePartMediator,
             else -> return coordinates
         }
     }
+
 }

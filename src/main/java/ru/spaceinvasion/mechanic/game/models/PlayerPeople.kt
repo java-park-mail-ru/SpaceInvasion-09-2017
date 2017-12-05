@@ -16,7 +16,12 @@ class PlayerPeople(mediator: GamePartMediator,
                    ID_GENERATOR: AtomicLong
 ): Player(mediator, gamePartId, userId, ID_GENERATOR) {
     init {
-        createUnit(COORDINATES_OF_UNIT_PEOPLE_START)
+        createUnit()
         createBase(Constants.COORDINATES_OF_BASE_PEOPLE_START)
     }
+
+    override fun createUnit() {
+        createUnit(COORDINATES_OF_UNIT_PEOPLE_START)
+    }
+
 }

@@ -45,11 +45,21 @@ public class ClientSnapService {
     }
     private void processSnapshotsForUserInSession(Integer userId, GameSession session) {
         final List<ClientSnap> playerSnaps = getSnapForUser(userId);
-        Integer lastSnapId = playerSnaps.get(playerSnaps.size() - 1).getIdOfRequest();
+        Integer lastSnapId;
+        try {
+            lastSnapId = playerSnaps.get(playerSnaps.size() - 1).getIdOfRequest();
+        } catch (IndexOutOfBoundsException ex) {
+            lastSnapId = -1;
+        }
         for (Integer processedPerTick = 0;
              processedPerTick < Constants.GameMechanicConstants.NUM_OF_PROCESSED_SNAPS_PER_SERVER_TICK;
              processedPerTick++) {
-            ClientSnap snap = playerSnaps.get(processedPerTick);
+            ClientSnap snap;
+            try {
+                snap = playerSnaps.get(processedPerTick);
+            } catch (IndexOutOfBoundsException ex) {
+                break;
+            }
             switch (snap.getType()) {
                 case "move": processMove(snap, userId, session); break;
                 case "tower": processTowerBuild(snap, userId, session); break;
