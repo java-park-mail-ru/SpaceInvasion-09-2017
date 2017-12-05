@@ -58,7 +58,7 @@ public class LeaderboardControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"n02\"," +
                                 "\"password\":\"soHardPassword\"}"));
-        userService.changeScore(((User)mockHttpSession.getAttribute("user")),5);
+        userService.changeScore(userService.getUser((Integer)mockHttpSession.getAttribute("user")),5);
         mockMvc
                 .perform(get("/v1/user")
                         .session(mockHttpSession)

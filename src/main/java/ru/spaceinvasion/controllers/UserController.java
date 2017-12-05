@@ -3,6 +3,7 @@ package ru.spaceinvasion.controllers;
 import static org.springframework.util.StringUtils.isEmpty;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -107,11 +108,11 @@ public class UserController {
         return ResponseEntity.ok(curUser);
     }
 
-    @GetMapping(path = "{username}")
-    public ResponseEntity<?> getUser(@PathVariable String username) {
+    @GetMapping(path = "{username_id}")
+    public ResponseEntity<?> getUser(@NotNull @PathVariable Integer username_id) {
         User user;
         try {
-            user = userService.getUser(username);
+            user = userService.getUser(username_id);
         } catch (Exceptions.NotFoundUser e) {
             return ResponseEntity.notFound().build();
         }

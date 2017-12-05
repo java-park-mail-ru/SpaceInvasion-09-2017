@@ -1,5 +1,6 @@
 package ru.spaceinvasion.controllers;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Before
+    @After
     public void clearDataBase() {
         userService.dropAll();
     }
@@ -73,6 +74,27 @@ public class UserControllerTest {
         assertEquals(
                 ((Integer)mockHttpSession.getAttribute("user")),
                 (Integer)userService.getUser("n02").getId());
+    }
+
+    @Test
+    public void testGetUser() throws Exception {
+        testSignUp();
+        final MockHttpSession mockHttpSession = new MockHttpSession();
+        mockMvc
+                .perform(post("/v1/user/signin")
+                        .session(mockHttpSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"n02\"," +
+                                "\"password\":\"soHardPassword\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("username").value("n02"));
+        mockMvc
+                .perform(get("/v1/user/"+mockHttpSession.getAttribute("user"))
+                        .session(mockHttpSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("username").value("n02"));
     }
 
     @Test
