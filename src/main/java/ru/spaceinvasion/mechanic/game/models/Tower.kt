@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong
 class Tower(mediator: GamePartMediator, gamePartId: Long,
             override var coordinates: Coordinates,
             val directionOfShooting: Direction,
-
             ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Damaging, Placed {
     override var health: Int = HEALTH_OF_TOWER
     override var isAlive: Boolean = true

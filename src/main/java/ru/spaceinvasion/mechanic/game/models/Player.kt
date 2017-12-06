@@ -167,4 +167,5 @@ abstract class Player(
         )
         mediator.registerColleague(Base::class.java, base!!)
     }
+
 }

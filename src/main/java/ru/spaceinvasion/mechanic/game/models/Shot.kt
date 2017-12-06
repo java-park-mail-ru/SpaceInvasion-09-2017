@@ -21,7 +21,7 @@ class Shot(mediator: GamePartMediator,
            ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Moving {
 
     init {
-        mediator.send(ShootMessage(this, ID_GENERATOR.decrementAndGet(), direction), Server::class.java)
+        mediator.send(ShootMessage(this, ID_GENERATOR.decrementAndGet(), direction, coordinates), Server::class.java)
     }
 
     override val width = Constants.SHOT_WIDTH

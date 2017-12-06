@@ -53,7 +53,7 @@ public class ClientSnapService {
              processedPerTick++) {
             ClientSnap snap;
             try {
-                snap = playerSnaps.get(processedPerTick);
+                snap = playerSnaps.get(0);
             } catch (IndexOutOfBoundsException ex) {
                 break;
             }

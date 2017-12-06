@@ -32,22 +32,22 @@ class Server(mediator: GamePartMediator,
         when (message.javaClass) {
         //TODO: Maybe not message of this type put into snaps? Think about it and change it
             (RollbackMessage::class.java) -> {
-                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(message)}
+                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as RollbackMessage))}
             }
             (MoveMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(message)}
+                snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId  }.forEach { it.value.add(ServerSnap(message as MoveMessage))}
             }
             (BuildTowerMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(ServerSnap((message.requestId).toInt(), (message as BuildTowerMessage)))}
+                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(ServerSnap(message as BuildTowerMessage))}
             }
             (ShootMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId }.forEach { it.value.add(message)}
+                snaps.filter { it.key != message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as ShootMessage))}
             }
             (CashChangeMessage::class.java) -> {
-                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(message)}
+                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as CashChangeMessage))}
             }
             (DisappearingMessage::class.java) -> {
-                snaps.forEach { it.value.add(message) }
+                snaps.forEach { it.value.add(ServerSnap(message as DisappearingMessage)) }
             }
             (DamageMessage::class.java) -> {
                 //MessageCreator reports about damage to him

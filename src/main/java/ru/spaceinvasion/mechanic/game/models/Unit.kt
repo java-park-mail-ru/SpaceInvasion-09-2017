@@ -25,7 +25,7 @@ class Unit(mediator: GamePartMediator,
     override val height = UNIT_HEIGHT
 
     override fun notify(message: GameMessage) {
-        when (message) {
+        when (message.javaClass) {
             (MoveMessage::class.java) -> {
                 mediator.send(
                         RequestCollisionsMessage(

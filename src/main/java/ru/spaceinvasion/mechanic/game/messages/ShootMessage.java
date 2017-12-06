@@ -9,11 +9,19 @@ import ru.spaceinvasion.models.Coordinates;
  */
 public class ShootMessage extends GameMessage {
     Direction direction;
+    Coordinates coordinatesOfShotAppearance;
 
     public ShootMessage(GamePart messageCreator, Long requestId, Direction direction) {
         super(messageCreator, requestId);
         this.direction = direction;
     }
+
+    public ShootMessage(GamePart messageCreator, Long requestId, Direction direction, Coordinates coordinates) {
+        super(messageCreator, requestId);
+        this.direction = direction;
+    }
+
+
 
     public ShootMessage(ShootMessage buildTowerMessage, GamePart messageCreator) {
         super(messageCreator, buildTowerMessage.getRequestId());
@@ -22,5 +30,9 @@ public class ShootMessage extends GameMessage {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinatesOfShotAppearance;
     }
 }

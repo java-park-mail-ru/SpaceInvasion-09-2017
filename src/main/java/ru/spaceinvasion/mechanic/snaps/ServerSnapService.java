@@ -25,6 +25,8 @@ public class ServerSnapService {
     }
 
     public void sendSnapshotsFor(Integer userId, List<Message> serverSnaps) {
+        if (serverSnaps == null)
+            return;
         for( Message message : serverSnaps ) {
             sendSnapshotsFor(userId, message);
         }

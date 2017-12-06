@@ -98,11 +98,11 @@ public class SpaceInvasionMechanics implements GameMechanics {
                 //TODO: Check it place
                 serverSnapService.sendSnapshotsFor(
                         session.getPlayer1(),
-                        session.getServer().getSnaps().get(session.getPlayer1())
+                        session.getServer().getSnaps().get(new Long(session.getPlayer1()))
                 );
                 serverSnapService.sendSnapshotsFor(
                         session.getPlayer2(),
-                        session.getServer().getSnaps().get(session.getPlayer2())
+                        session.getServer().getSnaps().get(new Long(session.getPlayer2()))
                 );
             } catch (RuntimeException ex) {
                 sessionsToTerminate.add(session);
