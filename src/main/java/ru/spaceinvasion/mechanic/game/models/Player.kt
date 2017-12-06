@@ -99,25 +99,6 @@ abstract class Player(
                     )
                 }
             }
-            (BombInstallingMessage::class.java) -> {
-                if (curUnit == null) {
-                    mediator.send(
-                            RollbackMessage(
-                                    this,
-                                    message.requestId,
-                                    message.requestId,
-                                    "No existing unit => no bomb"
-                            ),
-                            Server::class.java
-                    )
-                } else {
-                    mediator.send(
-                            BombInstallingMessage(message as BombInstallingMessage, this),
-                            Unit::class.java,
-                            curUnit!!
-                    )
-                }
-            }
             (LosingMessage::class.java) -> {
                 mediator.send(LosingMessage(message as LosingMessage, this), Server::class.java)
             }

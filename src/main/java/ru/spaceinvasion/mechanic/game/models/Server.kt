@@ -52,7 +52,10 @@ class Server(mediator: GamePartMediator,
             (DamageMessage::class.java) -> {
                 //MessageCreator reports about damage to him
                 //SrcOfDamage reports about guy who inflict damage
-                snaps.forEach { it.value.add(message) }
+                snaps.forEach { it.value.add(ServerSnap(message as DamageMessage)) }
+            }
+            (BombInstallingMessage::class.java) -> {
+                snaps.forEach { it.value.add(ServerSnap(message as BombInstallingMessage)) }
             }
         }
     }

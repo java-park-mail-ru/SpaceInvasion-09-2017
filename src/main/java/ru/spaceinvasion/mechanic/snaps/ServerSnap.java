@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.messages.*;
 import ru.spaceinvasion.mechanic.game.models.Player;
+import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.models.*;
 
 public class ServerSnap implements Message {
@@ -58,10 +59,11 @@ public class ServerSnap implements Message {
         data[4] = buildTowerMessage.getDirection().getValue();
     }
 
-    public ServerSnap(Integer idOfLastAcceptedCommitFromUser, BombSnap bombSnap) {
-        data = new Integer[2];
-        data[0] = idOfLastAcceptedCommitFromUser;
+    public ServerSnap(BombInstallingMessage bombInstallingMessage) {
+        data = new Integer[3];
+        data[0] = bombInstallingMessage.getRequestId().intValue();
         data[1] = 5;
+        data[2] = (int)bombInstallingMessage.getMessageCreator().getGamePartId();
     }
 
     public ServerSnap(ShootMessage shootMessage) {
@@ -74,20 +76,17 @@ public class ServerSnap implements Message {
     }
 
     public ServerSnap(CashChangeMessage cashChangeMessage) {
-        data = new Integer[4];
+        data = new Integer[3];
         data[0] = cashChangeMessage.getRequestId().intValue();
         data[1] = 8;
-        data[3] = ((Player)cashChangeMessage.getMessageCreator()).getCoins();
+        data[2] = ((Player)cashChangeMessage.getMessageCreator()).getCoins();
     }
 
     public ServerSnap(DisappearingMessage disappearingMessage) {
-        data = new Integer[4];
+        data = new Integer[3];
         data[0] = disappearingMessage.getRequestId().intValue();
         data[1] = 9;
-        data[3] = (int)disappearingMessage.getMessageCreator().getGamePartId();
+        data[2] = (int)disappearingMessage.getMessageCreator().getGamePartId();
     }
 
-    //            (CashChangeMessage::class.java) -> {
-//        snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(message)}
-//    }
 }

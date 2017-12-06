@@ -106,9 +106,6 @@ class CollisionEngine(mediator: GamePartMediator,
 
                         }
                     }
-                    (BombInstallingMessage::class.java) -> {
-
-                    }
                 }
             }
         }
