@@ -41,9 +41,9 @@ class Unit(mediator: GamePartMediator,
             }
             (AcceptedMoveMessage::class.java) -> {
                 val dx = ((message as AcceptedMoveMessage).coordinates.x - coordinates.x)
-                val dy = ((message as AcceptedMoveMessage).coordinates.y - coordinates.y)
+                val dy = (message.coordinates.y - coordinates.y)
                 move(dx,dy)
-                mediator.send(MoveMessage(this, message.requestId, Coordinates(dx,dy)), Server::class.java)
+                mediator.send(MoveMessage(this, message.requestId, message.coordinates), Server::class.java)
             }
             (CashChangeMessage::class.java) -> {
                 mediator.send(message, Player::class.java, owner.gamePartId)
