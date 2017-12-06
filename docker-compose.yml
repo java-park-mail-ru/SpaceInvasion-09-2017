@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-java
+    command:
+      java -jar /root/.m2/repository/ru/space_invasion/SpaceInvasion/1.0.0-SNAPSHOT/SpaceInvasion-1.0.0-SNAPSHOT.jar
+      --PGPASSWORD=$PGPASSWORD --PORT=$PORT --JDBC_DATABASE_URL=$JDBC_DATABASE_URL --PGUSER=$PGUSER --PGHOST=$PGHOST --PGPORT=$PGPORT --PGDATABASE=$PGDATABASE
+    depends_on:
+    - db
+    ports:
+    - "80:80"
+    volumes:
+    - ./:/var/www/SpaceInvasion
+    restart: always
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    ports:
+    - "5432:5432"
+    volumes:
+    - ./postgres:/var/lib/postgresql
+    - ./log/postgres:/var/log/postgresql
+    - ./ets/postgres:/etc/postgresql
