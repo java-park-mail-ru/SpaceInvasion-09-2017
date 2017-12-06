@@ -15,9 +15,13 @@ public class User {
     @Nullable
     private String email;
     private int score;
-    private int id;
+    private Integer id;
 
     public User() { }
+
+    public User(Integer id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -32,7 +36,7 @@ public class User {
 
     @JsonCreator
     public User(@Nullable @JsonProperty(value = "username", required = true) String username,
-                @Nullable@JsonProperty(value = "password", required = true) String password,
+                @Nullable @JsonProperty(value = "password", required = true) String password,
                 @JsonProperty("email") String email) {
         this.username = username;
         this.password = password;
@@ -77,13 +81,14 @@ public class User {
         return email;
     }
 
-    public int getId() {
+
+    @JsonProperty
+    public Integer getId() {
         return id;
     }
 
-    @JsonIgnore
-    @SuppressWarnings("unused")
-    public void setId(int id) {
+    @JsonProperty
+    public void setId(Integer id) {
         this.id = id;
     }
 }

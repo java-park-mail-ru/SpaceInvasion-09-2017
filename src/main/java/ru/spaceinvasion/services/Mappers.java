@@ -12,6 +12,7 @@ class Mappers {
                 res.getString("email")
         );
         user.setScore(res.getInt("score"));
+        user.setId(res.getInt("id"));
         return user;
     };
 
