@@ -6,7 +6,7 @@ import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
 import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.models.Server;
-import ru.spaceinvasion.mechanic.snaps.GameInitResponse;
+import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;
@@ -64,8 +64,8 @@ public class GameSessionService {
         players.add(gameSession.getPlayer1());
         players.add(gameSession.getPlayer2());
         try {
-            webSocketSessionService.sendMessageToUser(players.get(0), new GameInitResponse(Race.PEOPLE, player2Id));
-            webSocketSessionService.sendMessageToUser(players.get(1), new GameInitResponse(Race.ALIENS, player1Id));
+            webSocketSessionService.sendMessageToUser(players.get(0), new ServerSnap(Race.PEOPLE, player2Id));
+            webSocketSessionService.sendMessageToUser(players.get(1), new ServerSnap(Race.ALIENS, player1Id));
         } catch (IOException e) {
             players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
                     CloseStatus.SERVER_ERROR));

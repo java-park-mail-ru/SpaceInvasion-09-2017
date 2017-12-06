@@ -22,11 +22,18 @@ public class ServerSnap implements Message {
 //    4: emeny's tower
 //    5: emeny's bomb
 //    6: emeny's shot
-//    7: game init (using in GameInitResponse)
+//    7: game init
 //    8: change account
 //    9: disappearing (coin)
     //TODO Where is appearing coins?
 
+    public ServerSnap(Race race, Integer enemyId) {
+        data = new Integer[4];
+        data[0] = 0;
+        data[1] = 7;
+        data[2] = (race == Race.PEOPLE) ? 0 : 1;
+        data[3] = enemyId;
+}
 
     public ServerSnap(RollbackMessage rollbackMessage) {
         data = new Integer[2];
