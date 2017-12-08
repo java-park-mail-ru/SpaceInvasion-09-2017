@@ -8,4 +8,5 @@ deploy:
   app: space-invasion-backend
   on:
     repo: java-park-mail-ru/SpaceInvasion-09-2017
-    branch: release
+    all_branches: true
+    tags: true

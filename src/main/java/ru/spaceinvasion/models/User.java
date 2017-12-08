@@ -3,67 +3,92 @@ package ru.spaceinvasion.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class User {
 
     @JsonIgnore
-    @NotBlank
+    @Nullable
     private String password;
-    @NotBlank
-    private final String username;
-    @NotNull
-    private final String email;
+    @Nullable
+    private String username;
+    @Nullable
+    private String email;
+    private int score;
+    private Integer id;
 
-    //CHECKSTYLE:OFF
+    public User() { }
+
+    public User(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        final User user = (User) o;
+        User user = (User) o;
 
-        return (password != null ? password.equals(user.password) : user.password == null)
-                && (username != null ? username.equals(user.username) : user.username == null)
-                && email.equals(user.email);
+        if (id != user.id) return false;
+        return username != null ? username.equals(user.username) : user.username == null;
     }
-
-    @Override
-    public int hashCode() {
-        int result = password != null ? password.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + email.hashCode();
-        return result;
-    }
-    //CHECKSTYLE:ON
 
     @JsonCreator
-    public User(@JsonProperty(value = "username", required = true) String username,
-                @JsonProperty(value = "password", required = true) String password,
+    public User(@Nullable @JsonProperty(value = "username", required = true) String username,
+                @Nullable @JsonProperty(value = "password", required = true) String password,
                 @JsonProperty("email") String email) {
         this.username = username;
         this.password = password;
         this.email = (email != null ? email : "");
+        this.score = 0;
     }
 
+    @Nullable
     public String getUsername() {
         return username;
     }
 
     @JsonIgnore
+    @Nullable
     public String getPassword() {
         return password;
     }
 
     @JsonProperty
-    public void setPassword(String password) {
+    public int getScore() {
+        return score;
+    }
+
+    @JsonIgnore
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    @JsonIgnore
+    public void setUsername(@Nullable String username) { this.username = username; }
+
+    @JsonIgnore
+    public void setEmail(@Nullable  String email) { this.email = email; }
+
+    @JsonProperty
+    public void setPassword(@Nullable  String password) {
         this.password = password;
     }
 
-    @SuppressWarnings("unused")
+    @Nullable
     public String getEmail() {
         return email;
+    }
+
+
+    @JsonProperty
+    public Integer getId() {
+        return id;
+    }
+
+    @JsonProperty
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

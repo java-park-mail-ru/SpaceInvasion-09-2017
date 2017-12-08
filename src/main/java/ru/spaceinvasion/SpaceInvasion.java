@@ -1,14 +1,18 @@
 package ru.spaceinvasion;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import ru.spaceinvasion.utils.Constants;
 
 @SpringBootApplication
 public class SpaceInvasion {
+
     public static void main(String[] args) {
         SpringApplication.run(SpaceInvasion.class, args);
     }
@@ -20,16 +24,9 @@ public class SpaceInvasion {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/v1/**")
-                        .allowCredentials(true).allowedOrigins(
-                        "http://space-invasion.ru",
-                        "http://space-invasion.herokuapp.com",
-                        "http://www.space-invasion.ru",
-                        "http://www.space-invasion.herokuapp.com",
-                        "https://space-invasion.ru",
-                        "https://space-invasion.herokuapp.com",
-                        "https://www.space-invasion.ru",
-                        "https://www.space-invasion.herokuapp.com"
-                ).allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
+                        .allowCredentials(true)
+                        .allowedOrigins(Constants.UrlConstants.ALLOWED_ORIGINS)
+                        .allowedMethods("GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS");
             }
         };
     }
