@@ -24,6 +24,7 @@ public class DamageMessage extends GameMessage {
     public DamageMessage(DamageMessage damageMessage, GamePart messageCreator) {
         super(messageCreator, damageMessage.getRequestId());
         this.srcOfDamage = damageMessage.getSrcOfDamage();
+        this.numOfShot = damageMessage.numOfShot;
     }
 
     public GamePart getSrcOfDamage() {

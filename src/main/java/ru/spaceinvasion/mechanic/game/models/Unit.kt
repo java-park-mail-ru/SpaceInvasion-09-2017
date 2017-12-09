@@ -98,6 +98,7 @@ class Unit(mediator: GamePartMediator,
                 } else {
                     (message.srcOfDamage as Tower).damage_power
                 }
+                damage(damage)
                 if (!isAlive) {
                     mediator.send(UnitStatusMessage(this, message.requestId, false), Player::class.java, owner.gamePartId)
                     mediator.removeColleague(Unit::class.java, this)

@@ -9,9 +9,11 @@ public class Exceptions {
         }
     }
 
-    public static class NotFoundSessionForUser extends RuntimeException { };
+    public static class NotFoundSessionForUser extends RuntimeException { }
 
-    public static class NotValidData extends RuntimeException { };
+    public static class NotValidData extends RuntimeException { }
+
+    public static class UserAlreadyIsPlaying extends RuntimeException { }
 
     public static class NumberOfRequestsHasExceeded extends RuntimeException {
         private Integer idOfLastProcessedSnap;

@@ -41,7 +41,7 @@ class Server(mediator: GamePartMediator,
                 snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1)  }.forEach { it.value.add(ServerSnap(message as MoveMessage))}
             }
             (BuildTowerMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId * (-1)  }.forEach { it.value.add(ServerSnap(message as BuildTowerMessage))}
+                snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1)  }.forEach { it.value.add(ServerSnap(message as BuildTowerMessage))}
             }
             (ShootMessage::class.java) -> {
                 snaps.filter { it.key != ((message.messageCreator as Shot).shotMaker as Unit).owner.gamePartId * (-1) }.forEach { it.value.add(ServerSnap(message as ShootMessage))}

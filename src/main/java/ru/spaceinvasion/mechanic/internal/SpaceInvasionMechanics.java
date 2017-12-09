@@ -10,6 +10,7 @@ import ru.spaceinvasion.mechanic.snaps.ServerSnapService;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.TimeService;
 import ru.spaceinvasion.services.WebSocketSessionService;
+import ru.spaceinvasion.utils.Exceptions;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -64,7 +65,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
 
     public void addUser(Integer userId) {
         if(gameSessionService.isPlaying(userId)) {
-            return; //Or throw exception?
+            throw new Exceptions.UserAlreadyIsPlaying();
         }
         guysWhoWaitOpponent.add(userId);
     }
