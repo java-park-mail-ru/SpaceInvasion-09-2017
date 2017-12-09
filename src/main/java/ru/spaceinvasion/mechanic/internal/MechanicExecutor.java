@@ -20,6 +20,9 @@ import java.util.concurrent.Executors;
 public class MechanicExecutor implements Runnable {
 
     @NotNull
+    private static final Logger LOGGER = LoggerFactory.getLogger(MechanicExecutor.class);
+
+    @NotNull
     private Clock clock = Clock.systemDefaultZone();
 
     private Executor tickExecutor = Executors.newSingleThreadExecutor();
@@ -60,8 +63,8 @@ public class MechanicExecutor implements Runnable {
                 final long afterSleep = clock.millis();
                 lastFrameMillis = afterSleep - before;
             } catch (RuntimeException e) {
-                throw e;
-                //TODO gameMechanics.reset();
+                LOGGER.error(e.getStackTrace().toString());
+                gameMechanics.reset();
             }
         }
     }

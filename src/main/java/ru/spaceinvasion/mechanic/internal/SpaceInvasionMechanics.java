@@ -121,7 +121,15 @@ public class SpaceInvasionMechanics implements GameMechanics {
     }
 
     public void reset() {
-
+        for (GameSession session : gameSessionService.getSessions()) {
+            gameSessionService.forceTerminate(session, true);
+        }
+        guysWhoWaitOpponent.forEach(user -> webSocketSessionService.closeConnection(user, CloseStatus.SERVER_ERROR));
+        guysWhoWaitOpponent.clear();
+        tasks.clear();
+        clientSnapService.reset();
+        timeService.reset();
+        gameTaskScheduler.reset();
     }
 
     private void tryStartGames() {

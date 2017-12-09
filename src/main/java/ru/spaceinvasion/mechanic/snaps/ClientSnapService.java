@@ -40,6 +40,7 @@ public class ClientSnapService {
         }
         return rollbacks;
     }
+
     private void processSnapshotsForUserInSession(Integer userId, GameSession session) {
         final List<ClientSnap> playerSnaps = getSnapForUser(userId);
         Integer lastSnapId;
@@ -58,16 +59,26 @@ public class ClientSnapService {
                 break;
             }
             switch (snap.getType()) {
-                case "move": processMove(snap, userId, session); break;
-                case "tower": processTowerBuild(snap, userId, session); break;
-                case "bomb": processBombAdding(snap, userId, session); break;
-                case "shot": processShot(snap, userId, session); break;
-                case "state": processStateRequest(snap, userId, session); break;
+                case "move":
+                    processMove(snap, userId, session);
+                    break;
+                case "tower":
+                    processTowerBuild(snap, userId, session);
+                    break;
+                case "bomb":
+                    processBombAdding(snap, userId, session);
+                    break;
+                case "shot":
+                    processShot(snap, userId, session);
+                    break;
+                case "state":
+                    processStateRequest(snap, userId, session);
+                    break;
             }
             lastSnapId = snap.getIdOfRequest();
             playerSnaps.remove(0);
         }
-        if(playerSnaps.size() > 0) {
+        if (playerSnaps.size() > 0) {
             playerSnaps.clear();
             throw new Exceptions.NumberOfRequestsHasExceeded(userId, lastSnapId);
         }
@@ -76,16 +87,25 @@ public class ClientSnapService {
     private void processMove(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientMove(userId, snap.getIdOfRequest(), snap.getCoordinates());
     }
+
     private void processTowerBuild(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientTower(userId, snap.getIdOfRequest(), snap.getDirection());
     }
+
     private void processBombAdding(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientBomb(userId, snap.getIdOfRequest());
     }
+
     private void processShot(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientShot(userId, snap.getIdOfRequest(), snap.getDirection());
     }
+
     private void processStateRequest(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientStateRequest(userId, snap.getIdOfRequest());
     }
+
+    public void reset() {
+        //TODO
+    }
+
 }

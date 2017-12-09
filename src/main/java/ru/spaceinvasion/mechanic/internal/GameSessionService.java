@@ -6,6 +6,8 @@ import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
 import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.models.Server;
+import ru.spaceinvasion.mechanic.snaps.ClientSnap;
+import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
 import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
@@ -31,8 +33,13 @@ public class GameSessionService {
     @NotNull
     private final WebSocketSessionService webSocketSessionService;
 
-    public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService) {
+    @NotNull
+    private final ClientSnapService clientSnapService;
+
+    public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService,
+                              @NotNull ClientSnapService clientSnapService) {
         this.webSocketSessionService = webSocketSessionService;
+        this.clientSnapService = clientSnapService;
     }
 
     public boolean isPlaying(Integer userId) {
@@ -77,5 +84,16 @@ public class GameSessionService {
 
     public Set<GameSession> getSessions() {
         return gameSessions;
+    }
+
+    public void forceTerminate(GameSession gameSession, boolean err) {
+        final boolean exists = gameSessions.remove(gameSession);
+        usersMap.remove(gameSession.getPlayer1());
+        usersMap.remove(gameSession.getPlayer2());
+        final CloseStatus status = err ? CloseStatus.SERVER_ERROR : CloseStatus.NORMAL;
+        if (exists) {
+            webSocketSessionService.closeConnection(gameSession.getPlayer1(), status);
+            webSocketSessionService.closeConnection(gameSession.getPlayer2(), status);
+        }
     }
 }

@@ -93,7 +93,11 @@ class Unit(mediator: GamePartMediator,
                 )
             }
             (DamageMessage::class.java) -> {
-                damage(((message as DamageMessage).srcOfDamage as Shot).damage)
+                val damage = if ((message as DamageMessage).srcOfDamage.javaClass == Shot::class.java) {
+                    (message.srcOfDamage as Shot).damage
+                } else {
+                    (message.srcOfDamage as Tower).damage_power
+                }
                 if (!isAlive) {
                     mediator.send(UnitStatusMessage(this, message.requestId, false), Player::class.java, owner.gamePartId)
                     mediator.removeColleague(Unit::class.java, this)
