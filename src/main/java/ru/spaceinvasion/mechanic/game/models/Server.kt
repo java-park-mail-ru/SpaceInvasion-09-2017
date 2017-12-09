@@ -6,6 +6,7 @@ import ru.spaceinvasion.mechanic.snaps.ServerSnap
 import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.models.Message
 import ru.spaceinvasion.resources.Constants
+import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -17,6 +18,8 @@ class Server(mediator: GamePartMediator,
 
     val snaps: MutableMap<Long, MutableList<Message>> = HashMap()
 
+    var tickToCoinCreating: Int? = null
+    val randomGenerator = RandomGenerator()
     var playerPeopleLastProccesedSnapId : Long = 0
     var playerAliensLastProcessedSnapId : Long = 0
 
@@ -57,6 +60,9 @@ class Server(mediator: GamePartMediator,
             (UnitCreationMessage::class.java) -> {
                 snaps.forEach { it.value.add(ServerSnap(message as UnitCreationMessage))}
             }
+            (CoinAppearanceMessage::class.java) -> {
+                snaps.forEach { it.value.add(ServerSnap(message as CoinAppearanceMessage))}
+            }
         }
     }
 
@@ -65,6 +71,7 @@ class Server(mediator: GamePartMediator,
         snaps.put(playerAliensId, ArrayList())
         PlayerPeople(mediator, playerPeopleId * (-1), ID_GENERATOR)
         PlayerAliens(mediator, playerAliensId * (-1), ID_GENERATOR)
+        tickToCoinCreating = Constants.TICKS_TO_COIN_CREATING;
     }
 
     fun newClientMove(clientId: Long, snapId: Long, coords: Coordinates) {
@@ -92,5 +99,28 @@ class Server(mediator: GamePartMediator,
         mediator.send(TickMessage(this,0),Tower::class.java)
         mediator.send(TickMessage(this,0),Bomb::class.java)
         mediator.send(TickMessage(this,0),Player::class.java)
+        if (tickToCoinCreating != null) {
+            tickToCoinCreating = tickToCoinCreating!! - 1
+            if (tickToCoinCreating == 0) {
+                Coin(mediator,ID_GENERATOR.decrementAndGet(),ID_GENERATOR, randomGenerator.nextCoords())
+                tickToCoinCreating = Constants.TICKS_TO_COIN_CREATING;
+            }
+
+        }
+    }
+
+
+    class RandomGenerator() {
+        val yMin: Int = Constants.Y_OF_UPPER_MAP_BORDER + Constants.VERTICAL_OFFSET_OF_COINS;
+        val yMax: Int = Constants.Y_OF_LOWER_MAP_BORDER - Constants.VERTICAL_OFFSET_OF_COINS;
+        val xMin: Int = Constants.X_OF_LEFT_MAP_BORDER + Constants.HORIZONTAL_OFFSET_OF_COINS;
+        val xMax: Int = Constants.X_OF_RIGHT_MAP_BORDER - Constants.HORIZONTAL_OFFSET_OF_COINS;
+        val random = Random()
+
+        fun nextCoords() : Coordinates {
+            val y = random.nextInt(yMax - yMin) + yMin
+            val x = random.nextInt(xMax - xMin) + xMin
+            return Coordinates(x,y)
+        }
     }
 }

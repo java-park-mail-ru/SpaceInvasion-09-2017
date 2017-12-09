@@ -39,5 +39,9 @@ public class Constants {
     public final static Integer TICKS_UNITL_BOMB_ACTION = SERVER_FRAME_MILLIS * SECONDS_TO_BOMB_ACTION;
     public final static Integer SECONDS_TO_REBORN_UNIT = 3;
     public final static Integer TICKS_TO_REBORN_UNIT = SECONDS_TO_REBORN_UNIT * SERVER_FRAME_MILLIS;
+    public final static Integer SECONDS_TO_CREATING_COIN = 20;
+    public final static Integer TICKS_TO_COIN_CREATING = SECONDS_TO_CREATING_COIN * SERVER_FRAME_MILLIS;
+    public final static Integer VERTICAL_OFFSET_OF_COINS = (COIN_HEIGHT / 2) + 10;
+    public final static Integer HORIZONTAL_OFFSET_OF_COINS = BASE_WIDTH + (COIN_WIDTH / 2) + 10;
 
 }
