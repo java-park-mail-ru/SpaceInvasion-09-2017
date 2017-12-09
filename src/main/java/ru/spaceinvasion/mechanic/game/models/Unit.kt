@@ -24,6 +24,10 @@ class Unit(mediator: GamePartMediator,
     override val width = UNIT_WIDTH
     override val height = UNIT_HEIGHT
 
+    init {
+        mediator.send(UnitCreationMessage(this, 0) ,Server::class.java)
+    }
+
     override fun notify(message: GameMessage) {
         when (message.javaClass) {
             (MoveMessage::class.java) -> {
@@ -79,16 +83,17 @@ class Unit(mediator: GamePartMediator,
                         Shot(
                                 mediator,
                                 message.requestId,
-                                gamePartId,
+                                this,
                                 getCoordinatesOfShot((message as ShootMessage).direction),
                                 message.direction,
                                 damage_power,
-                                ID_GENERATOR
+                                ID_GENERATOR,
+                                null
                         )
                 )
             }
             (DamageMessage::class.java) -> {
-                damage(((message as DamageMessage).srcOfDamageId as Shot).damage)
+                damage(((message as DamageMessage).srcOfDamage as Shot).damage)
                 if (!isAlive) {
                     mediator.send(UnitStatusMessage(this, message.requestId, false), Player::class.java, owner.gamePartId)
                     mediator.removeColleague(Unit::class.java, this)
@@ -99,32 +104,34 @@ class Unit(mediator: GamePartMediator,
     }
 
     private fun getCoordinatesOfShot(directionOfLastMove: Direction) : Coordinates{
+        val dy = ((SHOT_HEIGHT + height) / 2 + 1)
+        val dx = ((SHOT_WIDTH + width) / 2 + 1)
         when (directionOfLastMove) {
             (Direction.UP) -> {
-                return Coordinates(coordinates.x, coordinates.y - SHOT_HEIGHT - 1)
+                return Coordinates(coordinates.x, coordinates.y - dy)
             }
             (Direction.UP_RIGHT) -> {
-                return Coordinates(coordinates.x + SHOT_WIDTH + 1, coordinates.y - SHOT_HEIGHT - 1)
+                return Coordinates(coordinates.x + dx, coordinates.y - dy)
             }
             (Direction.RIGHT) -> {
-                return Coordinates(coordinates.x + SHOT_WIDTH + 1,coordinates.y)
+                return Coordinates(coordinates.x + dx, coordinates.y)
             }
             (Direction.DOWN_RIGHT) -> {
-                return Coordinates(coordinates.x + SHOT_WIDTH + 1,coordinates.y + SHOT_HEIGHT + 1)
+                return Coordinates(coordinates.x + dx, coordinates.y + dy)
             }
             (Direction.DOWN) -> {
-                return Coordinates(coordinates.x,coordinates.y + SHOT_HEIGHT + 1)
+                return Coordinates(coordinates.x, coordinates.y + dy)
             }
             (Direction.DOWN_LEFT) -> {
-                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y + SHOT_HEIGHT + 1)
+                return Coordinates(coordinates.x - dx, coordinates.y + dy)
             }
             (Direction.LEFT) -> {
-                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y)
+                return Coordinates(coordinates.x - dx, coordinates.y)
             }
             (Direction.UP_LEFT) -> {
-                return Coordinates(coordinates.x - SHOT_WIDTH - 1,coordinates.y - SHOT_HEIGHT - 1)
+                return Coordinates(coordinates.x - dx, coordinates.y - dy)
             }
-            else -> return coordinates
+            else -> throw RuntimeException()
         }
     }
 

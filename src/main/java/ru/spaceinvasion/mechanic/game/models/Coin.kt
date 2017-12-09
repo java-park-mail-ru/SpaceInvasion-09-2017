@@ -3,6 +3,7 @@ package ru.spaceinvasion.mechanic.game.models
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.Mediator
+import ru.spaceinvasion.mechanic.game.messages.DamageMessage
 import ru.spaceinvasion.mechanic.game.messages.DisappearingMessage
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 import ru.spaceinvasion.models.Coordinates
@@ -21,7 +22,10 @@ class Coin(mediator: GamePartMediator,
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
             (DisappearingMessage::class.java) -> {
-                mediator.send(DisappearingMessage(this, message.requestId),Server::class.java)
+                mediator.send(
+                        DamageMessage(this, message.requestId, (message as DisappearingMessage).destroyer),
+                        Server::class.java
+                )
                 mediator.removeColleague(Coin::class.java, this)
             }
         }

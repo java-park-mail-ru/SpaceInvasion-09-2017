@@ -19,10 +19,15 @@ abstract class Player(
         ID_GENERATOR: AtomicLong
 ) : GamePart(mediator, gamePartId, ID_GENERATOR) {
 
+
     var coins: Int = START_COINS
     var curUnit: Long? = null
     var base: Base? = null
     var ttc: Int? = null
+
+    init {
+        mediator.registerColleague(Player::class.java, this)
+    }
 
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
@@ -43,10 +48,6 @@ abstract class Player(
             }
             (CashChangeMessage::class.java) -> {
                 coins += (message as CashChangeMessage).getdCash()
-                mediator.send(CashChangeMessage(
-                        this,
-                        message.requestId, message.getdCash()),
-                        Server::class.java)
             }
             (RollbackMessage::class.java) -> {
                 mediator.send(RollbackMessage(message as RollbackMessage, this), Server::class.java)

@@ -14,14 +14,16 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class Shot(mediator: GamePartMediator,
            gamePartId: Long,
-           val shotMakerId: Long,
+           val shotMaker: GamePart,
            override var coordinates: Coordinates,
            private val direction: Direction,
            val damage: Int,
-           ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Moving {
+           ID_GENERATOR: AtomicLong,
+           val numOfShot : Long?) : GamePart(mediator, gamePartId, ID_GENERATOR), Moving {
 
     init {
-        mediator.send(ShootMessage(this, ID_GENERATOR.decrementAndGet(), direction, coordinates), Server::class.java)
+        if (shotMaker::class.java == Unit::class.java)
+            mediator.send(ShootMessage(this, gamePartId, direction, coordinates), Server::class.java)
     }
 
     override val width = Constants.SHOT_WIDTH
@@ -44,6 +46,30 @@ class Shot(mediator: GamePartMediator,
                 val dx = ((message as AcceptedMoveMessage).coordinates.x - coordinates.x)
                 val dy = (message.coordinates.y - coordinates.y)
                 move(dx,dy)
+            }
+            (HitMessage::class.java) -> {
+                val damageMessage: DamageMessage
+                if (shotMaker.javaClass == Tower::class.java) {
+                    damageMessage = DamageMessage(this, message.requestId, shotMaker, numOfShot)
+                } else if (shotMaker.javaClass == Unit::class.java) {
+                    damageMessage = DamageMessage(this, message.requestId, this)
+                } else {
+                    throw RuntimeException();
+                }
+                if ((message as HitMessage).target.javaClass == Tower::class.java) {
+                    mediator.send(
+                            damageMessage,
+                            Tower::class.java,
+                            message.target.gamePartId
+                    )
+                } else if ((message).target.javaClass == Unit::class.java) {
+                    mediator.send(
+                            damageMessage,
+                            Unit::class.java,
+                            message.target.gamePartId
+                    )
+                }
+                mediator.removeColleague(Shot::class.java, this)
             }
         }
     }

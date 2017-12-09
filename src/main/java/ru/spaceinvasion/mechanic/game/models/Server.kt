@@ -17,6 +17,9 @@ class Server(mediator: GamePartMediator,
 
     val snaps: MutableMap<Long, MutableList<Message>> = HashMap()
 
+    var playerPeopleLastProccesedSnapId : Long = 0
+    var playerAliensLastProcessedSnapId : Long = 0
+
     init {
         mediator.registerColleague(
                 CollisionEngine::class.java,
@@ -32,22 +35,16 @@ class Server(mediator: GamePartMediator,
         when (message.javaClass) {
         //TODO: Maybe not message of this type put into snaps? Think about it and change it
             (RollbackMessage::class.java) -> {
-                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as RollbackMessage))}
+                snaps.filter { it.key == message.messageCreator.gamePartId * (-1) }.forEach { it.value.add(ServerSnap(message as RollbackMessage))}
             }
             (MoveMessage::class.java) -> {
-                snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId  }.forEach { it.value.add(ServerSnap(message as MoveMessage))}
+                snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1)  }.forEach { it.value.add(ServerSnap(message as MoveMessage))}
             }
             (BuildTowerMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId  }.forEach { it.value.add(ServerSnap(message as BuildTowerMessage))}
+                snaps.filter { it.key != message.messageCreator.gamePartId * (-1)  }.forEach { it.value.add(ServerSnap(message as BuildTowerMessage))}
             }
             (ShootMessage::class.java) -> {
-                snaps.filter { it.key != message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as ShootMessage))}
-            }
-            (CashChangeMessage::class.java) -> {
-                snaps.filter { it.key == message.messageCreator.gamePartId }.forEach { it.value.add(ServerSnap(message as CashChangeMessage))}
-            }
-            (DisappearingMessage::class.java) -> {
-                snaps.forEach { it.value.add(ServerSnap(message as DisappearingMessage)) }
+                snaps.filter { it.key != ((message.messageCreator as Shot).shotMaker as Unit).owner.gamePartId * (-1) }.forEach { it.value.add(ServerSnap(message as ShootMessage))}
             }
             (DamageMessage::class.java) -> {
                 //MessageCreator reports about damage to him
@@ -57,32 +54,29 @@ class Server(mediator: GamePartMediator,
             (BombInstallingMessage::class.java) -> {
                 snaps.forEach { it.value.add(ServerSnap(message as BombInstallingMessage)) }
             }
+            (UnitCreationMessage::class.java) -> {
+                snaps.forEach { it.value.add(ServerSnap(message as UnitCreationMessage))}
+            }
         }
     }
 
     fun startGame(playerPeopleId : Long, playerAliensId : Long) {
-        mediator.registerColleague(
-                Player::class.java,
-                PlayerPeople(mediator, playerPeopleId,
-                        ID_GENERATOR))
-        mediator.registerColleague(
-                Player::class.java,
-                PlayerAliens(mediator, playerAliensId,
-                        ID_GENERATOR))
         snaps.put(playerPeopleId, ArrayList())
         snaps.put(playerAliensId, ArrayList())
+        PlayerPeople(mediator, playerPeopleId * (-1), ID_GENERATOR)
+        PlayerAliens(mediator, playerAliensId * (-1), ID_GENERATOR)
     }
 
     fun newClientMove(clientId: Long, snapId: Long, coords: Coordinates) {
-        mediator.send(MoveMessage(this, snapId, coords), Player::class.java, clientId)
+        mediator.send(MoveMessage(this, snapId, coords), Player::class.java, clientId * (-1))
     }
 
     fun newClientTower(clientId: Long, snapId: Long, direction: Direction) {
-        mediator.send(BuildTowerMessage(this,snapId,direction), Player::class.java, clientId)
+        mediator.send(BuildTowerMessage(this,snapId,direction), Player::class.java, clientId * (-1))
     }
 
     fun newClientShot(clientId: Long, snapId: Long, direction: Direction) {
-        mediator.send(ShootMessage(this, snapId, direction),Player::class.java, clientId)
+        mediator.send(ShootMessage(this, snapId, direction),Player::class.java, clientId * (-1))
     }
 
     fun newClientStateRequest(clientId: Long, snapId: Long) {
@@ -94,10 +88,9 @@ class Server(mediator: GamePartMediator,
     }
 
     fun tick() {
-        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Shot::class.java)
-        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Tower::class.java)
-        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Bomb::class.java)
-        mediator.send(TickMessage(this,ID_GENERATOR.decrementAndGet()),Player::class.java)
+        mediator.send(TickMessage(this,0),Shot::class.java)
+        mediator.send(TickMessage(this,0),Tower::class.java)
+        mediator.send(TickMessage(this,0),Bomb::class.java)
+        mediator.send(TickMessage(this,0),Player::class.java)
     }
-
 }

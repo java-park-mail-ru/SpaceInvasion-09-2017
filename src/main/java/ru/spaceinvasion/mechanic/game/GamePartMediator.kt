@@ -2,9 +2,9 @@ package ru.spaceinvasion.mechanic.game
 
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 
-import java.util.ArrayList
-import java.util.HashMap
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class GamePartMediator : Mediator<GamePart> {
 
@@ -24,12 +24,14 @@ class GamePartMediator : Mediator<GamePart> {
 
     override fun <T : GamePart> send(message: GameMessage, sendToGamePart: Class<T>, sendToGamePartId: Long) {
         val gameParts = colleagues[sendToGamePart]
+        var recipient: T? = null
         gameParts
                 ?.filter {
                     it.gamePartId == sendToGamePartId
                 }?.forEach {
-                    it.notify(message)
+                    recipient = it as T
                 }
+        recipient?.notify(message)
     }
 
     fun <T : GamePart> sendToAllExclude(message: GameMessage, sendToGamePart: Class<T>, notSendToGamePartId: Long) {
@@ -44,8 +46,14 @@ class GamePartMediator : Mediator<GamePart> {
 
     override fun <_T : GamePart> send(message: GameMessage, sendToGamePart: Class<_T>) {
         val gameParts = colleagues[sendToGamePart]
+        val recipients = ArrayList<_T>()
         gameParts?.forEach {
-            send(message, sendToGamePart, it.gamePartId)
+            recipients.add(it as _T)
+        }
+        recipients.forEach {
+            if (authenticateColleague(sendToGamePart, it)) {
+                send(message, sendToGamePart, it.gamePartId)
+            }
         }
     }
 
@@ -62,6 +70,16 @@ class GamePartMediator : Mediator<GamePart> {
                 break
             }
         }
+    }
+
+    fun <_T : GamePart> authenticateColleague(clazz: Class<_T>, gamePart: GamePart) : Boolean {
+        val gameParts: MutableList<GamePart> = colleagues[clazz] as MutableList<GamePart>
+        for (authGamePart in gameParts) {
+            if (gamePart.gamePartId == authGamePart.gamePartId) {
+                return true
+            }
+        }
+        return false
     }
 
     companion object {

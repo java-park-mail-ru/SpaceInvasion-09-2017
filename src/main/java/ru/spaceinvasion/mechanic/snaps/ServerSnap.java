@@ -6,6 +6,8 @@ import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.messages.*;
 import ru.spaceinvasion.mechanic.game.models.Player;
 import ru.spaceinvasion.mechanic.game.models.Server;
+import ru.spaceinvasion.mechanic.game.models.Tower;
+import ru.spaceinvasion.mechanic.game.models.Unit;
 import ru.spaceinvasion.models.*;
 
 public class ServerSnap implements Message {
@@ -23,8 +25,7 @@ public class ServerSnap implements Message {
 //    5: emeny's bomb
 //    6: emeny's shot
 //    7: game init
-//    8: change account
-//    9: disappearing (coin)
+//    10: unit creation
     //TODO Where is appearing coins?
 
     public ServerSnap(Race race, Integer enemyId) {
@@ -42,11 +43,16 @@ public class ServerSnap implements Message {
     }
 
     public ServerSnap(DamageMessage damageMessage) {
-        data = new Integer[4];
+        if (damageMessage.getSrcOfDamage().getClass() == Tower.class) {
+            data = new Integer[5];
+            data[4] = damageMessage.getNumOfShot().intValue();
+        } else
+            data = new Integer[4];
         data[0] = damageMessage.getRequestId().intValue();
         data[1] = 2;
-        data[2] = damageMessage.getSrcOfDamageId().intValue();
+        data[2] = (int)damageMessage.getSrcOfDamage().getGamePartId();
         data[3] = (int)damageMessage.getMessageCreator().getGamePartId();
+
     }
 
     public ServerSnap(MoveMessage moveMessage) {
@@ -74,14 +80,16 @@ public class ServerSnap implements Message {
     }
 
     public ServerSnap(ShootMessage shootMessage) {
-        data = new Integer[5];
+        data = new Integer[6];
         data[0] = shootMessage.getRequestId().intValue();
         data[1] = 6;
         data[2] = shootMessage.getCoordinates().getX();
         data[3] = shootMessage.getCoordinates().getY();
         data[4] = shootMessage.getDirection().getValue();
+        data[5] = (int)shootMessage.getMessageCreator().getGamePartId();
     }
 
+    @Deprecated
     public ServerSnap(CashChangeMessage cashChangeMessage) {
         data = new Integer[3];
         data[0] = cashChangeMessage.getRequestId().intValue();
@@ -89,11 +97,20 @@ public class ServerSnap implements Message {
         data[2] = ((Player)cashChangeMessage.getMessageCreator()).getCoins();
     }
 
+    @Deprecated
     public ServerSnap(DisappearingMessage disappearingMessage) {
         data = new Integer[3];
         data[0] = disappearingMessage.getRequestId().intValue();
         data[1] = 9;
         data[2] = (int)disappearingMessage.getMessageCreator().getGamePartId();
+    }
+
+    public ServerSnap(UnitCreationMessage unitCreationMessage) {
+        data = new Integer[4];
+        data[0] = unitCreationMessage.getRequestId().intValue();
+        data[1] = 10;
+        data[2] = (int)((Unit)unitCreationMessage.getMessageCreator()).getOwner().getGamePartId() * (-1);
+        data[3] = (int)unitCreationMessage.getMessageCreator().getGamePartId();
     }
 
 }

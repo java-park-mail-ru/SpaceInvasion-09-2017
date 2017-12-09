@@ -7,19 +7,30 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class DamageMessage extends GameMessage {
 
-    private Long srcOfDamageId;
+    private GamePart srcOfDamage;
+    private Long numOfShot = null;
 
-    public DamageMessage(GamePart messageCreator, Long requestId, Long srcOfDamageId) {
+    public DamageMessage(GamePart messageCreator, Long requestId, GamePart srcOfDamage) {
         super(messageCreator, requestId);
-        this.srcOfDamageId = srcOfDamageId;
+        this.srcOfDamage = srcOfDamage;
+    }
+
+    public DamageMessage(GamePart messageCreator, Long requestId, GamePart srcOfDamage, Long numOfShot) {
+        super(messageCreator, requestId);
+        this.srcOfDamage = srcOfDamage;
+        this.numOfShot = numOfShot;
     }
 
     public DamageMessage(DamageMessage damageMessage, GamePart messageCreator) {
         super(messageCreator, damageMessage.getRequestId());
-        this.srcOfDamageId = damageMessage.getSrcOfDamageId();
+        this.srcOfDamage = damageMessage.getSrcOfDamage();
     }
 
-    public Long getSrcOfDamageId() {
-        return srcOfDamageId;
+    public GamePart getSrcOfDamage() {
+        return srcOfDamage;
+    }
+
+    public Long getNumOfShot() {
+        return numOfShot;
     }
 }

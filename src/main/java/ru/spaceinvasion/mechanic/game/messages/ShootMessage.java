@@ -19,6 +19,7 @@ public class ShootMessage extends GameMessage {
     public ShootMessage(GamePart messageCreator, Long requestId, Direction direction, Coordinates coordinates) {
         super(messageCreator, requestId);
         this.direction = direction;
+        this.coordinatesOfShotAppearance = coordinates;
     }
 
 

@@ -43,7 +43,7 @@ class CollisionEngine(mediator: GamePartMediator,
                             val coin: Coin? = collisionWith(Coin::class.java, message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
                             if (coin != null) {
                                 mediator.send(
-                                        DisappearingMessage(this,message.requestId),
+                                        DisappearingMessage(this,message.requestId, message.messageCreator),
                                         Coin::class.java,
                                         coin.gamePartId)
                                 mediator.send(
@@ -91,17 +91,15 @@ class CollisionEngine(mediator: GamePartMediator,
                                             message.messageCreator.gamePartId)
                                 } else {
                                     mediator.send(
-                                            DamageMessage(this, message.requestId, message.messageCreator.gamePartId),
-                                            Unit::class.java,
-                                            unit.gamePartId)
-                                    mediator.removeColleague(Shot::class.java, message.messageCreator)
+                                            HitMessage(this,message.requestId, unit),
+                                            Shot::class.java,
+                                            message.messageCreator.gamePartId)
                                 }
                             } else {
                                 mediator.send(
-                                        DamageMessage(this, message.requestId, message.messageCreator.gamePartId),
-                                        Tower::class.java,
-                                        tower.gamePartId)
-                                mediator.removeColleague(Shot::class.java, message.messageCreator)
+                                        HitMessage(this,message.requestId, tower),
+                                        Shot::class.java,
+                                        message.messageCreator.gamePartId)
                             }
 
                         }
@@ -112,10 +110,10 @@ class CollisionEngine(mediator: GamePartMediator,
     }
 
     private fun isCrossedMapLimits(coordinates: Coordinates, widthOfObject: Int, heightOfObject: Int): Boolean {
-        return  (coordinates.x < xOfLeftMapBorder) ||
-                (coordinates.y < yOfUpperMapBorder) ||
-                (coordinates.x + widthOfObject > xOfRightMapBorder) ||
-                (coordinates.y + heightOfObject > yOfLowerMapBorder)
+        return  (coordinates.x - (widthOfObject / 2) < xOfLeftMapBorder) ||
+                (coordinates.y - (heightOfObject / 2) < yOfUpperMapBorder) ||
+                (coordinates.x + (widthOfObject / 2) > xOfRightMapBorder) ||
+                (coordinates.y + (heightOfObject / 2) > yOfLowerMapBorder)
     }
 
     private fun <T> collisionWith(
@@ -140,29 +138,19 @@ class CollisionEngine(mediator: GamePartMediator,
                             coordinates2: Coordinates,
                             widthOfRect2: Int,
                             heightOfRect2: Int): Boolean {
-        val xL1 = coordinates1.x
-        val xR1 = coordinates1.x + widthOfRect1
-        val yU1 = coordinates1.y
-        val yD1 = coordinates1.y + heightOfRect1
-        val xL2 = coordinates2.x
-        val xR2 = coordinates2.x + widthOfRect2
-        val yU2 = coordinates2.y
-        val yD2 = coordinates2.y + heightOfRect2
+        val xL1 = coordinates1.x - (widthOfRect1 / 2)
+        val xR1 = coordinates1.x + (widthOfRect1 / 2)
+        val yU1 = coordinates1.y - (heightOfRect1 / 2)
+        val yD1 = coordinates1.y + (heightOfRect1 / 2)
+        val xL2 = coordinates2.x - (widthOfRect2 / 2)
+        val xR2 = coordinates2.x + (widthOfRect2 / 2)
+        val yU2 = coordinates2.y - (heightOfRect2 / 2)
+        val yD2 = coordinates2.y + (heightOfRect2 / 2)
         val yUR = maxOf(yU1,yU2)
         val xLR = maxOf(xL1,xL2)
         val yDR = minOf(yD1,yD2)
         val xRR = minOf(xR1,xR2)
         return yDR >= yUR && xRR >= xLR
     }
-
-//    private fun isIntersect(coordinates1: Coordinates,
-//                            coordinates2: Coordinates,
-//                            widthOfRect: Int,
-//                            heightOfRect: Int) :Boolean {
-//        return  coordinates1.x >= coordinates2.x &&
-//                coordinates1.x <= coordinates2.x + widthOfRect &&
-//                coordinates1.y >= coordinates2.y &&
-//                coordinates1.y <= coordinates2.y + heightOfRect
-//    }
 
 }

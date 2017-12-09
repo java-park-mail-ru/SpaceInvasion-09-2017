@@ -30,6 +30,7 @@ public class ServerSnapService {
         for( Message message : serverSnaps ) {
             sendSnapshotsFor(userId, message);
         }
+        serverSnaps.clear();
     }
 
     public void sendSnapshotsFor(Integer userId, Message serverSnap) {

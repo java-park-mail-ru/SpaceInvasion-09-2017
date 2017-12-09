@@ -27,7 +27,7 @@ class Bomb(mediator: GamePartMediator,
             (TickMessage::class.java) -> {
                 ttl--
                 if(ttl == 0) {
-                    mediator.send(DamageMessage(this, gamePartId, gamePartId), Base::class.java, installedOnBaseWithId)
+                    mediator.send(DamageMessage(this, gamePartId, this), Base::class.java, installedOnBaseWithId)
                     mediator.removeColleague(Bomb::class.java, this)
                 }
             }

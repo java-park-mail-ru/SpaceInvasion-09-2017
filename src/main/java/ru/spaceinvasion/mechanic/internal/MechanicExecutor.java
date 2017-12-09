@@ -60,7 +60,8 @@ public class MechanicExecutor implements Runnable {
                 final long afterSleep = clock.millis();
                 lastFrameMillis = afterSleep - before;
             } catch (RuntimeException e) {
-                gameMechanics.reset();
+                throw e;
+                //TODO gameMechanics.reset();
             }
         }
     }

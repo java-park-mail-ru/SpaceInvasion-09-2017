@@ -28,9 +28,9 @@ public class Constants {
     public final static Integer X_OF_RIGHT_MAP_BORDER = 960;
     public final static Integer X_OF_MIDDLE_MAP = Math.abs(X_OF_RIGHT_MAP_BORDER - X_OF_LEFT_MAP_BORDER) / 2 + X_OF_LEFT_MAP_BORDER;
     public final static Integer COST_OF_ONE_COIN = 10;
-    public final static Coordinates COORDINATES_OF_UNIT_PEOPLE_START = new Coordinates(30, 320);
+    public final static Coordinates COORDINATES_OF_UNIT_PEOPLE_START = new Coordinates(55, 320);
     public final static Coordinates COORDINATES_OF_BASE_PEOPLE_START = new Coordinates(5, 320);
-    public final static Coordinates COORDINATES_OF_UNIT_ALIENS_START = new Coordinates(930, 320);
+    public final static Coordinates COORDINATES_OF_UNIT_ALIENS_START = new Coordinates(905, 320);
     public final static Coordinates COORDINATES_OF_BASE_ALIENS_START = new Coordinates(955, 320);
     public final static Integer SERVER_FRAME_MILLIS = 25;
     public final static Integer TOWER_SHOOTS_PER_SECOND = 2;
