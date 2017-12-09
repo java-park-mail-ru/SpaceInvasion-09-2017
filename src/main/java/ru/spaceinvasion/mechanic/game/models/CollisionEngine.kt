@@ -59,7 +59,8 @@ class CollisionEngine(mediator: GamePartMediator,
                                                     mediator,
                                                     message.requestId,
                                                     base.gamePartId,
-                                                    ID_GENERATOR
+                                                    ID_GENERATOR,
+                                                    base.owner.gamePartId
                                             )
                                     )
                                 }

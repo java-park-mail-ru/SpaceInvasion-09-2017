@@ -7,12 +7,18 @@ import ru.spaceinvasion.mechanic.game.GamePart;
  */
 public class BombInstallingMessage extends GameMessage {
 
+    private Long installedOnBaseOfPlayer;
+
     public BombInstallingMessage(GamePart messageCreator, Long requestId) {
         super(messageCreator, requestId);
     }
 
-    public BombInstallingMessage(BombInstallingMessage bombInstallingMessage, GamePart messageCreator) {
-        super(messageCreator, bombInstallingMessage.getRequestId());
+    public BombInstallingMessage(GamePart messageCreator, Long requestId, Long installedOnBaseOfPlayer) {
+        super(messageCreator, requestId);
+        this.installedOnBaseOfPlayer = installedOnBaseOfPlayer;
     }
 
+    public Long getInstalledOnBaseOfPlayer() {
+        return installedOnBaseOfPlayer;
+    }
 }

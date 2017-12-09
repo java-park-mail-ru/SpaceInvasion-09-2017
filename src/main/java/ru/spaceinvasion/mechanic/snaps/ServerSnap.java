@@ -76,7 +76,7 @@ public class ServerSnap implements Message {
         data = new Integer[3];
         data[0] = bombInstallingMessage.getRequestId().intValue();
         data[1] = 5;
-        data[2] = (int)bombInstallingMessage.getMessageCreator().getGamePartId();
+        data[2] = bombInstallingMessage.getInstalledOnBaseOfPlayer().intValue() * (-1);
     }
 
     public ServerSnap(ShootMessage shootMessage) {

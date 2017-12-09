@@ -16,11 +16,12 @@ import java.util.concurrent.atomic.AtomicLong
 class Bomb(mediator: GamePartMediator,
            gamePartId: Long,
            private val installedOnBaseWithId: Long,
-           ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR) {
+           ID_GENERATOR: AtomicLong,
+           private val installedOnBaseOfPlayer: Long) : GamePart(mediator, gamePartId, ID_GENERATOR) {
     private var ttl = Constants.TICKS_UNTIL_TOWER_SHOOT
 
     init {
-        mediator.send(BombInstallingMessage(this,gamePartId),Server::class.java)
+        mediator.send(BombInstallingMessage(this,gamePartId,installedOnBaseOfPlayer),Server::class.java)
     }
     override fun notify(message: GameMessage) {
         when (message.javaClass) {
