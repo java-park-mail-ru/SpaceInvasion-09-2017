@@ -1,6 +1,5 @@
 package ru.spaceinvasion.mechanic.game.messages;
 
-import ru.spaceinvasion.mechanic.game.Direction;
 import ru.spaceinvasion.mechanic.game.GamePart;
 
 /**
@@ -12,7 +11,4 @@ public class TickMessage extends GameMessage {
         super(messageCreator, requestId);
     }
 
-    public TickMessage(TickMessage buildTowerMessage, GamePart messageCreator) {
-        super(messageCreator, buildTowerMessage.getRequestId());
-    }
 }

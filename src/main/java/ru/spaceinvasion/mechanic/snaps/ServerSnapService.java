@@ -17,8 +17,7 @@ import java.util.List;
 @Service
 public class ServerSnapService {
 
-    @NotNull
-    private WebSocketSessionService webSocketSessionService;
+    private @NotNull WebSocketSessionService webSocketSessionService;
 
     public ServerSnapService (@NotNull WebSocketSessionService webSocketSessionService) {
         this.webSocketSessionService = webSocketSessionService;

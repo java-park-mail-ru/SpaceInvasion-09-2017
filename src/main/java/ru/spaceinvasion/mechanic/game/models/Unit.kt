@@ -96,6 +96,7 @@ class Unit(mediator: GamePartMediator,
                 if (!isAlive) {
                     mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
                     mediator.removeColleague(Unit::class.java, this)
+                    mediator.send(UnitStatusMessage(this,message.requestId,false),Player::class.java,owner.gamePartId)
                 }
                 mediator.send(DamageTowerMessage(message, this), Server::class.java)
             }
@@ -104,6 +105,7 @@ class Unit(mediator: GamePartMediator,
                 if (!isAlive) {
                     mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
                     mediator.removeColleague(Unit::class.java, this)
+                    mediator.send(UnitStatusMessage(this,message.requestId,false),Player::class.java,owner.gamePartId)
                 }
                 mediator.send(DamageShotMessage(message, this), Server::class.java)
             }

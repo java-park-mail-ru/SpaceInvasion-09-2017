@@ -1,6 +1,6 @@
 package ru.spaceinvasion.mechanic.game
 
-enum class Direction(val value: Int) {
+public enum class Direction(val value: Int) {
     UP(0),
     UP_RIGHT(1),
     RIGHT(2),

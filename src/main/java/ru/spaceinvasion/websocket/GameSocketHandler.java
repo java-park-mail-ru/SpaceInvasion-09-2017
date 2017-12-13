@@ -1,5 +1,6 @@
 package ru.spaceinvasion.websocket;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         final Integer userId = (Integer)webSocketSession.getAttributes().get("user");
-        User user;
+        final User user;
         try {
             user = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
@@ -110,9 +111,8 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final CloseStatus status = closeStatus == null ? SERVER_ERROR : closeStatus;
         try {
             session.close(status);
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 }

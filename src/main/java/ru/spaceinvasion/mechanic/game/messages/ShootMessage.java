@@ -26,7 +26,7 @@ public class ShootMessage extends GameMessage {
 
     public ShootMessage(ShootMessage buildTowerMessage, GamePart messageCreator) {
         super(messageCreator, buildTowerMessage.getRequestId());
-        this.direction = buildTowerMessage.getDirection();
+        this.direction = buildTowerMessage.direction;
     }
 
     public Direction getDirection() {

@@ -8,11 +8,9 @@ import org.jetbrains.annotations.Nullable;
 public class User {
 
     @JsonIgnore
-    @Nullable
     private String password;
-    @Nullable
+
     private String username;
-    @Nullable
     private String email;
     private int score;
     private Integer id;
@@ -28,10 +26,9 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        final User user = (User) o;
 
-        if (id != user.id) return false;
-        return username != null ? username.equals(user.username) : user.username == null;
+        return id.equals(user.id) && (username != null ? username.equals(user.username) : user.username == null);
     }
 
     @JsonCreator
@@ -44,13 +41,11 @@ public class User {
         this.score = 0;
     }
 
-    @Nullable
     public String getUsername() {
         return username;
     }
 
     @JsonIgnore
-    @Nullable
     public String getPassword() {
         return password;
     }
@@ -76,11 +71,9 @@ public class User {
         this.password = password;
     }
 
-    @Nullable
     public String getEmail() {
         return email;
     }
-
 
     @JsonProperty
     public Integer getId() {
@@ -90,5 +83,15 @@ public class User {
     @JsonProperty
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = password != null ? password.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + score;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
     }
 }

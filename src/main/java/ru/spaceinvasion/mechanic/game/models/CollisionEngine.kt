@@ -121,10 +121,9 @@ class CollisionEngine(mediator: GamePartMediator,
             clazz: Class<T>, coordinates: Coordinates,
             widthOfObject: Int, heightOfObject: Int
     ): T? where T: GamePart, T: Placed{
-        val gameParts: List<T>? = mediator.returnColleagues(clazz) as List<T>?
-        if (gameParts == null) {
-            return null
-        }
+
+        @Suppress("UNCHECKED_CAST")
+        val gameParts = mediator.returnColleagues(clazz) as List<T>? ?: return null
         gameParts.forEach { it ->
             if (isIntersect(coordinates, widthOfObject, heightOfObject, it.coordinates, it.width, it.height)) {
                 return it;

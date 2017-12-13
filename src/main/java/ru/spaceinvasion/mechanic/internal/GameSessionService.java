@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
-import ru.spaceinvasion.mechanic.game.Race;
+import ru.spaceinvasion.mechanic.game.Side;
 import ru.spaceinvasion.mechanic.game.models.Server;
-import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
 import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.models.GameSession;
@@ -24,16 +23,13 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class GameSessionService {
 
-    @NotNull
     private final Map<Integer, GameSession> usersMap = new HashMap<>();
 
-    @NotNull
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
 
-    @NotNull
     private final WebSocketSessionService webSocketSessionService;
 
-    @NotNull
+    @SuppressWarnings("unused")
     private final ClientSnapService clientSnapService;
 
     public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService,
@@ -46,6 +42,7 @@ public class GameSessionService {
         return usersMap.containsKey(userId);
     }
 
+    @SuppressWarnings("unused")
     public GameSession getSessionOfUser(Integer userId) {
         GameSession gameSession = usersMap.get(userId);
         if (gameSession == null) {
@@ -71,8 +68,8 @@ public class GameSessionService {
         players.add(gameSession.getPlayer1());
         players.add(gameSession.getPlayer2());
         try {
-            webSocketSessionService.sendMessageToUser(players.get(0), new ServerSnap(Race.PEOPLE, player2Id));
-            webSocketSessionService.sendMessageToUser(players.get(1), new ServerSnap(Race.ALIENS, player1Id));
+            webSocketSessionService.sendMessageToUser(players.get(0), new ServerSnap(Side.LEFT, player2Id));
+            webSocketSessionService.sendMessageToUser(players.get(1), new ServerSnap(Side.RIGHT, player1Id));
         } catch (IOException e) {
             players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
                     CloseStatus.SERVER_ERROR));

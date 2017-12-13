@@ -14,20 +14,17 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GameSession {
     private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
 
-    @NotNull
-    private Long sessionId;
+    @SuppressWarnings("unused")
+    private @NotNull Long sessionId;
 
-    @NotNull
-    private Integer player1;
+    private @NotNull Integer player1;
 
-    @NotNull
-    private Integer player2;
+    private @NotNull Integer player2;
 
-    @NotNull
-    private GameSessionService gameSessionService;
+    @SuppressWarnings("unused")
+    private @NotNull GameSessionService gameSessionService;
 
-    @NotNull
-    private final Server server;
+    private final @NotNull Server server;
 
     public GameSession(@NotNull Integer player1Id,
                        @NotNull Integer player2Id,
@@ -40,19 +37,19 @@ public class GameSession {
         this.server = server;
     }
 
-    public Integer getPlayer1() {
+    public @NotNull Integer getPlayer1() {
         return player1;
     }
 
-    public void setPlayer1(Integer player1) {
+    public void setPlayer1(@NotNull Integer player1) {
         this.player1 = player1;
     }
 
-    public Integer getPlayer2() {
+    public @NotNull Integer getPlayer2() {
         return player2;
     }
 
-    public void setPlayer2(Integer player2) {
+    public void setPlayer2(@NotNull Integer player2) {
         this.player2 = player2;
     }
 
@@ -60,7 +57,7 @@ public class GameSession {
         return ID_GENERATOR;
     }
 
-    public Server getServer() {
+    public @NotNull Server getServer() {
         return server;
     }
 

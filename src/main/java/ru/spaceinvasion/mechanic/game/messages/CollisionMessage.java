@@ -16,7 +16,7 @@ public class CollisionMessage extends GameMessage {
 
     public CollisionMessage(CollisionMessage collisionMessage, GamePart messageCreator) {
         super(messageCreator, collisionMessage.getRequestId());
-        this.srcOfDamage = collisionMessage.getSrcOfDamage();
+        this.srcOfDamage = collisionMessage.srcOfDamage;
     }
 
     public GamePart getSrcOfDamage() {

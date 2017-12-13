@@ -19,10 +19,6 @@ import java.util.concurrent.Executors;
 @Service
 public class MechanicExecutor implements Runnable {
 
-    @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(MechanicExecutor.class);
-
-    @NotNull
     private Clock clock = Clock.systemDefaultZone();
 
     private Executor tickExecutor = Executors.newSingleThreadExecutor();
@@ -32,7 +28,6 @@ public class MechanicExecutor implements Runnable {
         this.gameMechanics = gameMechanics;
     }
 
-    @NotNull
     private final GameMechanics gameMechanics;
 
     @PostConstruct
@@ -52,7 +47,7 @@ public class MechanicExecutor implements Runnable {
                 try {
                     final long sleepingTime = Math.max(0, SERVER_FRAME_MILLIS - (after - before));
                     Thread.sleep(sleepingTime);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignore) {
 
                 }
 
@@ -64,7 +59,7 @@ public class MechanicExecutor implements Runnable {
                 lastFrameMillis = afterSleep - before;
             } catch (RuntimeException e) {
                 throw e;
-//                LOGGER.error(e.getMessage());
+                //TODO
 //                gameMechanics.reset();
             }
         }

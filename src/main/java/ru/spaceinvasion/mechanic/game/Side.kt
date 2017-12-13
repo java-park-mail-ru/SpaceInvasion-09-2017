@@ -1,6 +1,6 @@
 package ru.spaceinvasion.mechanic.game
 
-enum class Race {
-    PEOPLE,
-    ALIENS
+enum class Side {
+    LEFT,
+    RIGHT
 }

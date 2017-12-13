@@ -50,14 +50,14 @@ public class UserController {
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
-            User curUser = userService.getUser(userId);
+            final User curUser = userService.getUser(userId);
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
 
         if (!userService.authenticate(user)) {
             return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
         }
-        User curUser = userService.getUser(user.getUsername());
+        final User curUser = userService.getUser(user.getUsername());
         httpSession.setAttribute("user", curUser.getId());
         return ResponseEntity.ok(user);
     }
@@ -70,7 +70,7 @@ public class UserController {
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
-            User curUser = userService.getUser(userId);
+            final User curUser = userService.getUser(userId);
             return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
         }
         try {
@@ -95,11 +95,11 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
-        Integer userId = (Integer) httpSession.getAttribute("user");
+        final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId == null) {
             return TypicalResponses.FORBIDDEN_RESPONSE;
         }
-        User curUser;
+        final User curUser;
         try {
             curUser = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
@@ -110,7 +110,7 @@ public class UserController {
 
     @GetMapping(path = "{username_id}")
     public ResponseEntity<?> getUser(@NotNull @PathVariable Integer username_id) {
-        User user;
+        final User user;
         try {
             user = userService.getUser(username_id);
         } catch (Exceptions.NotFoundUser e) {

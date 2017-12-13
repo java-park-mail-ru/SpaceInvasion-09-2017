@@ -2,19 +2,17 @@ package ru.spaceinvasion.mechanic.snaps;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
-import ru.spaceinvasion.mechanic.game.Race;
+import ru.spaceinvasion.mechanic.game.Side;
 import ru.spaceinvasion.mechanic.game.messages.*;
-import ru.spaceinvasion.mechanic.game.models.CollisionEngine;
-import ru.spaceinvasion.mechanic.game.models.Player;
-import ru.spaceinvasion.mechanic.game.models.Tower;
 import ru.spaceinvasion.mechanic.game.models.Unit;
 import ru.spaceinvasion.models.*;
 
+@SuppressWarnings("ClassWithTooManyConstructors")
 public class ServerSnap implements Message {
 
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     @JsonProperty
-    @NotNull
-    private Integer[] data;
+    private @NotNull Integer[] data;
 
 //    types:
 //    0: state (reserved but not used)
@@ -29,103 +27,92 @@ public class ServerSnap implements Message {
 //    11: coin creation
     //TODO Where is appearing coins?
 
-    public ServerSnap(Race race, Integer enemyId) {
+    public ServerSnap(Side side, Integer enemyId) {
         data = new Integer[4];
         data[0] = 0;
         data[1] = 7;
-        data[2] = (race == Race.PEOPLE) ? 0 : 1;
+        data[2] = (side == Side.LEFT) ? 0 : 1;
         data[3] = enemyId;
 }
 
-    public ServerSnap(RollbackMessage rollbackMessage) {
+    public ServerSnap(Long lastSnapId, RollbackMessage rollbackMessage) {
         data = new Integer[2];
-        data[0] = rollbackMessage.getRequestId().intValue();
+        data[0] = lastSnapId.intValue();
         data[1] = 1;
     }
 
-    public ServerSnap(CollisionMessage collisionMessage) {
-        data = new Integer[4];
-        data[0] = collisionMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, CollisionMessage collisionMessage) {
+        data = new Integer[5];
+        data[0] = lastSnapId.intValue();
         data[1] = 2;
         data[2] = (int) collisionMessage.getSrcOfDamage().getGamePartId();
         data[3] = (int) collisionMessage.getMessageCreator().getGamePartId();
+        data[4] = collisionMessage.getRequestId().intValue();
     }
 
-    public ServerSnap(DamageTowerMessage damageTowerMessage) {
-        data = new Integer[5];
-        data[0] = damageTowerMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, DamageTowerMessage damageTowerMessage) {
+        data = new Integer[6];
+        data[0] = lastSnapId.intValue();
         data[1] = 2;
         data[2] = (int) damageTowerMessage.getSrcOfDamage().getGamePartId();
         data[3] = (int) damageTowerMessage.getMessageCreator().getGamePartId();
         data[4] = damageTowerMessage.getNumOfShot().intValue();
+        data[5] = damageTowerMessage.getRequestId().intValue();
     }
 
-
-
-    public ServerSnap(MoveMessage moveMessage) {
+    public ServerSnap(Long lastSnapId, MoveMessage moveMessage) {
         data = new Integer[4];
-        data[0] = moveMessage.getRequestId().intValue();
+        data[0] = lastSnapId.intValue();
         data[1] = 3;
         data[2] = moveMessage.getCoordinates().getX();
         data[3] = moveMessage.getCoordinates().getY();
     }
 
-    public ServerSnap(BuildTowerMessage buildTowerMessage) {
-        data = new Integer[5];
-        data[0] = buildTowerMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, BuildTowerMessage buildTowerMessage) {
+        data = new Integer[6];
+        data[0] = lastSnapId.intValue();
         data[1] = 4;
         data[2] = buildTowerMessage.getCoordinates().getX();
         data[3] = buildTowerMessage.getCoordinates().getY();
         data[4] = buildTowerMessage.getDirection().getValue();
+        data[5] = buildTowerMessage.getRequestId().intValue();
     }
 
-    public ServerSnap(BombInstallingMessage bombInstallingMessage) {
+    public ServerSnap(Long lastSnapId, BombInstallingMessage bombInstallingMessage) {
         data = new Integer[3];
-        data[0] = bombInstallingMessage.getRequestId().intValue();
+        data[0] = lastSnapId.intValue();
         data[1] = 5;
         data[2] = bombInstallingMessage.getInstalledOnBaseOfPlayer().intValue() * (-1);
     }
 
-    public ServerSnap(ShootMessage shootMessage) {
-        data = new Integer[6];
-        data[0] = shootMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, ShootMessage shootMessage) {
+        data = new Integer[7];
+        data[0] = lastSnapId.intValue();
         data[1] = 6;
         data[2] = shootMessage.getCoordinates().getX();
         data[3] = shootMessage.getCoordinates().getY();
         data[4] = shootMessage.getDirection().getValue();
         data[5] = (int)shootMessage.getMessageCreator().getGamePartId();
+        data[6] = shootMessage.getRequestId().intValue();
     }
 
-    @Deprecated
-    public ServerSnap(CashChangeMessage cashChangeMessage) {
-        data = new Integer[3];
-        data[0] = cashChangeMessage.getRequestId().intValue();
-        data[1] = 8;
-        data[2] = ((Player)cashChangeMessage.getMessageCreator()).getCoins();
-    }
-
-    @Deprecated
-    public ServerSnap(DisappearingMessage disappearingMessage) {
-        data = new Integer[3];
-        data[0] = disappearingMessage.getRequestId().intValue();
-        data[1] = 9;
-        data[2] = (int)disappearingMessage.getMessageCreator().getGamePartId();
-    }
-
-    public ServerSnap(UnitCreationMessage unitCreationMessage) {
-        data = new Integer[4];
-        data[0] = unitCreationMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, UnitCreationMessage unitCreationMessage) {
+        data = new Integer[5];
+        data[0] = lastSnapId.intValue();
         data[1] = 10;
         data[2] = (int)((Unit)unitCreationMessage.getMessageCreator()).getOwner().getGamePartId() * (-1);
         data[3] = (int)unitCreationMessage.getMessageCreator().getGamePartId();
+        data[4] = unitCreationMessage.getRequestId().intValue();
     }
 
-    public ServerSnap(CoinAppearanceMessage coinAppearanceMessage) {
-        data = new Integer[4];
-        data[0] = coinAppearanceMessage.getRequestId().intValue();
+    public ServerSnap(Long lastSnapId, CoinAppearanceMessage coinAppearanceMessage) {
+        data = new Integer[6];
+        data[0] = lastSnapId.intValue();
         data[1] = 11;
         data[2] = coinAppearanceMessage.getCoordinates().getX();
         data[3] = coinAppearanceMessage.getCoordinates().getY();
+        data[4] = (int)coinAppearanceMessage.getMessageCreator().getGamePartId();
+        data[5] = coinAppearanceMessage.getRequestId().intValue();
     }
 
 }

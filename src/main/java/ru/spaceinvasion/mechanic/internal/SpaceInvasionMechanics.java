@@ -21,29 +21,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Service
 public class SpaceInvasionMechanics implements GameMechanics {
 
-    @NotNull
-    private final Queue<Runnable> tasks = new ConcurrentLinkedQueue<>();
 
-    @NotNull
-    private final Queue<Integer> guysWhoWaitOpponent = new ConcurrentLinkedQueue<>();
+    private final @NotNull Queue<Runnable> tasks = new ConcurrentLinkedQueue<>();
 
-    @NotNull
-    private final GameSessionService gameSessionService;
 
-    @NotNull
-    private final ClientSnapService clientSnapService;
+    private final @NotNull Queue<Integer> guysWhoWaitOpponent = new ConcurrentLinkedQueue<>();
 
-    @NotNull
-    private final ServerSnapService serverSnapService;
+    private final @NotNull GameSessionService gameSessionService;
 
-    @NotNull
-    private final GameTaskScheduler gameTaskScheduler;
+    private final @NotNull ClientSnapService clientSnapService;
 
-    @NotNull
-    private final TimeService timeService;
+    private final @NotNull ServerSnapService serverSnapService;
 
-    @NotNull
-    private final WebSocketSessionService webSocketSessionService;
+    private final @NotNull GameTaskScheduler gameTaskScheduler;
+
+    private final @NotNull TimeService timeService;
+
+    private final @NotNull WebSocketSessionService webSocketSessionService;
 
     public SpaceInvasionMechanics(@NotNull GameSessionService gameSessionService,
                                   @NotNull ClientSnapService clientSnapService,
@@ -59,10 +53,12 @@ public class SpaceInvasionMechanics implements GameMechanics {
         this.webSocketSessionService = webSocketSessionService;
     }
 
+    @Override
     public void addClientSnapshot(Integer userId, ClientSnap clientSnap) {
         tasks.add(() -> clientSnapService.pushClientSnap(userId, clientSnap));
     }
 
+    @Override
     public void addUser(Integer userId) {
         if(gameSessionService.isPlaying(userId)) {
             throw new Exceptions.UserAlreadyIsPlaying();
@@ -70,6 +66,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
         guysWhoWaitOpponent.add(userId);
     }
 
+    @Override
     public void gmStep(long frameTime) {
         while (!tasks.isEmpty()) {
             final Runnable nextTask = tasks.poll();
@@ -82,7 +79,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
             }
         }
         for (GameSession session : gameSessionService.getSessions()) {
-            List<Map.Entry<Integer,RollbackResponse>> rollbacks = clientSnapService.processSnapshotsForSession(session);
+            final List<Map.Entry<Integer,RollbackResponse>> rollbacks = clientSnapService.processSnapshotsForSession(session);
             for( Map.Entry<Integer,RollbackResponse> rollback : rollbacks) {
                 serverSnapService.sendSnapshotsFor(rollback.getKey(), rollback.getValue());
             }
@@ -121,6 +118,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
 
     }
 
+    @Override
     public void reset() {
         for (GameSession session : gameSessionService.getSessions()) {
             gameSessionService.forceTerminate(session, true);
@@ -145,6 +143,6 @@ public class SpaceInvasionMechanics implements GameMechanics {
                 matchedPlayers.clear();
             }
         }
-        matchedPlayers.stream().forEach(guysWhoWaitOpponent::add);
+        guysWhoWaitOpponent.addAll(matchedPlayers);
     }
 }

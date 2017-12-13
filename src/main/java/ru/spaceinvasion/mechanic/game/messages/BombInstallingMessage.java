@@ -9,10 +9,6 @@ public class BombInstallingMessage extends GameMessage {
 
     private Long installedOnBaseOfPlayer;
 
-    public BombInstallingMessage(GamePart messageCreator, Long requestId) {
-        super(messageCreator, requestId);
-    }
-
     public BombInstallingMessage(GamePart messageCreator, Long requestId, Long installedOnBaseOfPlayer) {
         super(messageCreator, requestId);
         this.installedOnBaseOfPlayer = installedOnBaseOfPlayer;

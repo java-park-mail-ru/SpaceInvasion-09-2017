@@ -1,9 +1,12 @@
 package ru.spaceinvasion.models;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by egor on 14.11.17.
  */
 public class Coordinates {
+
     private Integer x;
     private Integer y;
 
@@ -13,14 +16,13 @@ public class Coordinates {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Coordinates that = (Coordinates) o;
+        final Coordinates that = (Coordinates) o;
 
-        if (x != null ? !x.equals(that.x) : that.x != null) return false;
-        return y != null ? y.equals(that.y) : that.y == null;
+        return (x != null ? x.equals(that.x) : that.x == null) && (y != null ? y.equals(that.y) : that.y == null);
     }
 
     @Override

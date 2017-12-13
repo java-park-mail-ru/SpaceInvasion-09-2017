@@ -1,8 +1,6 @@
 package ru.spaceinvasion.mechanic.snaps;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ru.spaceinvasion.mechanic.game.Direction;
 import ru.spaceinvasion.models.Coordinates;
 import ru.spaceinvasion.models.Message;
@@ -14,16 +12,10 @@ public class ClientSnap implements Message {
     @JsonProperty
     Integer[] request;
 
-    public ClientSnap(Integer[] request) {
-        this.request = request;
-    }
-
-    public ClientSnap() {}
-
     public Integer getIdOfRequest() {
         try {
             return request[0];
-        } catch (IndexOutOfBoundsException e) { }
+        } catch (IndexOutOfBoundsException ignore) { }
         throw new Exceptions.NotValidData();
     }
 
@@ -40,19 +32,21 @@ public class ClientSnap implements Message {
                     return "shot";
                 case 4:
                     return "state"; //Reserved but not used yet
+                default:
+                    throw new IndexOutOfBoundsException();
             }
-        } catch (IndexOutOfBoundsException e) { }
+        } catch (IndexOutOfBoundsException ignore) { }
         throw new Exceptions.NotValidData();
     }
 
     public Coordinates getCoordinates() {
         try {
-            Coordinates coords =  new Coordinates(request[2],request[3]);
-            return coords;
-        } catch (IndexOutOfBoundsException e) { }
+            return new Coordinates(request[2],request[3]);
+        } catch (IndexOutOfBoundsException ignore) { }
         throw new Exceptions.NotValidData();
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     public Direction getDirection() {
         try {
             switch (request[2]) {
@@ -64,8 +58,9 @@ public class ClientSnap implements Message {
                 case 5: return Direction.DOWN_LEFT;
                 case 6: return Direction.LEFT;
                 case 7: return Direction.UP_LEFT;
+                default: throw new IndexOutOfBoundsException();
             }
-        } catch (IndexOutOfBoundsException e) { }
+        } catch (IndexOutOfBoundsException ignore) { }
         throw new Exceptions.NotValidData();
     }
 

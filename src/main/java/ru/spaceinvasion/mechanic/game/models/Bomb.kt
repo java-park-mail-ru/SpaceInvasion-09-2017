@@ -17,7 +17,7 @@ class Bomb(mediator: GamePartMediator,
            private val installedOnBaseWithId: Long,
            ID_GENERATOR: AtomicLong,
            private val installedOnBaseOfPlayer: Long) : GamePart(mediator, gamePartId, ID_GENERATOR) {
-    private var ttl = Constants.TICKS_UNTIL_TOWER_SHOOT
+    private var ttl = Constants.TICKS_UNITL_BOMB_ACTION
 
     init {
         mediator.send(BombInstallingMessage(this,gamePartId,installedOnBaseOfPlayer),Server::class.java)

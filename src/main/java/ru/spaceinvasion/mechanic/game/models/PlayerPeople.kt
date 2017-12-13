@@ -1,9 +1,7 @@
 package ru.spaceinvasion.mechanic.game.models
 
 import ru.spaceinvasion.mechanic.game.GamePartMediator
-import ru.spaceinvasion.mechanic.game.Race
 import ru.spaceinvasion.resources.Constants
-import ru.spaceinvasion.resources.Constants.COORDINATES_OF_UNIT_ALIENS_START
 import ru.spaceinvasion.resources.Constants.COORDINATES_OF_UNIT_PEOPLE_START
 import java.util.concurrent.atomic.AtomicLong
 

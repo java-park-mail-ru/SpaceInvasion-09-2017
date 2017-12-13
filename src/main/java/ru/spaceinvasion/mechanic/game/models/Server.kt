@@ -41,36 +41,31 @@ class Server(mediator: GamePartMediator,
             commitRequest(message);
         }
         when (message.javaClass) {
-        //TODO: Maybe not message of this type put into snaps? Think about it and change it
             (RollbackMessage::class.java) -> {
                 snaps.filter { it.key == message.messageCreator.gamePartId * (-1) }.forEach {
-                    it.value.add(ServerSnap(message as RollbackMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as RollbackMessage))
                 }
             }
             (MoveMessage::class.java) -> {
                 snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1) }.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as MoveMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as MoveMessage))
                 }
             }
             (BuildTowerMessage::class.java) -> {
                 snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1) }.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as BuildTowerMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as BuildTowerMessage))
                 }
             }
             (ShootMessage::class.java) -> {
                 snaps.filter { it.key != ((message.messageCreator as Shot).shotMaker as Unit).owner.gamePartId * (-1) }.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as ShootMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as ShootMessage))
                 }
             }
             (CollisionMessage::class.java) -> {
                 //MessageCreator reports about damage to him
                 //SrcOfDamage reports about guy who inflict damage
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as CollisionMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as CollisionMessage))
                 }
             }
 
@@ -78,34 +73,29 @@ class Server(mediator: GamePartMediator,
                 //MessageCreator reports about damage to him
                 //SrcOfDamage reports about guy who inflict damage
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as DamageTowerMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as DamageTowerMessage))
                 }
             }
             (DamageShotMessage::class.java) -> {
                 //MessageCreator reports about damage to him
                 //SrcOfDamage reports about guy who inflict damage
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as DamageShotMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as DamageShotMessage))
                 }
             }
             (BombInstallingMessage::class.java) -> {
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as BombInstallingMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as BombInstallingMessage))
                 }
             }
             (UnitCreationMessage::class.java) -> {
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as UnitCreationMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as UnitCreationMessage))
                 }
             }
             (CoinAppearanceMessage::class.java) -> {
                 snaps.forEach {
-                    modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as CoinAppearanceMessage))
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as CoinAppearanceMessage))
                 }
             }
         }
@@ -157,6 +147,7 @@ class Server(mediator: GamePartMediator,
     }
 
     private fun commitRequest(request: GameMessage) {
+        //TODO: Delete this
         System.out.println(request.requestId)
         if (request.requestId == 0L) {
             return
@@ -169,18 +160,15 @@ class Server(mediator: GamePartMediator,
         }
     }
 
-    private fun modifyRequestId(userId: Long, message: GameMessage) {
-        if (message.requestId != 0L) {
-            return
-        }
+    private fun getLastRequestId(userId: Long) : Long {
         if (userId == minOf(playerAliensId, playerPeopleId)) {
-            message.requestId = playerPeopleLastProccesedSnapId
+            return playerPeopleLastProccesedSnapId
         } else {
-            message.requestId = playerAliensLastProcessedSnapId
+            return playerAliensLastProcessedSnapId
         }
     }
 
-    class RandomGenerator() {
+    class RandomGenerator {
         val yMin: Int = Constants.Y_OF_UPPER_MAP_BORDER + Constants.VERTICAL_OFFSET_OF_COINS;
         val yMax: Int = Constants.Y_OF_LOWER_MAP_BORDER - Constants.VERTICAL_OFFSET_OF_COINS;
         val xMin: Int = Constants.X_OF_LEFT_MAP_BORDER + Constants.HORIZONTAL_OFFSET_OF_COINS;

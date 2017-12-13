@@ -15,8 +15,7 @@ import ru.spaceinvasion.utils.Constants;
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer{
 
-    @NotNull
-    private final WebSocketHandler webSocketHandler;
+    private final @NotNull WebSocketHandler webSocketHandler;
 
     public WebSocketConfig(@NotNull WebSocketHandler webSocketHandler) {
         this.webSocketHandler = webSocketHandler;

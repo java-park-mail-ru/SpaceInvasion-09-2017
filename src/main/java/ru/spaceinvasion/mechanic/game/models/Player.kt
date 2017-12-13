@@ -2,11 +2,8 @@ package ru.spaceinvasion.mechanic.game.models
 
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
-import ru.spaceinvasion.mechanic.game.Race
 import ru.spaceinvasion.mechanic.game.messages.*
-import ru.spaceinvasion.mechanic.snaps.ServerSnap
 import ru.spaceinvasion.models.Coordinates
-import ru.spaceinvasion.resources.Constants
 import ru.spaceinvasion.resources.Constants.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -113,12 +110,11 @@ abstract class Player(
                 }
             }
             (TickMessage::class.java) -> {
-                //TODO: Rewrite this place after tests
                 if (ttc != null) {
                     ttc = ttc!! - 1
                     if (ttc!! == 0) {
                         createUnit()
-                        ttc == null
+                        ttc = null
                     }
                 }
             }

@@ -14,9 +14,7 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class GameMessageHandler extends MessageHandler<ClientSnap> {
-    @NotNull
     private GameMechanics gameMechanics;
-    @NotNull
     private MessageHandlerContainer messageHandlerContainer;
 
     public GameMessageHandler(@NotNull GameMechanics gameMechanics, @NotNull MessageHandlerContainer messageHandlerContainer) {
@@ -31,7 +29,7 @@ public class GameMessageHandler extends MessageHandler<ClientSnap> {
     }
 
     @Override
-    public void handle(@NotNull ClientSnap message, Integer userId) {
+    public void handle(ClientSnap message, Integer userId) {
         gameMechanics.addClientSnapshot(userId, message);
     }
 }

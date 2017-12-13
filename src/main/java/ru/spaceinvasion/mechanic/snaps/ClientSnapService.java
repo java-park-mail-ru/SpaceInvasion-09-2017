@@ -27,20 +27,21 @@ public class ClientSnapService {
     }
 
     public List<Map.Entry<Integer, RollbackResponse>> processSnapshotsForSession(GameSession gameSession) {
-        List<Map.Entry<Integer, RollbackResponse>> rollbacks = new ArrayList<>();
+        final List<Map.Entry<Integer, RollbackResponse>> rollbacks = new ArrayList<>();
         try {
             processSnapshotsForUserInSession(gameSession.getPlayer1(), gameSession);
         } catch (Exceptions.NumberOfRequestsHasExceeded e) {
-            rollbacks.add(new AbstractMap.SimpleEntry<Integer, RollbackResponse>(gameSession.getPlayer1(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
+            rollbacks.add(new AbstractMap.SimpleEntry<>(gameSession.getPlayer1(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
         }
         try {
             processSnapshotsForUserInSession(gameSession.getPlayer2(), gameSession);
         } catch (Exceptions.NumberOfRequestsHasExceeded e) {
-            rollbacks.add(new AbstractMap.SimpleEntry<Integer, RollbackResponse>(gameSession.getPlayer2(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
+            rollbacks.add(new AbstractMap.SimpleEntry<>(gameSession.getPlayer2(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
         }
         return rollbacks;
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private void processSnapshotsForUserInSession(Integer userId, GameSession session) {
         final List<ClientSnap> playerSnaps = getSnapForUser(userId);
         Integer lastSnapId;
@@ -52,7 +53,7 @@ public class ClientSnapService {
         for (Integer processedPerTick = 0;
              processedPerTick < Constants.GameMechanicConstants.NUM_OF_PROCESSED_SNAPS_PER_SERVER_TICK;
              processedPerTick++) {
-            ClientSnap snap;
+            final ClientSnap snap;
             try {
                 snap = playerSnaps.get(0);
             } catch (IndexOutOfBoundsException ex) {
@@ -74,11 +75,13 @@ public class ClientSnapService {
                 case "state":
                     processStateRequest(snap, userId, session);
                     break;
+                default:
+                    break;
             }
             lastSnapId = snap.getIdOfRequest();
             playerSnaps.remove(0);
         }
-        if (playerSnaps.size() > 0) {
+        if (!playerSnaps.isEmpty()) {
             playerSnaps.clear();
             throw new Exceptions.NumberOfRequestsHasExceeded(userId, lastSnapId);
         }

@@ -1,5 +1,6 @@
 package ru.spaceinvasion.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class WebSocketSessionService {
-    @NotNull
-    private Map<Integer, WebSocketSession> sessions = new ConcurrentHashMap<>();
-    @NotNull
-    private ObjectMapper objectMapper;
+    private @NotNull Map<Integer, WebSocketSession> sessions = new ConcurrentHashMap<>();
+    private @NotNull ObjectMapper objectMapper;
 
-    public WebSocketSessionService(ObjectMapper objectMapper) {
+    public WebSocketSessionService(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -62,6 +61,8 @@ public class WebSocketSessionService {
         }
         try {
             webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             throw new IOException("Unnable to send message", e);
         }
