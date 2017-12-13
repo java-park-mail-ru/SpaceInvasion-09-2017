@@ -3,7 +3,6 @@ package ru.spaceinvasion.mechanic.internal;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
-import ru.spaceinvasion.mechanic.snaps.RollbackResponse;
 import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
 import ru.spaceinvasion.mechanic.snaps.ServerSnapService;
@@ -79,10 +78,7 @@ public class SpaceInvasionMechanics implements GameMechanics {
             }
         }
         for (GameSession session : gameSessionService.getSessions()) {
-            final List<Map.Entry<Integer,RollbackResponse>> rollbacks = clientSnapService.processSnapshotsForSession(session);
-            for( Map.Entry<Integer,RollbackResponse> rollback : rollbacks) {
-                serverSnapService.sendSnapshotsFor(rollback.getKey(), rollback.getValue());
-            }
+            clientSnapService.processSnapshotsForSession(session);
             session.getServer().tick();
         }
 
@@ -93,7 +89,6 @@ public class SpaceInvasionMechanics implements GameMechanics {
         for (GameSession session : gameSessionService.getSessions()) {
 
             try {
-                //TODO: Check it place
                 serverSnapService.sendSnapshotsFor(
                         session.getPlayer1(),
                         session.getServer().getSnaps().get(new Long(session.getPlayer1()))

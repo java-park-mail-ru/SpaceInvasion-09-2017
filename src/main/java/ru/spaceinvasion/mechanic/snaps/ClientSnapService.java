@@ -26,19 +26,9 @@ public class ClientSnapService {
         return snaps.get(userId) != null ? snaps.get(userId) : Collections.emptyList();
     }
 
-    public List<Map.Entry<Integer, RollbackResponse>> processSnapshotsForSession(GameSession gameSession) {
-        final List<Map.Entry<Integer, RollbackResponse>> rollbacks = new ArrayList<>();
-        try {
-            processSnapshotsForUserInSession(gameSession.getPlayer1(), gameSession);
-        } catch (Exceptions.NumberOfRequestsHasExceeded e) {
-            rollbacks.add(new AbstractMap.SimpleEntry<>(gameSession.getPlayer1(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
-        }
-        try {
-            processSnapshotsForUserInSession(gameSession.getPlayer2(), gameSession);
-        } catch (Exceptions.NumberOfRequestsHasExceeded e) {
-            rollbacks.add(new AbstractMap.SimpleEntry<>(gameSession.getPlayer2(), new RollbackResponse(e.getIdOfLastProcessedSnap())));
-        }
-        return rollbacks;
+    public void processSnapshotsForSession(GameSession gameSession) {
+        processSnapshotsForUserInSession(gameSession.getPlayer1(), gameSession);
+        processSnapshotsForUserInSession(gameSession.getPlayer2(), gameSession);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
@@ -75,6 +65,9 @@ public class ClientSnapService {
                 case "state":
                     processStateRequest(snap, userId, session);
                     break;
+                case "accept_rollback":
+                    processAcceptRollback(snap, userId, session);
+                    break;
                 default:
                     break;
             }
@@ -83,7 +76,7 @@ public class ClientSnapService {
         }
         if (!playerSnaps.isEmpty()) {
             playerSnaps.clear();
-            throw new Exceptions.NumberOfRequestsHasExceeded(userId, lastSnapId);
+            processExceedingRequests(userId, session, lastSnapId);
         }
     }
 
@@ -105,6 +98,14 @@ public class ClientSnapService {
 
     private void processStateRequest(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientStateRequest(userId, snap.getIdOfRequest());
+    }
+
+    private void processExceedingRequests(Integer userId, GameSession session, Integer lastSnapId) {
+        session.getServer().newRollback(userId, lastSnapId);
+    }
+
+    private void processAcceptRollback(ClientSnap snap, Integer userId, GameSession session) {
+        session.getServer().newAcceptRollback(userId);
     }
 
     public void reset() {

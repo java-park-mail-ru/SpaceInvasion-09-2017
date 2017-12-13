@@ -20,4 +20,6 @@ public class RollbackMessage extends GameMessage {
         this.problemSnapId = rollbackMessage.problemSnapId;
         this.description = rollbackMessage.description;
     }
+
+
 }

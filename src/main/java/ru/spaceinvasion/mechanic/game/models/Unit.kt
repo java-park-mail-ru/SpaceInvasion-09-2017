@@ -53,13 +53,13 @@ class Unit(mediator: GamePartMediator,
             }
             (BuildTowerMessage::class.java) -> {
                 if ((owner.javaClass == PlayerPeople::class.java && coordinates.x > X_OF_MIDDLE_MAP) ||
-                        (owner.javaClass == PlayerAliens::class.java && coordinates.x > X_OF_MIDDLE_MAP)) {
+                        (owner.javaClass == PlayerAliens::class.java && coordinates.x < X_OF_MIDDLE_MAP)) {
                     mediator.send(RollbackMessage(
                             this,
                             message.requestId,
                             message.requestId,"Not your ground => No tower"),
                             Player::class.java,
-                            owner.curUnit!!
+                            owner.gamePartId
                     )
                 } else {
                     mediator.registerColleague(

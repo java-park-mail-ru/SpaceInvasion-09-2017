@@ -32,6 +32,8 @@ public class ClientSnap implements Message {
                     return "shot";
                 case 4:
                     return "state"; //Reserved but not used yet
+                case 5:
+                    return "accept_rollback";
                 default:
                     throw new IndexOutOfBoundsException();
             }

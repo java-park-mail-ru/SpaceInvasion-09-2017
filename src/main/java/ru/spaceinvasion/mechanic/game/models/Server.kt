@@ -24,6 +24,9 @@ class Server(mediator: GamePartMediator,
     var playerAliensLastProcessedSnapId: Long = 0
     var playerPeopleId: Long = 0
     var playerAliensId: Long = 0
+    var playerPeopleHasRollback = false
+    var playerAliensHasRollback = false
+
 
     init {
         mediator.registerColleague(
@@ -45,6 +48,7 @@ class Server(mediator: GamePartMediator,
                 snaps.filter { it.key == message.messageCreator.gamePartId * (-1) }.forEach {
                     it.value.add(ServerSnap(getLastRequestId(it.key), message as RollbackMessage))
                 }
+                addRollbackBlock(message as RollbackMessage)
             }
             (MoveMessage::class.java) -> {
                 snaps.filter { it.key != (message.messageCreator as Unit).owner.gamePartId * (-1) }.forEach {
@@ -112,14 +116,17 @@ class Server(mediator: GamePartMediator,
     }
 
     fun newClientMove(clientId: Long, snapId: Long, coords: Coordinates) {
+        if (checkRollbackBlock(clientId)) return
         mediator.send(MoveMessage(this, snapId, coords), Player::class.java, clientId * (-1))
     }
 
     fun newClientTower(clientId: Long, snapId: Long, direction: Direction) {
+        if (checkRollbackBlock(clientId)) return
         mediator.send(BuildTowerMessage(this, snapId, direction), Player::class.java, clientId * (-1))
     }
 
     fun newClientShot(clientId: Long, snapId: Long, direction: Direction) {
+        if (checkRollbackBlock(clientId)) return
         mediator.send(ShootMessage(this, snapId, direction), Player::class.java, clientId * (-1))
     }
 
@@ -128,7 +135,22 @@ class Server(mediator: GamePartMediator,
     }
 
     fun newClientBomb(clientId: Long, snapId: Long) {
+        if (checkRollbackBlock(clientId)) return
         throw NotImplementedError()
+    }
+
+    fun newRollback(clientId: Long, lastSnapId: Long) {
+        snaps.filter { it.key == clientId }.forEach {
+            it.value.add(ServerSnap(getLastRequestId(it.key), RollbackMessage(this, 0, lastSnapId + 1, "A lot of requests per server snap")))
+        }
+    }
+
+    fun newAcceptRollback(clientId: Long) {
+        if (clientId == minOf(playerAliensId, playerPeopleId)) {
+            playerPeopleHasRollback = false
+        } else {
+            playerAliensHasRollback = false
+        }
     }
 
     fun tick() {
@@ -147,8 +169,6 @@ class Server(mediator: GamePartMediator,
     }
 
     private fun commitRequest(request: GameMessage) {
-        //TODO: Delete this
-        System.out.println(request.requestId)
         if (request.requestId == 0L) {
             return
         }
@@ -165,6 +185,22 @@ class Server(mediator: GamePartMediator,
             return playerPeopleLastProccesedSnapId
         } else {
             return playerAliensLastProcessedSnapId
+        }
+    }
+
+    private fun addRollbackBlock(message: RollbackMessage) {
+        if (message.messageCreator.gamePartId * (-1) == minOf(playerAliensId, playerPeopleId)) {
+            playerPeopleHasRollback = true;
+        } else {
+            playerAliensHasRollback = true;
+        }
+    }
+
+    private fun checkRollbackBlock(userId: Long) : Boolean {
+        if (userId == minOf(playerAliensId, playerPeopleId)) {
+            return playerPeopleHasRollback
+        } else {
+            return playerAliensHasRollback
         }
     }
 

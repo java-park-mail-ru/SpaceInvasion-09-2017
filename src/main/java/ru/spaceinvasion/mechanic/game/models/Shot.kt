@@ -6,7 +6,8 @@ import ru.spaceinvasion.mechanic.game.GamePartMediator
 import ru.spaceinvasion.mechanic.game.messages.*
 import ru.spaceinvasion.models.Coordinates
 import ru.spaceinvasion.resources.Constants
-import ru.spaceinvasion.resources.Constants.SPEED_OF_SHOT
+import ru.spaceinvasion.resources.Constants.SPEED_OF_SHOT_PER_TICK
+import ru.spaceinvasion.resources.Constants.TICKS_OF_SHOT_LIVE
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -28,11 +29,16 @@ class Shot(mediator: GamePartMediator,
 
     override val width = Constants.SHOT_WIDTH
     override val height = Constants.SHOT_HEIGHT
-    override var speed: Int = SPEED_OF_SHOT
+    override var speed: Int = SPEED_OF_SHOT_PER_TICK
+    var ttl = TICKS_OF_SHOT_LIVE
 
     override fun notify(message: GameMessage) {
         when (message.javaClass) {
             (TickMessage::class.java) -> {
+                if (ttl == 0) {
+                    mediator.removeColleague(Shot::class.java, this)
+                    return
+                }
                 mediator.send(
                         RequestCollisionsMessage(
                                 this,
@@ -41,6 +47,7 @@ class Shot(mediator: GamePartMediator,
                         ),
                         CollisionEngine::class.java
                 )
+                ttl--
             }
             (AcceptedMoveMessage::class.java) -> {
                 val dx = ((message as AcceptedMoveMessage).coordinates.x - coordinates.x)
