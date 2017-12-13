@@ -65,12 +65,29 @@ class Server(mediator: GamePartMediator,
                     it.value.add(ServerSnap(message as ShootMessage))
                 }
             }
-            (DamageMessage::class.java) -> {
+            (CollisionMessage::class.java) -> {
                 //MessageCreator reports about damage to him
                 //SrcOfDamage reports about guy who inflict damage
                 snaps.forEach {
                     modifyRequestId(it.key,message)
-                    it.value.add(ServerSnap(message as DamageMessage))
+                    it.value.add(ServerSnap(message as CollisionMessage))
+                }
+            }
+
+            (DamageTowerMessage::class.java) -> {
+                //MessageCreator reports about damage to him
+                //SrcOfDamage reports about guy who inflict damage
+                snaps.forEach {
+                    modifyRequestId(it.key,message)
+                    it.value.add(ServerSnap(message as DamageTowerMessage))
+                }
+            }
+            (DamageShotMessage::class.java) -> {
+                //MessageCreator reports about damage to him
+                //SrcOfDamage reports about guy who inflict damage
+                snaps.forEach {
+                    modifyRequestId(it.key,message)
+                    it.value.add(ServerSnap(message as DamageShotMessage))
                 }
             }
             (BombInstallingMessage::class.java) -> {
@@ -140,6 +157,7 @@ class Server(mediator: GamePartMediator,
     }
 
     private fun commitRequest(request: GameMessage) {
+        System.out.println(request.requestId)
         if (request.requestId == 0L) {
             return
         }

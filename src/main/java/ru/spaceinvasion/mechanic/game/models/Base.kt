@@ -2,7 +2,7 @@ package ru.spaceinvasion.mechanic.game.models
 
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
-import ru.spaceinvasion.mechanic.game.messages.DamageMessage
+import ru.spaceinvasion.mechanic.game.messages.CollisionMessage
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 import ru.spaceinvasion.mechanic.game.messages.LosingMessage
 import ru.spaceinvasion.mechanic.game.messages.WiningMessage
@@ -25,10 +25,10 @@ class Base(mediator: GamePartMediator,
     override val height = BASE_HEIGHT
     override fun notify(message: GameMessage) {
         when(message.javaClass) {
-            (DamageMessage::class.java) -> {
+            (CollisionMessage::class.java) -> {
                 damage(1)
                 if(isAlive) {
-                    mediator.send(DamageMessage(message as DamageMessage, this), Server::class.java)
+                    mediator.send(CollisionMessage(message as CollisionMessage, this), Server::class.java)
                 } else {
                     mediator.send(LosingMessage(this,message.requestId),Player::class.java, owner.gamePartId)
                     mediator.sendToAllExclude(WiningMessage(this,message.requestId),Player::class.java, owner.gamePartId)

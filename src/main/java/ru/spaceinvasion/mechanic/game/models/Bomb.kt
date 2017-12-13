@@ -2,9 +2,8 @@ package ru.spaceinvasion.mechanic.game.models
 
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
-import ru.spaceinvasion.mechanic.game.Mediator
 import ru.spaceinvasion.mechanic.game.messages.BombInstallingMessage
-import ru.spaceinvasion.mechanic.game.messages.DamageMessage
+import ru.spaceinvasion.mechanic.game.messages.CollisionMessage
 import ru.spaceinvasion.mechanic.game.messages.GameMessage
 import ru.spaceinvasion.mechanic.game.messages.TickMessage
 import ru.spaceinvasion.resources.Constants
@@ -28,7 +27,7 @@ class Bomb(mediator: GamePartMediator,
             (TickMessage::class.java) -> {
                 ttl--
                 if(ttl == 0) {
-                    mediator.send(DamageMessage(this, gamePartId, this), Base::class.java, installedOnBaseWithId)
+                    mediator.send(CollisionMessage(this, gamePartId, this), Base::class.java, installedOnBaseWithId)
                     mediator.removeColleague(Bomb::class.java, this)
                 }
             }

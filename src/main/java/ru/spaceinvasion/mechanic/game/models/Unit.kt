@@ -1,6 +1,5 @@
 package ru.spaceinvasion.mechanic.game.models
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import ru.spaceinvasion.mechanic.game.Direction
 import ru.spaceinvasion.mechanic.game.GamePart
 import ru.spaceinvasion.mechanic.game.GamePartMediator
@@ -92,18 +91,21 @@ class Unit(mediator: GamePartMediator,
                         )
                 )
             }
-            (DamageMessage::class.java) -> {
-                val damage = if ((message as DamageMessage).srcOfDamage.javaClass == Shot::class.java) {
-                    (message.srcOfDamage as Shot).damage
-                } else {
-                    (message.srcOfDamage as Tower).damage_power
-                }
-                damage(damage)
+            (DamageTowerMessage::class.java) -> {
+                damage(((message as DamageTowerMessage).srcOfDamage as Tower).damage_power)
                 if (!isAlive) {
-                    mediator.send(UnitStatusMessage(this, message.requestId, false), Player::class.java, owner.gamePartId)
+                    mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
                     mediator.removeColleague(Unit::class.java, this)
                 }
-                mediator.send(DamageMessage(message, this), Server::class.java)
+                mediator.send(DamageTowerMessage(message, this), Server::class.java)
+            }
+            (DamageShotMessage::class.java) -> {
+                damage(((message as DamageShotMessage).srcOfDamage as Shot).damage)
+                if (!isAlive) {
+                    mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
+                    mediator.removeColleague(Unit::class.java, this)
+                }
+                mediator.send(DamageShotMessage(message, this), Server::class.java)
             }
         }
     }

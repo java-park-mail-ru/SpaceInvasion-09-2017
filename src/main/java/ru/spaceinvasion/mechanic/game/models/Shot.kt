@@ -48,26 +48,22 @@ class Shot(mediator: GamePartMediator,
                 move(dx,dy)
             }
             (HitMessage::class.java) -> {
-                val damageMessage: DamageMessage
                 if (shotMaker.javaClass == Tower::class.java) {
-                    damageMessage = DamageMessage(this, message.requestId, shotMaker, numOfShot)
+                    val collisionMessage = DamageTowerMessage(this, message.requestId, shotMaker, numOfShot)
+                    mediator.send(
+                            collisionMessage,
+                            (message as HitMessage).target.javaClass,
+                            message.target.gamePartId
+                    )
                 } else if (shotMaker.javaClass == Unit::class.java) {
-                    damageMessage = DamageMessage(this, message.requestId, this)
+                    val collisionMessage = DamageShotMessage(this, message.requestId, this)
+                    mediator.send(
+                            collisionMessage,
+                            (message as HitMessage).target.javaClass,
+                            message.target.gamePartId
+                    )
                 } else {
                     throw RuntimeException();
-                }
-                if ((message as HitMessage).target.javaClass == Tower::class.java) {
-                    mediator.send(
-                            damageMessage,
-                            Tower::class.java,
-                            message.target.gamePartId
-                    )
-                } else if ((message).target.javaClass == Unit::class.java) {
-                    mediator.send(
-                            damageMessage,
-                            Unit::class.java,
-                            message.target.gamePartId
-                    )
                 }
                 mediator.removeColleague(Shot::class.java, this)
             }

@@ -43,13 +43,21 @@ class Tower(mediator: GamePartMediator, gamePartId: Long,
                     )
                 }
             }
-            (DamageMessage::class.java) -> {
-                damage(((message as DamageMessage).srcOfDamage as Shot).damage)
+            (DamageTowerMessage::class.java) -> {
+                damage(((message as DamageTowerMessage).srcOfDamage as Tower).damage_power)
                 if (!isAlive) {
                     mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
                     mediator.removeColleague(Tower::class.java, this)
                 }
-                mediator.send(DamageMessage(message, this), Server::class.java)
+                mediator.send(CollisionMessage(message as CollisionMessage, this), Server::class.java)
+            }
+            (DamageShotMessage::class.java) -> {
+                damage(((message as CollisionMessage).srcOfDamage as Shot).damage)
+                if (!isAlive) {
+                    mediator.registerColleague(Coin::class.java, Coin(mediator,message.requestId,ID_GENERATOR,coordinates))
+                    mediator.removeColleague(Tower::class.java, this)
+                }
+                mediator.send(CollisionMessage(message, this), Server::class.java)
             }
         }
     }

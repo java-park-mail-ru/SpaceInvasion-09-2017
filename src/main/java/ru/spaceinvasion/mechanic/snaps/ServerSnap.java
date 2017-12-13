@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import ru.spaceinvasion.mechanic.game.Race;
 import ru.spaceinvasion.mechanic.game.messages.*;
+import ru.spaceinvasion.mechanic.game.models.CollisionEngine;
 import ru.spaceinvasion.mechanic.game.models.Player;
-import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.mechanic.game.models.Tower;
 import ru.spaceinvasion.mechanic.game.models.Unit;
 import ru.spaceinvasion.models.*;
@@ -43,18 +43,24 @@ public class ServerSnap implements Message {
         data[1] = 1;
     }
 
-    public ServerSnap(DamageMessage damageMessage) {
-        if (damageMessage.getSrcOfDamage().getClass() == Tower.class) {
-            data = new Integer[5];
-            data[4] = damageMessage.getNumOfShot().intValue();
-        } else
-            data = new Integer[4];
-        data[0] = damageMessage.getRequestId().intValue();
+    public ServerSnap(CollisionMessage collisionMessage) {
+        data = new Integer[4];
+        data[0] = collisionMessage.getRequestId().intValue();
         data[1] = 2;
-        data[2] = (int)damageMessage.getSrcOfDamage().getGamePartId();
-        data[3] = (int)damageMessage.getMessageCreator().getGamePartId();
-
+        data[2] = (int) collisionMessage.getSrcOfDamage().getGamePartId();
+        data[3] = (int) collisionMessage.getMessageCreator().getGamePartId();
     }
+
+    public ServerSnap(DamageTowerMessage damageTowerMessage) {
+        data = new Integer[5];
+        data[0] = damageTowerMessage.getRequestId().intValue();
+        data[1] = 2;
+        data[2] = (int) damageTowerMessage.getSrcOfDamage().getGamePartId();
+        data[3] = (int) damageTowerMessage.getMessageCreator().getGamePartId();
+        data[4] = damageTowerMessage.getNumOfShot().intValue();
+    }
+
+
 
     public ServerSnap(MoveMessage moveMessage) {
         data = new Integer[4];
