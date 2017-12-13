@@ -53,16 +53,7 @@ class CollisionEngine(mediator: GamePartMediator,
                             } else {
                                 val base: Base? = collisionWith(Base::class.java, message.potentialCoordinates, UNIT_WIDTH, UNIT_HEIGHT)
                                 if (base != null && base.owner.gamePartId != (message.messageCreator as Unit).owner.gamePartId) {
-                                    mediator.registerColleague(
-                                            Bomb::class.java,
-                                            Bomb(
-                                                    mediator,
-                                                    message.requestId,
-                                                    base.gamePartId,
-                                                    ID_GENERATOR,
-                                                    base.owner.gamePartId
-                                            )
-                                    )
+                                    mediator.send(BombInstallingMessage(this,message.requestId,base.gamePartId), Base::class.java,base.gamePartId)
                                 }
                             }
                             mediator.send(
