@@ -22,7 +22,7 @@ class Coin(mediator: GamePartMediator,
 
     init {
         mediator.registerColleague(Coin::class.java, this)
-        mediator.send(CoinAppearanceMessage(this,0,coordinates), Server::class.java)
+        mediator.send(CoinAppearanceMessage(this, 0, coordinates), Server::class.java)
     }
     override fun notify(message: GameMessage) {
         when(message.javaClass) {

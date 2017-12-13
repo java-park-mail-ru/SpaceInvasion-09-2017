@@ -104,13 +104,12 @@ public class ServerSnap implements Message {
     }
 
     public ServerSnap(Long lastSnapId, CoinAppearanceMessage coinAppearanceMessage) {
-        data = new Integer[6];
+        data = new Integer[5];
         data[0] = lastSnapId.intValue();
         data[1] = 11;
         data[2] = coinAppearanceMessage.getCoordinates().getX();
         data[3] = coinAppearanceMessage.getCoordinates().getY();
         data[4] = (int)coinAppearanceMessage.getMessageCreator().getGamePartId();
-        data[5] = coinAppearanceMessage.getRequestId().intValue();
     }
 
 }
