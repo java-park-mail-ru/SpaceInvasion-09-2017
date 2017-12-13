@@ -29,6 +29,7 @@ class Base(mediator: GamePartMediator,
                 if(!isAlive) {
                     mediator.send(LosingMessage(this,message.requestId),Player::class.java, owner.gamePartId)
                     mediator.sendToAllExclude(WiningMessage(this,message.requestId),Player::class.java, owner.gamePartId)
+                    mediator.send(FinishMessage(this,0), Server::class.java)
                 }
             }
             (BombInstallingMessage::class.java) -> {

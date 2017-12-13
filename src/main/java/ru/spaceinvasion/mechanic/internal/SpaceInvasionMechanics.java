@@ -80,6 +80,9 @@ public class SpaceInvasionMechanics implements GameMechanics {
         for (GameSession session : gameSessionService.getSessions()) {
             clientSnapService.processSnapshotsForSession(session);
             session.getServer().tick();
+            if (session.getServer().getGameIsEnded()) {
+                gameSessionService.forceTerminate(session,false);
+            }
         }
 
         gameTaskScheduler.tick();

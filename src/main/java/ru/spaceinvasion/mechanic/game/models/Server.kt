@@ -26,6 +26,7 @@ class Server(mediator: GamePartMediator,
     var playerAliensId: Long = 0
     var playerPeopleHasRollback = false
     var playerAliensHasRollback = false
+    var gameIsEnded = false
 
 
     init {
@@ -101,6 +102,9 @@ class Server(mediator: GamePartMediator,
                 snaps.forEach {
                     it.value.add(ServerSnap(getLastRequestId(it.key), message as CoinAppearanceMessage))
                 }
+            }
+            (FinishMessage::class.java) -> {
+                gameIsEnded = true
             }
         }
     }
