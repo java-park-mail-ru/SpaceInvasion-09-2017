@@ -53,7 +53,7 @@ class Unit(mediator: GamePartMediator,
             }
             (BuildTowerMessage::class.java) -> {
                 if ((owner.javaClass == PlayerPeople::class.java && coordinates.x > X_OF_MIDDLE_MAP) ||
-                        (owner.javaClass == PlayerAliens::class.java && coordinates.y > X_OF_MIDDLE_MAP)) {
+                        (owner.javaClass == PlayerAliens::class.java && coordinates.x > X_OF_MIDDLE_MAP)) {
                     mediator.send(RollbackMessage(
                             this,
                             message.requestId,

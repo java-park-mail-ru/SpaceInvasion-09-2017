@@ -42,22 +42,20 @@ public class ServerSnap implements Message {
     }
 
     public ServerSnap(Long lastSnapId, CollisionMessage collisionMessage) {
-        data = new Integer[5];
+        data = new Integer[4];
         data[0] = lastSnapId.intValue();
         data[1] = 2;
         data[2] = (int) collisionMessage.getSrcOfDamage().getGamePartId();
         data[3] = (int) collisionMessage.getMessageCreator().getGamePartId();
-        data[4] = collisionMessage.getRequestId().intValue();
     }
 
     public ServerSnap(Long lastSnapId, DamageTowerMessage damageTowerMessage) {
-        data = new Integer[6];
+        data = new Integer[5];
         data[0] = lastSnapId.intValue();
         data[1] = 2;
         data[2] = (int) damageTowerMessage.getSrcOfDamage().getGamePartId();
         data[3] = (int) damageTowerMessage.getMessageCreator().getGamePartId();
         data[4] = damageTowerMessage.getNumOfShot().intValue();
-        data[5] = damageTowerMessage.getRequestId().intValue();
     }
 
     public ServerSnap(Long lastSnapId, MoveMessage moveMessage) {
