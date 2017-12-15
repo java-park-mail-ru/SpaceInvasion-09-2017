@@ -145,7 +145,7 @@ class Server(mediator: GamePartMediator,
 
     fun newRollback(clientId: Long, lastSnapId: Long) {
         snaps.filter { it.key == clientId }.forEach {
-            it.value.add(ServerSnap(getLastRequestId(it.key), RollbackMessage(this, 0, lastSnapId + 1, "A lot of requests per server snap")))
+            it.value.add(ServerSnap(getLastRequestId(it.key), RollbackMessage(this, 0, "A lot of requests per server snap")))
         }
     }
 

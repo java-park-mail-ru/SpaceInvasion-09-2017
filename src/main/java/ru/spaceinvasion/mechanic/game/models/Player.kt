@@ -34,7 +34,6 @@ abstract class Player(
                             RollbackMessage(
                                     this,
                                     ID_GENERATOR.decrementAndGet(),
-                                    message.requestId,
                                     "No existing unit => no move"
                             ),
                             Server::class.java
@@ -55,7 +54,6 @@ abstract class Player(
                             RollbackMessage(
                                     this,
                                     message.requestId,
-                                    message.requestId,
                                     "No existing unit => no tower"
                             ),
                             Server::class.java
@@ -70,8 +68,7 @@ abstract class Player(
                                 RollbackMessage(
                                     this,
                                     message.requestId,
-                                    message.requestId,
-                                    "No money => no tower"
+                                        "No money => no tower"
                             ),
                             Server::class.java
                         )
@@ -83,7 +80,6 @@ abstract class Player(
                     mediator.send(
                             RollbackMessage(
                                     this,
-                                    message.requestId,
                                     message.requestId,
                                     "No existing unit => no shots"
                             ),

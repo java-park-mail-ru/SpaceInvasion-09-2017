@@ -57,7 +57,7 @@ class Unit(mediator: GamePartMediator,
                     mediator.send(RollbackMessage(
                             this,
                             message.requestId,
-                            message.requestId,"Not your ground => No tower"),
+                            "Not your ground => No tower"),
                             Player::class.java,
                             owner.gamePartId
                     )

@@ -33,7 +33,6 @@ class CollisionEngine(mediator: GamePartMediator,
                                     RollbackMessage(
                                             this,
                                             message.requestId,
-                                            message.requestId,
                                             "Unit try to leave field"
                                     ),
                                     Player::class.java,

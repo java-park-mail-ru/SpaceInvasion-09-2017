@@ -37,6 +37,7 @@ public class WebSocketSessionService {
 
     public void removeUser(Integer userId)
     {
+        //TODO Завершить игровую сессию
         sessions.remove(userId);
     }
 

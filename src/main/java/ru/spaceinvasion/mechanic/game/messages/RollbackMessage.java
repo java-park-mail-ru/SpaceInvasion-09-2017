@@ -9,9 +9,9 @@ public class RollbackMessage extends GameMessage {
     private Long problemSnapId;
     private String description;
 
-    public RollbackMessage(GamePart messageCreator, Long requestId, Long problemSnapId, String description) {
+    public RollbackMessage(GamePart messageCreator, Long requestId, String description) {
         super(messageCreator, requestId);
-        this.problemSnapId = problemSnapId;
+        this.problemSnapId = requestId;
         this.description = description;
     }
 
