@@ -1,5 +1,8 @@
 package ru.spaceinvasion.utils;
 
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 public class Constants {
     public static class ApiConstants {
         static final String BASE_API_PATH = "/v1";
