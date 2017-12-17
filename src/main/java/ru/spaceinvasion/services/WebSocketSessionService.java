@@ -3,14 +3,17 @@ package ru.spaceinvasion.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import ru.spaceinvasion.mechanic.internal.GameSessionService;
+import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.models.Message;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketSessionService {
     private @NotNull Map<Integer, WebSocketSession> sessions = new ConcurrentHashMap<>();
     private @NotNull ObjectMapper objectMapper;
+    private @NotNull Set<Integer> setOfGoingAway = new HashSet<>();
 
     public WebSocketSessionService(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -35,14 +39,9 @@ public class WebSocketSessionService {
         return sessions.containsKey(userId) && sessions.get(userId).isOpen();
     }
 
-    public void removeUser(Integer userId)
-    {
-        //TODO Завершить игровую сессию
-        sessions.remove(userId);
-    }
-
     public void closeConnection(Integer userId, CloseStatus closeStatus) {
         final WebSocketSession webSocketSession = sessions.get(userId);
+        sessions.remove(userId);
         if (webSocketSession != null && webSocketSession.isOpen()) {
             try {
                 webSocketSession.close(closeStatus);
@@ -50,6 +49,17 @@ public class WebSocketSessionService {
 
             }
         }
+    }
+
+    public void connectionWasClosed(Integer userId, CloseStatus closeStatus) {
+        if (closeStatus.equals(CloseStatus.GOING_AWAY)) {
+            setOfGoingAway.add(userId);
+            sessions.remove(userId);
+        }
+    }
+
+    public @NotNull Set<Integer> getSetOfGoingAway() {
+        return setOfGoingAway;
     }
 
     public void sendMessageToUser(Integer userId, @NotNull Message message) throws IOException {

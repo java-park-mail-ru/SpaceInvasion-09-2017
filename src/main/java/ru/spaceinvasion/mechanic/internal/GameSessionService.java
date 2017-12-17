@@ -29,13 +29,11 @@ public class GameSessionService {
 
     private final WebSocketSessionService webSocketSessionService;
 
-    @SuppressWarnings("unused")
-    private final ClientSnapService clientSnapService;
+    private final Set<Integer> usersWhoseSessionFinish = new HashSet<>();
 
     public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService,
                               @NotNull ClientSnapService clientSnapService) {
         this.webSocketSessionService = webSocketSessionService;
-        this.clientSnapService = clientSnapService;
     }
 
     public boolean isPlaying(Integer userId) {
@@ -49,6 +47,10 @@ public class GameSessionService {
             throw new Exceptions.NotFoundSessionForUser();
         }
         return gameSession;
+    }
+
+    public void playerIsGoingAway(Integer userId) {
+        forceTerminate(usersMap.get(userId),false);
     }
 
     public void startGame(@NotNull Integer player1Id,
@@ -78,6 +80,9 @@ public class GameSessionService {
 
     }
 
+    public Set<Integer> getUsersWhoseSessionFinish() {
+        return usersWhoseSessionFinish;
+    }
 
     public Set<GameSession> getSessions() {
         return gameSessions;
@@ -85,12 +90,11 @@ public class GameSessionService {
 
     public void forceTerminate(GameSession gameSession, boolean err) {
         final boolean exists = gameSessions.remove(gameSession);
-        usersMap.remove(gameSession.getPlayer1());
-        usersMap.remove(gameSession.getPlayer2());
-        final CloseStatus status = err ? CloseStatus.SERVER_ERROR : CloseStatus.NORMAL;
-        if (exists) {
-            webSocketSessionService.closeConnection(gameSession.getPlayer1(), status);
-            webSocketSessionService.closeConnection(gameSession.getPlayer2(), status);
+        if (exists && usersMap.remove(gameSession.getPlayer1()) != null) {
+            usersWhoseSessionFinish.add(gameSession.getPlayer1());
+        }
+        if (exists && usersMap.remove(gameSession.getPlayer2()) != null) {
+            usersWhoseSessionFinish.add(gameSession.getPlayer2());
         }
     }
 }

@@ -11,6 +11,7 @@ import ru.spaceinvasion.services.TimeService;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;
 
+import javax.websocket.Session;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -77,20 +78,12 @@ public class SpaceInvasionMechanics implements GameMechanics {
                 }
             }
         }
+        destroySessionsOfGoingOutPlayers();
+        gameTaskScheduler.tick();
+        final List<GameSession> sessionsToTerminate = new ArrayList<>();
         for (GameSession session : gameSessionService.getSessions()) {
             clientSnapService.processSnapshotsForSession(session);
             session.getServer().tick();
-            if (session.getServer().getGameIsEnded()) {
-                gameSessionService.forceTerminate(session,false);
-            }
-        }
-
-        gameTaskScheduler.tick();
-
-        final List<GameSession> sessionsToTerminate = new ArrayList<>();
-
-        for (GameSession session : gameSessionService.getSessions()) {
-
             try {
                 serverSnapService.sendSnapshotsFor(
                         session.getPlayer1(),
@@ -103,18 +96,44 @@ public class SpaceInvasionMechanics implements GameMechanics {
             } catch (RuntimeException ex) {
                 sessionsToTerminate.add(session);
             }
+            if (session.getServer().getGameIsEnded()) {
+                sessionsToTerminate.add(session);
+            }
         }
-        //TODO: Rewrite
         sessionsToTerminate
                 .forEach(session ->
-                        webSocketSessionService.closeConnection(session.getPlayer1(), CloseStatus.NORMAL));
-        sessionsToTerminate
-                .forEach(session ->
-                        webSocketSessionService.closeConnection(session.getPlayer2(), CloseStatus.NORMAL));
+                        gameSessionService.forceTerminate(session, false));
+        final Set<Integer> usersWhoseSessionFinish =  gameSessionService.getUsersWhoseSessionFinish();
+        finishSessions(usersWhoseSessionFinish);
+        usersWhoseSessionFinish.clear();
         tryStartGames();
         timeService.tick(frameTime);
-
     }
+
+    private void destroySessionsOfGoingOutPlayers() {
+        final Set<Integer> setOfGoingAway = webSocketSessionService.getSetOfGoingAway();
+        for (Integer userId : webSocketSessionService.getSetOfGoingAway()) {
+            gameSessionService.playerIsGoingAway(userId);
+        }
+        final Set<Integer> usersWhoseSessionFinish = gameSessionService.getUsersWhoseSessionFinish();
+        final Set<Integer> usersToCloseSession = new HashSet<>();
+        for (Integer userId : usersWhoseSessionFinish)  {
+            if(!setOfGoingAway.contains(userId)) {
+                usersToCloseSession.add(userId);
+            }
+        }
+        setOfGoingAway.clear();
+        usersWhoseSessionFinish.clear();
+        finishSessions(usersToCloseSession);
+    }
+
+    private void finishSessions(Set<Integer> usersToCloseSession) {
+        for (Integer userId : usersToCloseSession) {
+            webSocketSessionService.closeConnection(userId, CloseStatus.NORMAL);
+        }
+    }
+
+
 
     @Override
     public void reset() {

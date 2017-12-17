@@ -86,9 +86,6 @@ public class ClientSnapService {
 
     private void processMove(ClientSnap snap, Integer userId, GameSession session) {
         session.getServer().newClientMove(userId, snap.getIdOfRequest(), snap.getCoordinates());
-        System.out.println(snap.getCoordinates().getX().toString()+" "+snap.getCoordinates().getY().toString());
-        debugSigmaDX += snap.getCoordinates().getX();
-        debugSigmaDY += snap.getCoordinates().getY();
     }
 
     private void processTowerBuild(ClientSnap snap, Integer userId, GameSession session) {

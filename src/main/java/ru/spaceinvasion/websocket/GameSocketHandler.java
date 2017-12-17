@@ -1,6 +1,5 @@
 package ru.spaceinvasion.websocket;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +92,12 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) {
+        try {
+            webSocketSession.close();
+        } catch (IOException ignore) {
+
+        }
+        webSocketSessionService.connectionWasClosed((Integer)webSocketSession.getAttributes().get("user"), CloseStatus.GOING_AWAY);
         LOGGER.warn("Websocket transport problem", throwable);
     }
 
@@ -103,7 +108,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');
             return;
         }
-        webSocketSessionService.removeUser(userId);
     }
 
 
