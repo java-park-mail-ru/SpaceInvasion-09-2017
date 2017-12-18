@@ -8,4 +8,6 @@ public interface LeaderboardService {
 
     List<User> getTop (int limit);
 
+    List<User> getPage (int limit, int offset);
+
 }
