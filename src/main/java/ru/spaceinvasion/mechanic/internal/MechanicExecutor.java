@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.spaceinvasion.websocket.GameSocketHandler;
 
 import javax.annotation.PostConstruct;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import static ru.spaceinvasion.resources.Constants.SERVER_FRAME_MILLIS;
 import java.time.Clock;
 import java.util.concurrent.Executor;
@@ -18,8 +20,9 @@ import java.util.concurrent.Executors;
  */
 @Service
 public class MechanicExecutor implements Runnable {
-
     private Clock clock = Clock.systemDefaultZone();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MechanicExecutor.class);
 
     private Executor tickExecutor = Executors.newSingleThreadExecutor();
 
@@ -58,9 +61,8 @@ public class MechanicExecutor implements Runnable {
                 final long afterSleep = clock.millis();
                 lastFrameMillis = afterSleep - before;
             } catch (RuntimeException e) {
-                throw e;
-                //TODO
-//                gameMechanics.reset();
+                LOGGER.error("error: ",e);
+                gameMechanics.reset();
             }
         }
     }
