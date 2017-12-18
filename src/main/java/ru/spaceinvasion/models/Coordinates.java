@@ -1,18 +1,29 @@
 package ru.spaceinvasion.models;
 
+import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by egor on 14.11.17.
  */
+
+@Immutable
 public class Coordinates {
 
-    private Integer x;
-    private Integer y;
+    private final Integer x;
+    private final Integer y;
 
     public Coordinates(Integer x, Integer y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Coordinates(Coordinates coordinates) {
+        this.x = coordinates.x;
+        this.y = coordinates.y;
     }
 
     @Override
@@ -36,15 +47,8 @@ public class Coordinates {
         return x;
     }
 
-    public void setX(Integer x) {
-        this.x = x;
-    }
-
     public Integer getY() {
         return y;
     }
 
-    public void setY(Integer y) {
-        this.y = y;
-    }
 }

@@ -40,8 +40,7 @@ public class Constants {
     public static final Integer TICKS_UNITL_BOMB_ACTION = SERVER_FRAME_MILLIS * SECONDS_TO_BOMB_ACTION;
     public static final Integer SECONDS_TO_REBORN_UNIT = 3;
     public static final Integer TICKS_TO_REBORN_UNIT = SECONDS_TO_REBORN_UNIT * SERVER_FRAME_MILLIS;
-    public static final Integer SECONDS_TO_CREATING_COIN = 20;
-    public static final Integer TICKS_TO_COIN_CREATING = SECONDS_TO_CREATING_COIN * SERVER_FRAME_MILLIS;
+    public static final Integer MILLIS_TO_CREATING_COIN = 5000;
     public static final Integer SECONDS_OF_SHOT_LIVE = 3;
     public static final Integer TICKS_OF_SHOT_LIVE = SECONDS_OF_SHOT_LIVE * SERVER_FRAME_MILLIS;
     public static final Integer VERTICAL_OFFSET_OF_COINS = (COIN_HEIGHT / 2) + 10;

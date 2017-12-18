@@ -10,8 +10,8 @@ interface Placed {
     val width: Int
     val height: Int
 
+
     fun setCoordinates(x: Int, y: Int) {
-        coordinates.x = x;
-        coordinates.y = y;
+        this.coordinates = Coordinates(x,y)
     }
 }

@@ -55,7 +55,8 @@ public class SpaceInvasionMechanics implements GameMechanics {
 
     @Override
     public void addClientSnapshot(Integer userId, ClientSnap clientSnap) {
-        tasks.add(() -> clientSnapService.pushClientSnap(userId, clientSnap));
+        clientSnapService.pushClientSnap(userId,clientSnap);
+//        tasks.add(() -> clientSnapService.pushClientSnap(userId, clientSnap));
     }
 
     @Override

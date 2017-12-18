@@ -6,7 +6,7 @@ import org.springframework.web.socket.CloseStatus;
 import ru.spaceinvasion.mechanic.game.GamePartMediator;
 import ru.spaceinvasion.mechanic.game.Side;
 import ru.spaceinvasion.mechanic.game.models.Server;
-import ru.spaceinvasion.mechanic.snaps.ClientSnapService;
+import ru.spaceinvasion.mechanic.internal.tasks.CoinCreationTask;
 import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
@@ -15,6 +15,8 @@ import ru.spaceinvasion.utils.Exceptions;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static ru.spaceinvasion.resources.Constants.MILLIS_TO_CREATING_COIN;
 
 /**
  * Created by egor on 14.11.17.
@@ -31,9 +33,12 @@ public class GameSessionService {
 
     private final Set<Integer> usersWhoseSessionFinish = new HashSet<>();
 
+    private final GameTaskScheduler gameTaskScheduler;
+
     public GameSessionService(@NotNull WebSocketSessionService webSocketSessionService,
-                              @NotNull ClientSnapService clientSnapService) {
+                              @NotNull GameTaskScheduler gameTaskScheduler) {
         this.webSocketSessionService = webSocketSessionService;
+        this.gameTaskScheduler = gameTaskScheduler;
     }
 
     public boolean isPlaying(Integer userId) {
@@ -77,6 +82,7 @@ public class GameSessionService {
                     CloseStatus.SERVER_ERROR));
         }
         gameSession.getServer().startGame(gameSession.getPlayer1(), gameSession.getPlayer2());
+        gameTaskScheduler.schedule(MILLIS_TO_CREATING_COIN, new CoinCreationTask(gameSession.getServer(), gameTaskScheduler));
 
     }
 

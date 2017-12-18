@@ -2,25 +2,31 @@ package ru.spaceinvasion.mechanic.internal;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import ru.spaceinvasion.models.GameSession;
+import ru.spaceinvasion.mechanic.internal.tasks.PingTask;
 import ru.spaceinvasion.services.TimeService;
+import ru.spaceinvasion.services.WebSocketSessionService;
 
 import java.util.*;
+
+import static ru.spaceinvasion.utils.Constants.GameMechanicConstants.PING_MILLIS;
 
 /**
  * Created by egor on 15.11.17.
  */
 
 @Service
-@Deprecated
 public class GameTaskScheduler {
 
-    @NotNull private final TimeService timeService;
+    private final @NotNull TimeService timeService;
 
     private final TreeMap<Long, ScheduledTask> scheduledTasks = new TreeMap<>();
 
-    public GameTaskScheduler(@NotNull TimeService timeService) {
+    private final WebSocketSessionService webSocketSessionService;
+
+    public GameTaskScheduler(@NotNull TimeService timeService, @NotNull WebSocketSessionService webSocketSessionService) {
         this.timeService = timeService;
+        this.webSocketSessionService = webSocketSessionService;
+        schedule(PING_MILLIS,new PingTask(webSocketSessionService,this));
     }
 
     public void schedule(long timerMillis, ScheduledTask task) {
@@ -61,22 +67,8 @@ public class GameTaskScheduler {
         default void onError() {}
     }
 
-    //TODO: Отнаследовать взрыв бомбы от GameSessionTask
     public abstract static class GameSessionTask implements ScheduledTask{
-        private final GameSession gameSession;
 
-        public GameSessionTask(GameSession gameSession) {
-            this.gameSession = gameSession;
-        }
-
-        public GameSession getGameSession() {
-            return gameSession;
-        }
-
-        @Override
-        public void onError() {
-            gameSession.terminateSession();
-        }
     }
 
     private static final class ScheduledTaskList implements ScheduledTask {

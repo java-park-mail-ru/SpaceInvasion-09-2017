@@ -19,7 +19,7 @@ class Server(mediator: GamePartMediator,
     val snaps: MutableMap<Long, MutableList<Message>> = HashMap()
 
     var tickToCoinCreating: Int? = null
-    val randomGenerator = RandomGenerator()
+    private val randomGenerator = RandomGenerator()
     var playerPeopleLastProccesedSnapId: Long = 0
     var playerAliensLastProcessedSnapId: Long = 0
     var playerPeopleId: Long = 0
@@ -27,6 +27,7 @@ class Server(mediator: GamePartMediator,
     var playerPeopleHasRollback = false
     var playerAliensHasRollback = false
     var gameIsEnded = false
+
 
 
     init {
@@ -116,7 +117,6 @@ class Server(mediator: GamePartMediator,
         snaps.put(playerAliensId, ArrayList())
         PlayerPeople(mediator, playerPeopleId * (-1), ID_GENERATOR)
         PlayerAliens(mediator, playerAliensId * (-1), ID_GENERATOR)
-        tickToCoinCreating = Constants.TICKS_TO_COIN_CREATING;
     }
 
     fun newClientMove(clientId: Long, snapId: Long, coords: Coordinates) {
@@ -157,19 +157,15 @@ class Server(mediator: GamePartMediator,
         }
     }
 
+    fun newCoin() {
+        Coin(mediator, ID_GENERATOR.decrementAndGet(), ID_GENERATOR, randomGenerator.nextCoords())
+    }
+
     fun tick() {
         mediator.send(TickMessage(this, 0), Shot::class.java)
         mediator.send(TickMessage(this, 0), Tower::class.java)
         mediator.send(TickMessage(this, 0), Bomb::class.java)
         mediator.send(TickMessage(this, 0), Player::class.java)
-        if (tickToCoinCreating != null) {
-            tickToCoinCreating = tickToCoinCreating!! - 1
-            if (tickToCoinCreating == 0) {
-                Coin(mediator, ID_GENERATOR.decrementAndGet(), ID_GENERATOR, randomGenerator.nextCoords())
-                tickToCoinCreating = Constants.TICKS_TO_COIN_CREATING;
-            }
-
-        }
     }
 
     private fun commitRequest(request: GameMessage) {

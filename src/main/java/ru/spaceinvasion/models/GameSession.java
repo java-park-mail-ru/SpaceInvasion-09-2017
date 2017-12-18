@@ -7,6 +7,8 @@ import ru.spaceinvasion.mechanic.game.Mediator;
 import ru.spaceinvasion.mechanic.game.messages.GameMessage;
 import ru.spaceinvasion.mechanic.game.models.Server;
 import ru.spaceinvasion.mechanic.internal.GameSessionService;
+import ru.spaceinvasion.mechanic.internal.GameTaskScheduler;
+import ru.spaceinvasion.mechanic.internal.tasks.CoinCreationTask;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.concurrent.atomic.AtomicLong;

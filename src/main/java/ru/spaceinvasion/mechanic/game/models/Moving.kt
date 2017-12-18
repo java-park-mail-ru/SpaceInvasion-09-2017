@@ -11,16 +11,7 @@ interface Moving: Placed {
     var speed: Int;
 
     fun move(dx: Int, dy: Int) {
-        coordinates.x += dx;
-        coordinates.y += dy;
+        coordinates = Coordinates(coordinates.x + dx, coordinates.y + dy)
     }
 
-    fun locate(x: Int, y: Int) {
-        coordinates.x = x
-        coordinates.y = y
-    }
-
-    fun locate(coordinates: Coordinates) {
-        this.coordinates = coordinates
-    }
 }

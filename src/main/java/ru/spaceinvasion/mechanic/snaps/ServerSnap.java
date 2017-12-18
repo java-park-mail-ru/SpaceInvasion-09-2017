@@ -25,6 +25,7 @@ public class ServerSnap implements Message {
 //    7: game init
 //    10: unit creation
 //    11: coin creation
+//    12: ping
     //TODO Where is appearing coins?
 
     public ServerSnap(Side side, Integer enemyId) {
@@ -110,6 +111,12 @@ public class ServerSnap implements Message {
         data[2] = coinAppearanceMessage.getCoordinates().getX();
         data[3] = coinAppearanceMessage.getCoordinates().getY();
         data[4] = (int)coinAppearanceMessage.getMessageCreator().getGamePartId();
+    }
+
+    public ServerSnap() {
+        data = new Integer[2];
+        data[0] = 0;
+        data[1] = 12;
     }
 
 }

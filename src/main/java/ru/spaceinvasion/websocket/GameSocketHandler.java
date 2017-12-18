@@ -7,11 +7,14 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import ru.spaceinvasion.mechanic.game.messages.GameMessage;
+import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;
+import sun.tools.tree.CastExpression;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +23,8 @@ import java.io.IOException;
 import static org.springframework.web.socket.CloseStatus.SERVER_ERROR;
 
 public class GameSocketHandler extends TextWebSocketHandler {
+//    private static int i = 0;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSocketHandler.class);
     private static final CloseStatus ACCESS_DENIED = new CloseStatus(4500, "Not logged in. Access denied");
 
@@ -72,6 +77,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
             return;
         }
+//        System.out.println(i++);
         collectMessage(user, message);
     }
 
@@ -84,6 +90,11 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         try {
+//            try {
+//                System.out.println(ClientSnap.class.cast(message).getIdOfRequest());
+//            } catch (ClassCastException e) {
+//
+//            }
             messageHandlerContainer.collect(message, user.getId());
         } catch (Exceptions.HandleException e) {
             LOGGER.error("Can't handle message of type " + message.getClass().getName() + " with content: " + text, e);

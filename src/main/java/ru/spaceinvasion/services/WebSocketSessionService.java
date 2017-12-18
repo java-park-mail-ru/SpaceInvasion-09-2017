@@ -78,4 +78,16 @@ public class WebSocketSessionService {
             throw new IOException("Unnable to send message", e);
         }
     }
+
+    public void sendMessageToAll(@NotNull Message message) {
+        for (Map.Entry<Integer,WebSocketSession> userAndSession : sessions.entrySet()) {
+            if (userAndSession.getValue().isOpen()) {
+                try {
+                    userAndSession.getValue().sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+                } catch (IOException ignore) {
+
+                }
+            }
+        }
+    }
 }

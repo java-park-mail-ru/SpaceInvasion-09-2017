@@ -28,5 +28,6 @@ public class Constants {
     }
     public static class GameMechanicConstants {
         public static final Integer NUM_OF_PROCESSED_SNAPS_PER_SERVER_TICK = 3;
+        public static final Integer PING_MILLIS = 1000;
     }
 }
