@@ -5,11 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.spaceinvasion.websocket.GameSocketHandler;
 
 import javax.annotation.PostConstruct;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import static ru.spaceinvasion.resources.Constants.SERVER_FRAME_MILLIS;
 import java.time.Clock;
 import java.util.concurrent.Executor;

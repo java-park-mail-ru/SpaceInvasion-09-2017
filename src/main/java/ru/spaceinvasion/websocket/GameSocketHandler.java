@@ -7,14 +7,11 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import ru.spaceinvasion.mechanic.game.messages.GameMessage;
-import ru.spaceinvasion.mechanic.snaps.ClientSnap;
 import ru.spaceinvasion.models.Message;
 import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
 import ru.spaceinvasion.services.WebSocketSessionService;
 import ru.spaceinvasion.utils.Exceptions;
-import sun.tools.tree.CastExpression;
 
 import javax.validation.constraints.NotNull;
 
