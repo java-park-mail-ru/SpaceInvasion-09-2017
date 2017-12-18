@@ -32,17 +32,17 @@ public class UserController {
     @PostMapping(path = "signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
+            return ResponseEntity.ok().build();
         }
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
             final User curUser = userService.getUser(userId);
-            return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
+            return ResponseEntity.ok(curUser); // Already authorized by curUser
         }
 
         if (!userService.authenticate(user)) {
-            return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
+            return ResponseEntity.ok().build();
         }
         final User curUser = userService.getUser(user.getUsername());
         httpSession.setAttribute("user", curUser.getId());
@@ -52,18 +52,18 @@ public class UserController {
     @PostMapping(path = "signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
+            return ResponseEntity.ok().build();
         }
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
             final User curUser = userService.getUser(userId);
-            return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
+            return ResponseEntity.ok(curUser); // Already authorized by curUser
         }
         try {
             user = userService.create(user);
         } catch (DuplicateKeyException e) {
-            return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
+            return ResponseEntity.ok().build();
         }
         httpSession.setAttribute("user", user.getId());
 
@@ -74,7 +74,7 @@ public class UserController {
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null ||
                 httpSession.getAttribute("user") == null) {
-            return TypicalResponses.CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE;
+            return ResponseEntity.ok().build();
         }
         httpSession.invalidate();
         return ResponseEntity.ok().build();
@@ -84,13 +84,13 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId == null) {
-            return TypicalResponses.FORBIDDEN_RESPONSE;
+            return ResponseEntity.ok().build();
         }
         final User curUser;
         try {
             curUser = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
-            return TypicalResponses.FORBIDDEN_RESPONSE;
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.ok(curUser);
     }
@@ -101,7 +101,7 @@ public class UserController {
         try {
             user = userService.getUser(username_id);
         } catch (Exceptions.NotFoundUser e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.ok(user);

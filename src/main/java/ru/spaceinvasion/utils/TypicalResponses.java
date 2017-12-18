@@ -10,8 +10,6 @@ public class TypicalResponses {
                     .body(new RestJsonAnswer("Singning in failed", "Wrong login or password"));
     public static final ResponseEntity<RestJsonAnswer> USERNAME_ALREADY_USED_RESPONSE = ResponseEntity.badRequest()
                             .body(new RestJsonAnswer("Username already used", "Come up with a different username"));
-    public static final ResponseEntity<RestJsonAnswer> UNAUTHORIZED_RESPONSE = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                    .body(new RestJsonAnswer("Unauthorized", "Sign in or sign up"));
     public static final ResponseEntity<RestJsonAnswer> FORBIDDEN_RESPONSE = ResponseEntity.status(HttpStatus.FORBIDDEN)
             .body(new RestJsonAnswer("Forbidden", "Sign in or sign up"));
     public static final ResponseEntity<RestJsonAnswer> CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE = ResponseEntity.status(HttpStatus.FORBIDDEN)
