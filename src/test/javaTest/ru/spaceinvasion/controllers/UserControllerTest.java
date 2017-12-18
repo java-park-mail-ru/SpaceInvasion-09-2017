@@ -56,7 +56,7 @@ public class UserControllerTest {
         mockMvc
                 .perform(get("/v1/user")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
     }
 
     @Test
