@@ -17,6 +17,7 @@ class Unit(mediator: GamePartMediator,
            val owner: Player,
            ID_GENERATOR: AtomicLong) : GamePart(mediator, gamePartId, ID_GENERATOR), Moving, Damaging {
     override var isAlive: Boolean = true
+
     override var health: Int = HEALTH_OF_UNIT
     override var speed: Int = SPEED_OF_UNIT
     val damage_power: Int = DAMAGE_POWER_OF_UNIT

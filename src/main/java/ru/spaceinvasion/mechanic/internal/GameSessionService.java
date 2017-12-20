@@ -10,10 +10,12 @@ import ru.spaceinvasion.mechanic.internal.tasks.CoinCreationTask;
 import ru.spaceinvasion.mechanic.snaps.ServerSnap;
 import ru.spaceinvasion.models.GameSession;
 import ru.spaceinvasion.services.WebSocketSessionService;
+import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.utils.Exceptions;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static ru.spaceinvasion.resources.Constants.MILLIS_TO_CREATING_COIN;
@@ -81,7 +83,7 @@ public class GameSessionService {
             players.stream().forEach(playerToCutOff -> webSocketSessionService.closeConnection(playerToCutOff,
                     CloseStatus.SERVER_ERROR));
         }
-        gameSession.getServer().startGame(gameSession.getPlayer1(), gameSession.getPlayer2());
+        gameSession.run();
         gameTaskScheduler.schedule(MILLIS_TO_CREATING_COIN, new CoinCreationTask(gameSession.getServer(), gameTaskScheduler));
 
     }

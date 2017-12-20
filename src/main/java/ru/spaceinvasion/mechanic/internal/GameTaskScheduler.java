@@ -26,7 +26,7 @@ public class GameTaskScheduler {
     public GameTaskScheduler(@NotNull TimeService timeService, @NotNull WebSocketSessionService webSocketSessionService) {
         this.timeService = timeService;
         this.webSocketSessionService = webSocketSessionService;
-        schedule(PING_MILLIS,new PingTask(webSocketSessionService,this));
+        //schedule(PING_MILLIS,new PingTask(webSocketSessionService,this));
     }
 
     public void schedule(long timerMillis, ScheduledTask task) {

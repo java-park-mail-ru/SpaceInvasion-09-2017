@@ -7,7 +7,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class GameSession {
+public class GameSession extends Thread {
     private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
 
     @SuppressWarnings("unused")
@@ -59,5 +59,10 @@ public class GameSession {
 
     public void terminateSession() {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public void run() {
+        server.startGame(player1, player2);
     }
 }
