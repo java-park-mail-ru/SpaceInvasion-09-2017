@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping(path = "signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return BAD_REQUEST;
+            return FORBIDDEN;
         }
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
