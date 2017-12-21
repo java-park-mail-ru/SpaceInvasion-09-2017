@@ -83,10 +83,8 @@ public class LeaderboardControllerTest {
                 .andExpect(jsonPath("$[3].username").value("n02"))
                 .andExpect(jsonPath("$[3].score").value(5));
         mockMvc
-                .perform(get("/v1/leaderboard/page")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"limit\": 2 ," +
-                                "\"offset\": 1}"))
+                .perform(get("/v1/leaderboard/page?limit=2&offset=1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("chocolateSwan"))
                 .andExpect(jsonPath("$[0].score").value(24))
