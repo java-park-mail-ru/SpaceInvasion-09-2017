@@ -26,6 +26,8 @@ public class ServerSnap implements Message {
 //    10: unit creation
 //    11: coin creation
 //    12: ping
+//    13: win
+//    14: lose
     //TODO Where is appearing coins?
 
     public ServerSnap(Side side, Integer enemyId) {
@@ -117,6 +119,18 @@ public class ServerSnap implements Message {
         data = new Integer[2];
         data[0] = 0;
         data[1] = 12;
+    }
+
+    public ServerSnap(Long lastSnapId, WiningMessage winingMessage) {
+        data = new Integer[2];
+        data[0] = lastSnapId.intValue();
+        data[1] = 13;
+    }
+
+    public ServerSnap(Long lastSnapId, LosingMessage losingMessage) {
+        data = new Integer[2];
+        data[0] = lastSnapId.intValue();
+        data[1] = 14;
     }
 
 }
