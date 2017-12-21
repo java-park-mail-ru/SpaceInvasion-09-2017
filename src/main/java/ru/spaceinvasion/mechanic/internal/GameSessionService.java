@@ -98,10 +98,10 @@ public class GameSessionService {
 
     public void forceTerminate(GameSession gameSession, boolean err) {
         final boolean exists = gameSessions.remove(gameSession);
-        if (exists && usersMap.remove(gameSession.getPlayer1()) != null) {
+        if (usersMap.remove(gameSession.getPlayer1()) != null && exists) {
             usersWhoseSessionFinish.add(gameSession.getPlayer1());
         }
-        if (exists && usersMap.remove(gameSession.getPlayer2()) != null) {
+        if (usersMap.remove(gameSession.getPlayer2()) != null && exists) {
             usersWhoseSessionFinish.add(gameSession.getPlayer2());
         }
     }
