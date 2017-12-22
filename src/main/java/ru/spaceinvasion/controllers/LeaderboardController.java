@@ -34,8 +34,8 @@ public class LeaderboardController {
     }
 
     @GetMapping(path = "/page")
-    public List<User> getScoreBoardAll(@RequestBody @NotNull Page page) {
-        return leaderboardService.getPage(page.getLimit(), page.getOffset());
+    public List<User> getScoreBoardAll(@RequestParam @NotNull Integer limit, @RequestParam @NotNull Integer offset) {
+        return leaderboardService.getPage(limit, offset;
 
     }
 }
