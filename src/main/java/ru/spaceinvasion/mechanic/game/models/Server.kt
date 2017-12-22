@@ -104,8 +104,17 @@ class Server(mediator: GamePartMediator,
                     it.value.add(ServerSnap(getLastRequestId(it.key), message as CoinAppearanceMessage))
                 }
             }
-            (FinishMessage::class.java) -> {
+            (WiningMessage::class.java) -> {
                 gameIsEnded = true
+                snaps.filter { it.key == (message.messageCreator as Player).gamePartId * (-1)}.forEach {
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as WiningMessage))
+                }
+            }
+            (LosingMessage::class.java) -> {
+                gameIsEnded = true
+                snaps.filter { it.key == (message.messageCreator as Player).gamePartId * (-1)}.forEach {
+                    it.value.add(ServerSnap(getLastRequestId(it.key), message as LosingMessage))
+                }
             }
         }
     }
