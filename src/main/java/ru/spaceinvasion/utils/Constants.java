@@ -1,5 +1,8 @@
 package ru.spaceinvasion.utils;
 
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 public class Constants {
     public static class ApiConstants {
         static final String BASE_API_PATH = "/v1";
@@ -22,5 +25,10 @@ public class Constants {
                 "http://www.space-invasion-frontend.herokuapp.com",
                 "https://www.space-invasion-frontend.herokuapp.com"
         };
+    }
+    public static class GameMechanicConstants {
+        public static final Integer NUM_OF_PROCESSED_SNAPS_PER_SERVER_TICK = 3;
+        public static final Integer NUM_OF_THREADS = 9;
+        public static final Integer PING_MILLIS = 1000;
     }
 }

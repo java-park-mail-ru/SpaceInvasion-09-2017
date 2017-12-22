@@ -28,7 +28,7 @@
 It is the browser game in the genre MMORTS shooter game "Space Invasion".
 The moon is inhabited by two warring races: Humans and Aliens.
 In this game you have to choose a side and fight for the right to live in this world.
-Only one will survive. Capture the enemy base or your race will be defeated...
+Only one will survive. Capture the enemy base or your side will be defeated...
 
 
 ## Quick start
