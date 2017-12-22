@@ -90,7 +90,7 @@ public class UserServicePostgres implements UserService {
 
     @Override
     public void dropAll() {
-        String sql = "DELETE FROM users *";
+        String sql = "TRUNCATE TABLE users";
         jdbcTemplateObject.update(sql);
     }
 
