@@ -22,4 +22,9 @@ public class LeaderboardServicePostgres implements LeaderboardService {
         String sql = "SELECT * FROM users ORDER BY score DESC LIMIT ?";
         return jdbcTemplateObject.query(sql, Mappers.USER_ROW_MAPPER, limit);
     }
+
+    public List<User> getPage(int limit, int offset) {
+        String sql = "SELECT * FROM users ORDER BY score DESC LIMIT ? OFFSET ?";
+        return jdbcTemplateObject.query(sql, Mappers.USER_ROW_MAPPER, limit, offset);
+    }
 }

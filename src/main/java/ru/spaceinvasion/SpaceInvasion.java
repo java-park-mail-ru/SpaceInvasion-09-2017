@@ -8,13 +8,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
 import ru.spaceinvasion.utils.Constants;
+import ru.spaceinvasion.websocket.GameSocketHandler;
 
 @SpringBootApplication
 public class SpaceInvasion {
 
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(SpaceInvasion.class);
+
     public static void main(String[] args) {
-        SpringApplication.run(SpaceInvasion.class, args);
+        SpringApplication.run(new Class[]{WebSocketConfig.class, SpaceInvasion.class}, args);
+    }
+
+    @Bean
+    public WebSocketHandler gameWebSocketHandler() {
+        return new PerConnectionWebSocketHandler(GameSocketHandler.class);
     }
 
     @Bean

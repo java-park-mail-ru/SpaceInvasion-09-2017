@@ -75,13 +75,21 @@ public class LeaderboardControllerTest {
         userService.create(user);
         userService.changeScore(user,24);
         mockMvc
-                .perform(get("/v1/leaderboard")
+                .perform(get("/v1/leaderboard/top")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("egorkurakov"))
                 .andExpect(jsonPath("$[0].score").value(25))
                 .andExpect(jsonPath("$[3].username").value("n02"))
                 .andExpect(jsonPath("$[3].score").value(5));
+        mockMvc
+                .perform(get("/v1/leaderboard/page?limit=2&offset=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].username").value("chocolateSwan"))
+                .andExpect(jsonPath("$[0].score").value(24))
+                .andExpect(jsonPath("$[1].username").value("vasidmi"))
+                .andExpect(jsonPath("$[1].score").value(20));
     }
 }
 

@@ -1,5 +1,6 @@
 package ru.spaceinvasion.services;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,7 +66,7 @@ public class UserServicePostgres implements UserService {
     }
 
     @Override
-    public User getUser(String username) {
+    public @NotNull User getUser(String username) {
         String sql;
         User user;
         if (username == null) {

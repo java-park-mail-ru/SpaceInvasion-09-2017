@@ -1,8 +1,10 @@
 package ru.spaceinvasion.controllers;
 
 import static org.springframework.util.StringUtils.isEmpty;
+import static ru.spaceinvasion.utils.TypicalResponses.*;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,6 @@ import ru.spaceinvasion.utils.Constants;
 import ru.spaceinvasion.utils.Exceptions;
 import ru.spaceinvasion.models.User;
 import ru.spaceinvasion.services.UserService;
-import ru.spaceinvasion.utils.TypicalResponses;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -31,19 +32,18 @@ public class UserController {
     @PostMapping(path = "signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
+            return FORBIDDEN;
         }
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
-            User curUser = userService.getUser(userId);
-            return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
+            return BAD_REQUEST;
         }
 
         if (!userService.authenticate(user)) {
-            return TypicalResponses.WRONG_AUTH_DATA_RESPONSE;
+            return FORBIDDEN;
         }
-        User curUser = userService.getUser(user.getUsername());
+        final User curUser = userService.getUser(user.getUsername());
         httpSession.setAttribute("user", curUser.getId());
         return ResponseEntity.ok(user);
     }
@@ -51,18 +51,17 @@ public class UserController {
     @PostMapping(path = "signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid User user, HttpSession httpSession) {
         if (!checkUser(user)) {
-            return TypicalResponses.BAD_REQUEST;
+            return FORBIDDEN;
         }
 
         final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId != null) {
-            User curUser = userService.getUser(userId);
-            return ResponseEntity.badRequest().body(curUser); // Already authorized by curUser
+            return BAD_REQUEST;
         }
         try {
             user = userService.create(user);
         } catch (DuplicateKeyException e) {
-            return TypicalResponses.USERNAME_ALREADY_USED_RESPONSE;
+            return CONFLICT;
         }
         httpSession.setAttribute("user", user.getId());
 
@@ -73,34 +72,34 @@ public class UserController {
     public ResponseEntity<?> logout(HttpSession httpSession) {
         if (httpSession == null ||
                 httpSession.getAttribute("user") == null) {
-            return TypicalResponses.CANT_LOGOUT_IF_NOT_LOGINED_RESPONSE;
+            return BAD_REQUEST;
         }
         httpSession.invalidate();
-        return ResponseEntity.ok().build();
+        return OK;
     }
 
     @GetMapping
     public ResponseEntity<?> getCurrentUser(HttpSession httpSession) {
-        Integer userId = (Integer) httpSession.getAttribute("user");
+        final Integer userId = (Integer) httpSession.getAttribute("user");
         if (userId == null) {
-            return TypicalResponses.FORBIDDEN_RESPONSE;
+            return BAD_REQUEST;
         }
-        User curUser;
+        final User curUser;
         try {
             curUser = userService.getUser(userId);
         } catch (Exceptions.NotFoundUser e) {
-            return TypicalResponses.FORBIDDEN_RESPONSE;
+            return BAD_REQUEST;
         }
         return ResponseEntity.ok(curUser);
     }
 
-    @GetMapping(path = "{username}")
-    public ResponseEntity<?> getUser(@PathVariable String username) {
-        User user;
+    @GetMapping(path = "{username_id}")
+    public ResponseEntity<?> getUser(@NotNull @PathVariable Integer username_id) {
+        final User user;
         try {
-            user = userService.getUser(username);
+            user = userService.getUser(username_id);
         } catch (Exceptions.NotFoundUser e) {
-            return ResponseEntity.notFound().build();
+            return NOT_FOUND;
         }
 
         return ResponseEntity.ok(user);
